@@ -1,0 +1,37 @@
+GameState
+	world: love.physics World
+	terrain: Terrain
+	ecs: ECS
+
+Terrain
+	world: love.physics World
+	bodies: Body[]
+
+ECS (Entity Component System)
+	world: love.physics World
+	entities: Entity[]
+	components: ComponentStorage
+
+Entity
+	position: Vector2
+	velocity: Vector2
+	dimensions: Vector2
+	rotation: number
+	body: Body
+	components: ComponentStorage
+	ecs: ECS
+
+Component
+	entity: Entity
+	ecs: ECS
+
+ComponentStorage: Dictionary<class, Component[]>
+
+Body
+	body: love.physics Body
+	shape: love.physics Shape
+	fixture: love.physics Fixture
+
+Vector2
+	x: number
+	y: number
