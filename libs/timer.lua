@@ -26,18 +26,18 @@ end
 
 local taskHandler = {
 	["single"] = function(self, task, i)
-		task.func(self, unpack(task.args))
+		task.func()
 		return remove(self.tasks, i)
 	end,
 	["repeat"] = function(self, task, i)
-		task.func(self, -task.wait)
+		task.func(-task.wait)
 		if -task.wait > task.duration then
 			return remove(self.tasks, i)
 		end
 	end,
 	["coroutine"] = function(self, task, i)
 		if coroutine.status(task.rout) == "suspended" then
-			local ok, wait = coroutine.resume(task.rout, self, coroutineWait)
+			local ok, wait = coroutine.resume(task.rout, coroutineWait)
 			if ok then
 				task.wait = type(wait) == "number" and wait or 0
 			end
@@ -62,18 +62,17 @@ function Timer:update(dt)
 end
 
 -- Queues a task to be executed after a set delay
--- func(timer, ...)
-function Timer:queueTask(delay, func, ...)
+-- func()
+function Timer:queueTask(delay, func)
 	self.tasks[#self.tasks+1] = {
 		wait = delay,
 		func = func,
-		args = {...},
 		type = "single"
 	}
 end
 
 -- Executes a task after a set delay for some time every update
--- func(timer, totalTime)
+-- func(totalTime)
 function Timer:repeatTask(delay, duration, func)
 	self.tasks[#self.tasks+1] = {
 		wait = delay,
@@ -84,7 +83,7 @@ function Timer:repeatTask(delay, duration, func)
 end
 
 -- Executes a task as a coroutine
--- func(timer, wait)
+-- func(wait)
 function Timer:coTask(func)
 	self.tasks[#self.tasks+1] = {
 		wait = 0,

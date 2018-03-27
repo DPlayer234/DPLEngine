@@ -78,7 +78,9 @@ function love.load()
 		Engine:pushGameState(gameState)
 	end
 
-	setState()
+	--setState()
+
+	Engine:pushGameState(Engine.Editor())
 
 	require "dev"
 end

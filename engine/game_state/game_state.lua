@@ -2,11 +2,14 @@
 The base class for any Game State
 ]]
 local currentModule = miscMod.getModule(..., false)
+local parentModule = miscMod.getModule(currentModule, false)
 
 local physicsWorldDraw = require "dev.physics_world_draw"
 local physics = require "love.physics"
 
-local ECS = require(currentModule .. ".ecs")
+local ECS = require(parentModule .. ".ecs")
+local Transformation = require(currentModule .. ".transformation")
+
 local Timer = require "libs.timer"
 
 -- The class
@@ -18,11 +21,18 @@ function GameState:new()
 	self:_setWorldCallbacks()
 
 	self.timer = Timer()
+	self.transformation = Transformation()
 
 	self.ecs = ECS()
 	self.ecs.world = self.world
 	self.ecs.timer = self.timer
+	self.ecs.transformation = self.transformation
+
+	self:initialize()
 end
+
+-- Initializes the game state and, f.e., sets the entities and terrain used when instantiating
+function GameState:initialize() end
 
 -- Called when the state is pushed onto the stack
 function GameState:pushed() end
@@ -48,6 +58,7 @@ end
 
 -- Draws the game state
 function GameState:draw()
+	self.transformation:apply()
 	self.ecs:draw()
 
 	physicsWorldDraw(self.world, 0, 0, love.graphics.getDimensions())

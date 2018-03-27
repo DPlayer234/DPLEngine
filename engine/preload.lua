@@ -9,9 +9,11 @@ local hooks = {
 	["Engine.ECS"]           = ".ecs",
 	["Engine.ECS.Entity"]    = ".ecs.entity",
 	["Engine.ECS.Component"] = ".ecs.component",
+	["Engine.Editor"]        = ".editor",
+	["Engine.GameState"]     = ".game_state",
+	["Engine.Mat3x3"]        = ".libs.mat3x3",
 	["Engine.Vector2"]       = ".libs.vector2",
 	["Engine.Transform"]     = ".libs.transform",
-	["Engine.GameState"]     = ".game_state",
 	["Engine"]               = ".engine"
 }
 

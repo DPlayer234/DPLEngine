@@ -6,4 +6,4 @@ local currentModule = miscMod.getModule(..., true)
 -- Hooking require
 require(currentModule .. ".preload")
 
-return require "Engine"
+return require(currentModule .. ".engine")

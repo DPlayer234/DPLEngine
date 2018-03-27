@@ -11,6 +11,8 @@ for i,f in ipairs {
 	"dev",
 	"engine",
 	"engine.ecs",
+	"engine.editor",
+	"engine.game_state",
 	"engine.libs",
 	"libs.input2",
 	"libs.mathf",

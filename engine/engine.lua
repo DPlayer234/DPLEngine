@@ -11,12 +11,14 @@ local EventStore = require "libs.event_store"
 local Engine = class("Engine")
 
 -- Load Libraries
+Engine.Mat3x3    = require(currentModule .. ".libs.mat3x3")
 Engine.Vector2   = require(currentModule .. ".libs.vector2")
 Engine.Transform = require(currentModule .. ".libs.transform")
 
 -- Load primary classes
-Engine.GameState = require(currentModule .. ".game_state")
 Engine.ECS       = require(currentModule .. ".ecs")
+Engine.Editor    = require(currentModule .. ".editor")
+Engine.GameState = require(currentModule .. ".game_state")
 
 -- Instantiates a new engine state
 function Engine:new()
@@ -37,6 +39,8 @@ end
 
 -- Pushes the game state onto the stack
 function Engine:pushGameState(gameState)
+	if not gameState:typeOf("GameState") then error("Can only push objects of type 'GameState' to the Engine.") end
+
 	local state = self:getGameState()
 	if state then state:suspended() end
 
