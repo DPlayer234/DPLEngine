@@ -12,7 +12,7 @@ local implicit2d = {
 	end
 }
 
--- Allows implicitly creating 2D tables
+-- Assigns every class its own ID
 local nextId = {
 	__index = function(t, class)
 		t.id = t.id + 1
@@ -42,24 +42,13 @@ end
 
 -- Adds a component to the storage
 function ComponentStorage:add(component)
+	if not component:typeOf("Component") then error("Can only add objects of type 'Component' to a ComponentStorage.") end
 	if self:contains(component) then return component end
 
 	local list = self:_getValueList(component)
 	list[#list + 1] = component
 
 	return component
-end
-
--- Removes a component from the storage
-function ComponentStorage:remove(component)
-	local list = self:_getValueList(component)
-	for i=1, #list do
-		if list[i] == component then
-			table.remove(list, i)
-			return true
-		end
-	end
-	return false
 end
 
 -- Gets a component of the given type. Which one is undefined.
@@ -139,6 +128,7 @@ function ComponentStorage:clearDestroyed()
 		for j=1, #list do
 			if list[j]._destroy then
 				list[j]._destroyed = true
+				list[j]:onDestroy()
 				table.remove(list, j)
 			end
 		end

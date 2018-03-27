@@ -1,12 +1,14 @@
 --[[
-A Collider for rigidbodies
+A Collider for rigidbodies (Fixture)
 ]]
+local currentModule = miscMod.getModule(..., false)
+
 local physics = require "love.physics"
+local Vector2 = require "Engine.Vector2"
 
-local Vector2 = Engine.Vector2
-local Ridigbody
+local Rigidbody = require(currentModule .. ".rigidbody")
 
-local Collider = class("Collider", Engine.ECS.Component)
+local Collider = class("Collider", require "Engine.ECS.Component")
 
 -- Creates a new Collider
 function Collider:new(shape, density)
@@ -17,12 +19,10 @@ function Collider:new(shape, density)
 end
 
 function Collider:initialize()
-	self._rigidbody = self.entity:getComponent(Ridigbody)
-	self.fixture = physics.newFixture(self._rigidbody.body, self._shape, self._density or 1)
-end
+	self.rigidbody = assert(self.entity:getComponent(Rigidbody), "Colliders require a Rigidbody.")
 
-Engine.callAfterInit(function()
-	Ridigbody = Engine:getComponentType "Rigidbody"
-end)
+	self.fixture = physics.newFixture(self.rigidbody.body, self._shape, self._density or 1)
+	self.fixture:setUserData(self)
+end
 
 return Collider

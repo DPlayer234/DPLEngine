@@ -6,15 +6,13 @@ local currentModule = miscMod.getModule(..., false)
 -- Keys: require-parameter
 -- Right: relative path
 local hooks = {
-	["ECS"]       = ".ecs",
-	["Entity"]    = ".ecs.entity",
-	["Component"] = ".ecs.component",
-	["Vector2"]   = ".libs.vector2",
-	["Rotation"]  = ".libs.rotation",
-	["Transform"] = ".libs.transform",
-	["GameState"] = ".game_state",
-	["Engine"]    = "",
-	["Preload"]   = ".preload"
+	["Engine.ECS"]           = ".ecs",
+	["Engine.ECS.Entity"]    = ".ecs.entity",
+	["Engine.ECS.Component"] = ".ecs.component",
+	["Engine.Vector2"]       = ".libs.vector2",
+	["Engine.Transform"]     = ".libs.transform",
+	["Engine.GameState"]     = ".game_state",
+	["Engine"]               = ".engine"
 }
 
 -- Hooking into package.preload

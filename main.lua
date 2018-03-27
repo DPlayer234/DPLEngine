@@ -41,25 +41,28 @@ function love.load()
 	-- Load and initialize the engine
 	Engine = require "engine"
 
-	Engine:initialize(50)
+	Engine:initialize { meter = 50 }
 
 	local gameState = Engine.GameState()
 	local ecs = gameState.ecs
 
 	do
 		local entity = ecs:addEntity(Engine.ECS.Entity())
-		entity:addComponent(Engine:getComponentType "Rigidbody" ()):setPosition(Engine.Vector2(100, 100))
-		entity:addComponent(Engine:getComponentType "Collider" (love.physics.newRectangleShape(100, 100)))
+		entity:addComponent(require "engine.components.rigidbody" ())
+		entity:addComponent(require "engine.components.collider" (love.physics.newRectangleShape(100, 100))).fixture:setRestitution(0.7)
+
+		entity.transform.position = Engine.Vector2(200, 100)
 	end
 
 	do
 		local entity = ecs:addEntity(Engine.ECS.Entity())
-		local rigidbody = entity:addComponent(Engine:getComponentType "Rigidbody" ())
-		rigidbody:setPosition(Engine.Vector2(250, 250))
-		rigidbody:setAngle(0.2)
+		local rigidbody = entity:addComponent(require "engine.components.rigidbody" ())
 		rigidbody.body:setType("static")
 
-		entity:addComponent(Engine:getComponentType "Collider" (love.physics.newRectangleShape(500, 50)))
+		entity:addComponent(require "engine.components.collider" (love.physics.newRectangleShape(1000, 50)))
+
+		entity.transform.position = Engine.Vector2(500, 500)
+		entity.transform.rotation = 0.06
 	end
 
 	Engine:pushGameState(gameState)

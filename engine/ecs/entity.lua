@@ -9,7 +9,7 @@ local Object = require(currentModule .. ".object")
 local Component = require(currentModule .. ".component")
 local ComponentStorage = require(currentModule .. ".component_storage")
 
-local libs = require(parentModule .. ".libs")
+local Transform = require "Engine.Transform"
 
 -- Class
 local Entity = class("Entity", Object)
@@ -18,17 +18,25 @@ local Entity = class("Entity", Object)
 function Entity:new()
 	self:Object()
 
-	self.transform = libs.Transform()
+	self.transform = Transform()
 
 	self._compStorage = ComponentStorage()
 	self._tags = {}
 end
 
--- For Overrides
+-- Called after the ECS is attached
 function Entity:initialize() end
 
+function Entity:onCollisionBegin(other, contact) end
+function Entity:onCollisionStay(other, contact) end
+function Entity:onCollisionEnd(other, contact) end
+
+function Entity:onSensorBegin(other, contact) end
+function Entity:onSensorStay(other, contact) end
+function Entity:onSensorEnd(other, contact) end
+
 -- Attaches an ECS to the entity
-function Entity:attachECS(ecs)
+function Entity:attachToECS(ecs)
 	self.ecs = ecs
 
 	self:initialize()
@@ -36,7 +44,7 @@ end
 
 -- Adds a component to the entity
 function Entity:addComponent(component)
-	component:attachEntity(self)
+	component:attachToEntity(self)
 	return self._compStorage:add(component)
 end
 

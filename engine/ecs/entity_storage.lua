@@ -21,22 +21,12 @@ end
 
 -- Adds an entity to the storage
 function EntityStorage:add(entity)
+	if not entity:typeOf("Entity") then error("Can only add objects of type 'Entity' to an EntityStorage.") end
 	if self:contains(entity) then return entity end
 
 	self._entities[#self._entities + 1] = entity
 
 	return entity
-end
-
--- Removes an entity from the storage
-function EntityStorage:remove(entity)
-	for i=1, #self._entities do
-		if self._entities[i] == entity then
-			table.remove(self._entities, i)
-			return true
-		end
-	end
-	return false
 end
 
 -- Updates all contained entities
@@ -78,6 +68,7 @@ function EntityStorage:clearDestroyed()
 	for i=1, #self._entities do
 		if self._entities[i]._destroy then
 			self._entities[i]._destroyed = true
+			self._entities[i]:onDestroy()
 			table.remove(self._entities, j)
 		end
 	end

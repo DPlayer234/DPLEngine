@@ -1,44 +1,20 @@
 --[[
-A Rigidbody with a body
+A Rigidbody (Body)
 ]]
 local physics = require "love.physics"
+local Vector2 = require "Engine.Vector2"
 
-local Vector2 = Engine.Vector2
-
-local Rigidbody = class("Rigidbody", Engine.ECS.Component)
+local Rigidbody = class("Rigidbody", require "Engine.ECS.Component")
 
 -- Initializes the Rigidbody
 function Rigidbody:initialize()
 	local x, y = self.transform.position:unpack()
+
 	self.body = physics.newBody(self.ecs.world, x, y, "dynamic")
 	self.body:setUserData(self)
-end
+	self.body:setAngle(self.transform.rotation)
 
--- Gets the position of the object
-function Rigidbody:getPosition()
-	return Vector2(self.body:getPosition())
-end
-
--- Sets the position of the object
-function Rigidbody:setPosition(position)
-	self.transform.position = position
-	self.body:setPosition(position:unpack())
-end
-
--- Gets the angel of the object
-function Rigidbody:getAngle()
-	return self.body:getAngle()
-end
-
--- Sets the angle of the object
-function Rigidbody:setAngle(angle)
-	self.transform.rotation.angle = angle
-	self.body:setAngle(angle)
-end
-
-function Rigidbody:postUpdate()
-	self.transform.position = Vector2(self.body:getPosition())
-	self.transform.rotation.angle = self.body:getAngle()
+	self.transform:hook(self.body)
 end
 
 function Rigidbody:destroy()
@@ -48,3 +24,6 @@ function Rigidbody:destroy()
 end
 
 return Rigidbody
+--[[
+RIGIDBODY NOT RIDIGBODY
+]]

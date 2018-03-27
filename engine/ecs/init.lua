@@ -21,28 +21,33 @@ function ECS:new(world)
 	self._compStorage = ECS.ComponentStorage()
 
 	self.world = world
+	self.deltaTime = 0
 
 	self.timer = Timer()
 end
 
 -- Adds an entity to the system and returns it
 function ECS:addEntity(entity)
-	entity:attachECS(self)
+	entity:attachToECS(self)
 	return self._entStorage:add(entity)
 end
 
 -- Updates the system
 function ECS:update(dt)
+	self.deltaTime = dt
+
 	-- Update Entities
-	self._entStorage:updateAll(dt)
-	self._compStorage:updateAll(dt)
+	self._entStorage:updateAll()
+	self._compStorage:updateAll()
 end
 
 -- Post-Updates the system
 function ECS:postUpdate(dt)
+	self.deltaTime = dt
+
 	-- Update Entities
-	self._entStorage:postUpdateAll(dt)
-	self._compStorage:postUpdateAll(dt)
+	self._entStorage:postUpdateAll()
+	self._compStorage:postUpdateAll()
 
 	-- Remove destroyed entities and components
 	self._entStorage:clearDestroyed()

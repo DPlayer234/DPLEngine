@@ -11,11 +11,11 @@ function Component:new(entity)
 	self:Object()
 end
 
--- For Overrides
+-- Called after the entity is attached
 function Component:initialize() end
 
 -- Attaches an entity to the component
-function Component:attachEntity(entity)
+function Component:attachToEntity(entity)
 	self.entity = entity
 
 	self.ecs = self.entity.ecs

@@ -13,18 +13,21 @@ function Object:new()
 end
 
 -- By default, does nothing
-function Object:update(dt) end
+function Object:update() end
 
 -- By default, does nothing
-function Object:postUpdate(dt) end
+function Object:postUpdate() end
 
 -- By default, does nothing
-function Object:draw(dt) end
+function Object:draw() end
 
 -- Destroys the object
 function Object:destroy()
 	self._destroy = true
 end
+
+-- Called when the object is actually destroyed
+function Object:onDestroy() end
 
 -- Returns whether the object was destroyed already and cannot be used anymore
 function Object:wasDestroyed()

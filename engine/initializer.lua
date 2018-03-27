@@ -14,14 +14,24 @@ function Initializer:new(engine)
 	self.engine = engine
 end
 
--- Loads all entities into the engine's entities field
+-- Loads all Engine entities into the engine's entities field
 function Initializer:loadEntities()
 	self:_loadClasses(self.engine._entities, currentPath .. "/entities")
 end
 
--- Loads all components into the engine's components field
+-- Loads all Engine components into the engine's components field
 function Initializer:loadComponents()
 	self:_loadClasses(self.engine._components, currentPath .. "/components")
+end
+
+-- Loads all user entities into the engine's entities field
+function Initializer:loadUserEntities(userPath)
+	self:_loadClasses(self.engine._entities, userPath)
+end
+
+-- Loads all user components into the engine's components field
+function Initializer:loadUserComponents(userPath)
+	self:_loadClasses(self.engine._components, userPath)
 end
 
 -- Loads classes into a table from a certain directory
