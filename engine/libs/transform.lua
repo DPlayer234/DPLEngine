@@ -4,6 +4,8 @@ Entity Transform
 local currentModule = miscMod.getModule(..., false)
 local math = math
 
+local TYPE_NAME = "Transform" --#const
+
 local Vector2  = require(currentModule .. ".vector2")
 
 -- Explicit methods
@@ -15,7 +17,10 @@ local methods = {
 	-- Hook
 	hook = function(self, hook)
 		self._hook = hook
-	end
+	end,
+	-- Type
+	type = function() return TYPE_NAME end,
+	typeOf = function(self, name) return name == TYPE_NAME end
 }
 
 -- Value getter

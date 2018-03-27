@@ -27,10 +27,12 @@ end
 -- Called after the ECS is attached
 function Entity:initialize() end
 
+-- Collision callbacks
 function Entity:onCollisionBegin(other, contact) end
 function Entity:onCollisionStay(other, contact) end
 function Entity:onCollisionEnd(other, contact) end
 
+-- Sensor callbacks
 function Entity:onSensorBegin(other, contact) end
 function Entity:onSensorStay(other, contact) end
 function Entity:onSensorEnd(other, contact) end

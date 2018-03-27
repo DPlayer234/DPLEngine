@@ -5,7 +5,7 @@ local EntityStorage = class("EntityStorage")
 
 -- Creates a new EntityStorage
 function EntityStorage:new()
-	self._entities = setmetatable({}, implicit2d)
+	self._entities = {}
 	self._needsClear = true
 end
 

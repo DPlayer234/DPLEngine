@@ -4,6 +4,8 @@
 local math = math
 local ffi = require "ffi"
 
+local TYPE_NAME = "Vector2" --#const
+
 -- Define the C structs
 ffi.cdef [[
 typedef struct {
@@ -60,7 +62,10 @@ local methods = {
 	-- Returns both components in order
 	unpack = function(self)
 		return self.x, self.y
-	end
+	end,
+	-- Type
+	type = function() return TYPE_NAME end,
+	typeOf = function(self, name) return name == TYPE_NAME end
 }
 
 -- Metatable, including operators

@@ -14,8 +14,6 @@ ECS (Entity Component System)
 
 Entity
 	transform: Transform
-	dimensions: Vector2
-	body: Body
 	components: ComponentStorage
 	ecs: ECS
 
@@ -24,11 +22,6 @@ Component
 	ecs: ECS
 
 ComponentStorage: Dictionary<class, Component[]>
-
-Body
-	body: love.physics Body
-	shape: love.physics Shape
-	fixture: love.physics Fixture
 
 Vector2
 	x: number

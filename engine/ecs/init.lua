@@ -4,7 +4,6 @@ The Entity Component System
 local currentModule = miscMod.getModule(..., true)
 
 local EventStore = require "libs.event_store"
-local Timer      = require "libs.timer"
 
 -- The Entity Component System class
 local ECS = class("ECS")
@@ -20,10 +19,10 @@ function ECS:new(world)
 	self._entStorage = ECS.EntityStorage()
 	self._compStorage = ECS.ComponentStorage()
 
-	self.world = world
 	self.deltaTime = 0
 
-	self.timer = Timer()
+	self.world = nil
+	self.timer = nil
 end
 
 -- Adds an entity to the system and returns it
