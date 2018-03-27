@@ -4,9 +4,6 @@ Simple extended math library.
 local currentModule = (...):gsub("%.init$", "")
 local mathf = {}
 
--- Loads the Vector2 sub-module
-require(currentModule .. ".vector2")(mathf)
-
 -- Regular math
 local floor = math.floor
 

@@ -30,8 +30,7 @@ function Initializer:_loadClasses(into, directory)
 		local fullPath = directory .. "/" .. item
 		if love.filesystem.isDirectory(fullPath) then
 			-- Load subdirectory
-			into[item] = {}
-			self:_loadClasses(into[item], fullPath)
+			self:_loadClasses(into, fullPath)
 		elseif (item:find("%.lua$")) then
 			-- Loads the Lua file and stores the class
 			local loaded = require(fullPath:gsub("%.lua$", ""):gsub("[/\\]", "."))

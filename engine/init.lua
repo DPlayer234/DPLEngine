@@ -3,11 +3,20 @@ The engine itself
 ]]
 local currentModule = miscMod.getModule(..., true)
 
+local physics = require "love.physics"
+
 local EventStore = require "libs.event_store"
 local Timer      = require "libs.timer"
 
 -- Class for the game engine
 local Engine = class("Engine")
+
+-- Load Libraries
+local libs = require(currentModule .. ".libs")
+
+Engine.Vector2   = libs.Vector2
+Engine.Rotation  = libs.Rotation
+Engine.Transform = libs.Transform
 
 -- Load primary classes
 Engine.GameState   = require(currentModule .. ".game_state")
@@ -16,6 +25,9 @@ Engine.Initializer = require(currentModule .. ".initializer")
 
 -- Stores functions to be called upon the end of the initialization
 local onInitDone = EventStore()
+
+-- Preload Hooker
+require(currentModule .. ".preload")
 
 -- Instantiates a new engine state
 function Engine:new()
@@ -29,7 +41,9 @@ function Engine:new()
 end
 
 -- Initializes the engine
-function Engine:initialize()
+function Engine:initialize(meterScale)
+	physics.setMeter(meterScale or 30)
+
 	self.initializer:loadEntities()
 	self.initializer:loadComponents()
 
@@ -60,6 +74,16 @@ function Engine:popGameState()
 
 	local state = self:getGameState()
 	if state then state:resumed() end
+end
+
+-- Gets a loaded entity class by name
+function Engine:getEntityType(entityType)
+	return self._entities[entityType]
+end
+
+-- Gets a loaded component class by name
+function Engine:getComponentType(componentType)
+	return self._components[componentType]
 end
 
 -- Updates the engine and active game state

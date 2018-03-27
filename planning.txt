@@ -13,10 +13,8 @@ ECS (Entity Component System)
 	components: ComponentStorage
 
 Entity
-	position: Vector2
-	velocity: Vector2
+	transform: Transform
 	dimensions: Vector2
-	rotation: number
 	body: Body
 	components: ComponentStorage
 	ecs: ECS
@@ -35,3 +33,8 @@ Body
 Vector2
 	x: number
 	y: number
+
+Transform
+	position: Vector2
+	velocity: Vector2
+	rotation: number

@@ -12,9 +12,21 @@ local implicit2d = {
 	end
 }
 
+-- Allows implicitly creating 2D tables
+local nextId = {
+	__index = function(t, class)
+		t.id = t.id + 1
+		rawset(t, class, t.id)
+		return t.id
+	end
+}
+
 -- Creates a new ComponentStorage
 function ComponentStorage:new()
+	self._classId = setmetatable({ id = 0 }, nextId)
 	self._components = setmetatable({}, implicit2d)
+
+	self._needsClear = false
 end
 
 -- Returns whether the storage contains the component
@@ -30,7 +42,7 @@ end
 
 -- Adds a component to the storage
 function ComponentStorage:add(component)
-	if self:contains(component) then return end
+	if self:contains(component) then return component end
 
 	local list = self:_getValueList(component)
 	list[#list + 1] = component
@@ -85,23 +97,55 @@ end
 
 -- Updates all contained components
 function ComponentStorage:updateAll(dt)
-	for class, list in pairs(self._components) do
-		for i=1, #list do
-			list[i]:update(dt)
+	for i=1, #self._components do
+		local list = self._components[i]
+		for j=1, #list do
+			list[j]:update(dt)
 		end
 	end
 end
 
+-- Post-Updates all contained components
+function ComponentStorage:postUpdateAll(dt)
+	for i=1, #self._components do
+		local list = self._components[i]
+		for j=1, #list do
+			list[j]:postUpdate(dt)
+		end
+	end
+end
+
+-- Draws all contained components
+function ComponentStorage:drawAll(dt)
+	for i=1, #self._components do
+		local list = self._components[i]
+		for j=1, #list do
+			list[j]:draw(dt)
+		end
+	end
+end
+
+-- Marks this storage needing a clear
+function ComponentStorage:queueClear()
+	self._needsClear = true
+end
+
 -- Clears all destroyed components out
 function ComponentStorage:clearDestroyed()
-	for class, list in pairs(self._components) do
-		for i=#list, 1, -1 do
-			if list[i]._destroy then
-				list[i]._destroyed = true
-				table.remove(list, i)
+	if not self._needsClear then return false end
+
+	for i=1, #self._components do
+		local list = self._components[i]
+		for j=1, #list do
+			if list[j]._destroy then
+				list[j]._destroyed = true
+				table.remove(list, j)
 			end
 		end
 	end
+
+	self._needsClear = false
+	return true
 end
 
 -- Gets the component list for the class of the given component
@@ -111,7 +155,7 @@ end
 
 -- Gets the component list of the given class
 function ComponentStorage:_getClassList(class)
-	return self._components[class]
+	return self._components[self._classId[class]]
 end
 
 return ComponentStorage

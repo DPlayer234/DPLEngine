@@ -9,11 +9,11 @@ ffi.cdef [[
 typedef struct {
 	double x;
 	double y;
-} mathf_Vector2
+} Engine_Vector2
 ]]
 
 -- Get the type in Lua (also used for construction)
-local Vector2 = ffi.typeof("mathf_Vector2")
+local Vector2 = ffi.typeof("Engine_Vector2")
 
 -- Explicit methods
 local methods = {
@@ -64,7 +64,6 @@ local methods = {
 }
 
 -- Metatable, including operators
--- Operators always return a new vector
 local meta = {
 	-- Addition
 	__add = function(a, b)
@@ -108,8 +107,4 @@ local meta = {
 -- Assign metatable
 ffi.metatype(Vector2, meta)
 
--- Allow hooking
-return function(mathf)
-	mathf.newVector2 = Vector2
-	mathf.vector2 = methods
-end
+return Vector2

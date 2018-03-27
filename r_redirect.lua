@@ -11,6 +11,7 @@ for i,f in ipairs {
 	"dev",
 	"engine",
 	"engine.ecs",
+	"engine.libs",
 	"libs.input2",
 	"libs.mathf",
 	-- End of list

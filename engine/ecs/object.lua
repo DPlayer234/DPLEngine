@@ -1,5 +1,5 @@
 --[[
-Super class for updatable and destroyable things
+Super class for updatable, drawable and destroyable things
 ]]
 local Object = class("Object")
 
@@ -14,6 +14,12 @@ end
 
 -- By default, does nothing
 function Object:update(dt) end
+
+-- By default, does nothing
+function Object:postUpdate(dt) end
+
+-- By default, does nothing
+function Object:draw(dt) end
 
 -- Destroys the object
 function Object:destroy()

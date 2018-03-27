@@ -10,7 +10,7 @@ function love.conf(t)
 		developer = "Darius \"DPlay\" K.",
 		publisher = "None",
 		version   = "0.0.0",
-		identity  = "LEngine"
+		identity  = "DPLEngine"
 	}
 
 	_game.fullTitle = _game.subtitle and _game.title .. ": " .. _game.subtitle or _game.title
