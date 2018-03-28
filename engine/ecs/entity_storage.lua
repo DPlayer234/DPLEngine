@@ -7,6 +7,7 @@ local EntityStorage = class("EntityStorage")
 function EntityStorage:new()
 	self._entities = {}
 	self._needsClear = true
+	self._needsSort = true
 end
 
 -- Returns whether the storage contains the entity
@@ -25,6 +26,7 @@ function EntityStorage:add(entity)
 	if self:contains(entity) then return entity end
 
 	self._entities[#self._entities + 1] = entity
+	self._needsSort = true
 
 	return entity
 end
@@ -122,16 +124,28 @@ function EntityStorage:queueClear()
 	self._needsClear = true
 end
 
--- Clears all destroyed entities out
-function EntityStorage:clearDestroyed()
-	-- Clear out destroyed components
-	for i=1, #self._entities do
-		self._entities[i]._compStorage:clearDestroyed()
+-- Handles internal stuff
+function EntityStorage:handle()
+	self:_handleComponents()
+
+	if self._needsClear then
+		self:_clearDestroyed()
 	end
 
-	-- Clear out destroyed entities
-	if not self._needsClear then return false end
+	if self._needsSort then
+		self:_sort()
+	end
+end
 
+-- Clear out destroyed components
+function EntityStorage:_handleComponents()
+	for i=1, #self._entities do
+		self._entities[i]._compStorage:handle()
+	end
+end
+
+-- Clears all destroyed entities out
+function EntityStorage:_clearDestroyed()
 	for i=#self._entities, 1, -1 do
 		if self._entities[i]._destroy then
 			self._entities[i]._destroyed = true
@@ -141,7 +155,18 @@ function EntityStorage:clearDestroyed()
 	end
 
 	self._needsClear = false
-	return true
+end
+
+-- Sorting callback
+local sort = function(a, b)
+	return a.priority > b.priority
+end
+
+-- Sorts the entity list
+function EntityStorage:_sort()
+	table.sort(self._entities, sort)
+
+	self._needsSort = false
 end
 
 return EntityStorage

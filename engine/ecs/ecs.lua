@@ -72,9 +72,8 @@ function ECS:postUpdate()
 	self._entStorage:postUpdateAll()
 	self._compStorage:postUpdateAll()
 
-	-- Remove destroyed entities and components
-	self._entStorage:clearDestroyed()
-	self._compStorage:clearDestroyed()
+	self._entStorage:handle()
+	self._compStorage:handle()
 end
 
 -- Draws the system
@@ -88,8 +87,8 @@ function ECS:destroy()
 	self._entStorage:destroyAll()
 	self._compStorage:destroyAll()
 
-	self._entStorage:clearDestroyed()
-	self._compStorage:clearDestroyed()
+	self._entStorage:handle()
+	self._compStorage:handle()
 end
 
 return ECS

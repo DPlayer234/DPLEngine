@@ -7,6 +7,8 @@ local Vector2 = require "Engine.Vector2"
 
 local DrawableRenderer = class("DrawableRenderer", require "Engine.ECS.Component")
 
+DrawableRenderer.priority = -100
+
 function DrawableRenderer:initialize()
 	self._center = Vector2()
 	self._color = colors.vec4(1, 1, 1, 1)

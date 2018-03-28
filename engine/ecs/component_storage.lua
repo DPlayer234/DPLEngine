@@ -3,17 +3,9 @@ Stores components
 ]]
 local ComponentStorage = class("ComponentStorage")
 
--- Allows implicitly creating 2D tables
-local implicit2d = {
-	__index = function(t, k)
-		local v = {}
-		rawset(t, k, v)
-		return v
-	end
-}
-
 -- Automatically extends the definitions in the table by the class's children
-local autoExtendClass = {
+-- _classes
+local classesMeta = {
 	__newindex = function(t, name, class)
 		rawset(t, name, class)
 		if class.PARENT then
@@ -23,21 +15,35 @@ local autoExtendClass = {
 }
 
 -- Makes the table automatically assign IDs
-local autoIds = {
+-- _typeIds
+local typeIdsMeta = {
 	__index = function(t, k)
-		t._id = t._id + 1
-		rawset(t, k, t._id)
-		return t._id
+		t.id = t.id + 1
+		rawset(t, k, t.id)
+		t.self._components[t.id].name = k
+		return t.id
+	end
+}
+
+-- Allows implicitly creating 2D tables
+-- _components
+local componentsMeta = {
+	__index = function(t, k)
+		local v = {}
+		rawset(t, k, v)
+		t.self._needsSort = true
+		return v
 	end
 }
 
 -- Creates a new ComponentStorage
 function ComponentStorage:new()
-	self._classes = setmetatable({}, autoExtendClass)
-	self._types   = setmetatable({ _id = 0 }, autoIds)
+	self._classes = setmetatable({ self = self }, classesMeta)
+	self._typeIds = setmetatable({ self = self, id = 0 }, typeIdsMeta)
 
-	self._components = setmetatable({}, implicit2d)
+	self._components = setmetatable({ self = self }, componentsMeta)
 
+	self._needsSort  = false
 	self._needsClear = false
 end
 
@@ -59,6 +65,7 @@ function ComponentStorage:add(component)
 
 	local list = self:_getValueList(component)
 	list[#list + 1] = component
+	list.priority = component.priority
 
 	return component
 end
@@ -147,10 +154,47 @@ function ComponentStorage:queueClear()
 	self._needsClear = true
 end
 
--- Clears all destroyed components out
-function ComponentStorage:clearDestroyed()
-	if not self._needsClear then return false end
+-- Handles internal stuff
+function ComponentStorage:handle()
+	if self._needsSort then
+		self:_sort()
+	end
 
+	if self._needsClear then
+		self:_clearDestroyed()
+	end
+end
+
+-- Sorting callback
+local sort = function(a, b)
+	return a.priority > b.priority
+end
+
+-- Sorts the component storage
+function ComponentStorage:_sort()
+	local typeIds = { self = self }
+
+	-- Remove unused tables
+	for i=#self._components, 1, -1 do
+		if #self._components[i] < 1 then
+			table.remove(self._components, i)
+		end
+	end
+
+	table.sort(self._components, sort)
+
+	-- Update type IDs
+	for i=1, #self._components do
+		typeIds[self._components[i].name] = i
+	end
+
+	self._typeIds = setmetatable(typeIds, typeIdsMeta)
+
+	self._needsSort = false
+end
+
+-- Clears all destroyed components out
+function ComponentStorage:_clearDestroyed()
 	for i=1, #self._components do
 		local list = self._components[i]
 		for j=#list, 1, -1 do
@@ -165,7 +209,6 @@ function ComponentStorage:clearDestroyed()
 	end
 
 	self._needsClear = false
-	return true
 end
 
 -- Gets the component list for the class of the given component
@@ -180,7 +223,7 @@ end
 
 -- Gets the component list of the given class
 function ComponentStorage:_getTypeList(typeName)
-	return self._components[self._types[typeName]]
+	return self._components[self._typeIds[typeName]]
 end
 
 -- Returns the class based on the type name or nil if it isn't known in this context

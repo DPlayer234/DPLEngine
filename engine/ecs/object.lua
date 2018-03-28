@@ -3,6 +3,8 @@ Super class for updatable, drawable and destroyable things
 ]]
 local Object = class("Object")
 
+Object.priority = 0
+
 -- Creates a new Object
 function Object:new()
 	-- Marks an entity for destruction
