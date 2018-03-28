@@ -1,9 +1,9 @@
 --[[
 Quick loading the engine itself
 ]]
-local currentModule = miscMod.getModule(..., true)
+local currentModule = (...):gsub("%.init$", "")
 
 -- Hooking require
-require(currentModule .. ".preload")
+require(currentModule .. "._preload")
 
-return require(currentModule .. ".engine")
+return require "Engine"

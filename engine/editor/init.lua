@@ -1,4 +1,4 @@
 --[[
 Returns the Editor
 ]]
-return require(miscMod.getModule(..., true) .. ".editor")
+return require((...):gsub("%.init$", "") .. ".editor")

@@ -13,8 +13,7 @@ for i,f in ipairs {
 	"engine.ecs",
 	"engine.editor",
 	"engine.game_state",
-	"engine.libs",
-	"libs.input2",
+	"engine.libs.input",
 	"libs.mathf",
 	-- End of list
 } do

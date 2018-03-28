@@ -1,11 +1,9 @@
 --[[
 Rectanglur Collider
 ]]
-local currentModule = miscMod.getModule(..., false)
-
 local physics = require "love.physics"
 
-local Collider = require(currentModule .. ".collider")
+local Collider = require("Engine.components").Collider
 local RectangleCollider = class("RectangleCollider", Collider)
 
 -- Creates a new collider

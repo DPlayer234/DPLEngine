@@ -1,18 +1,13 @@
 --[[
 The base class for any entity to be added to a scene
 ]]
-local currentModule = miscMod.getModule(..., false)
-local parentModule  = miscMod.getModule(currentModule, false)
-
-local Object = require(currentModule .. ".object")
-
-local Component = require(currentModule .. ".component")
-local ComponentStorage = require(currentModule .. ".component_storage")
+local Component = require "Engine.ECS.Component"
+local ComponentStorage = require "Engine.ECS.ComponentStorage"
 
 local Transform = require "Engine.Transform"
 
 -- Class
-local Entity = class("Entity", Object)
+local Entity = class("Entity", require "Engine.ECS.Object")
 
 -- Initializes a new Entity
 function Entity:new()
@@ -101,10 +96,7 @@ end
 function Entity:destroy()
 	self.ecs._entStorage:queueClear()
 	self.Object.destroy(self)
-
-	for _, component in ipairs(self:getComponents("Component")) do
-		component:destroy()
-	end
+	self._compStorage:destroyAll()
 end
 
 return Entity

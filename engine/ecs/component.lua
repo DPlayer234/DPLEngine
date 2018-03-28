@@ -1,10 +1,7 @@
 --[[
 The base class for any component addable to entities
 ]]
-local currentModule = miscMod.getModule(..., false)
-
-local Object = require(currentModule .. ".object")
-local Component = class("Component", Object)
+local Component = class("Component", require "Engine.ECS.Object")
 
 -- Creates a new component instance
 function Component:new()

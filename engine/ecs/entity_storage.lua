@@ -110,6 +110,13 @@ function EntityStorage:drawAll()
 	end
 end
 
+-- Destroys all contained entities
+function EntityStorage:destroyAll()
+	for i=1, #self._entities do
+		self._entities[i]:destroy()
+	end
+end
+
 -- Marks this storage needing a clear
 function EntityStorage:queueClear()
 	self._needsClear = true

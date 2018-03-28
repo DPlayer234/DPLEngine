@@ -1,8 +1,6 @@
 --[[
 Stores and updates animations
 ]]
-local currentModule = miscMod.getModule(..., false)
-
 local graphics = require "love.graphics"
 local Vector2 = require "Engine.Vector2"
 

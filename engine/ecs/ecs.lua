@@ -1,16 +1,14 @@
 --[[
 The Entity Component System
 ]]
-local currentModule = miscMod.getModule(..., false)
-
--- The Entity Component System class
 local ECS = class("ECS")
 
 -- Load important classes
-ECS.ComponentStorage = require(currentModule .. ".component_storage")
-ECS.Component        = require(currentModule .. ".component")
-ECS.EntityStorage    = require(currentModule .. ".entity_storage")
-ECS.Entity           = require(currentModule .. ".entity")
+ECS.Object           = require "Engine.ECS.Object"
+ECS.Entity           = require "Engine.ECS.Entity"
+ECS.Component        = require "Engine.ECS.Component"
+ECS.EntityStorage    = require "Engine.ECS.EntityStorage"
+ECS.ComponentStorage = require "Engine.ECS.ComponentStorage"
 
 -- Initializes a new Entity Component System
 function ECS:new()
@@ -83,6 +81,15 @@ end
 function ECS:draw()
 	self._entStorage:drawAll()
 	self._compStorage:drawAll()
+end
+
+-- Destroy and clear all entities and components associated
+function ECS:destroy()
+	self._entStorage:destroyAll()
+	self._compStorage:destroyAll()
+
+	self._entStorage:clearDestroyed()
+	self._compStorage:clearDestroyed()
 end
 
 return ECS

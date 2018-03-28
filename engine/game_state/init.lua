@@ -1,4 +1,4 @@
 --[[
 Returns the GameState
 ]]
-return require(miscMod.getModule(..., true) .. ".game_state")
+return require((...):gsub("%.init$", "") .. ".game_state")

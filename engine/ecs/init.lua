@@ -1,4 +1,4 @@
 --[[
 Returns the ECS
 ]]
-return require(miscMod.getModule(..., true) .. ".ecs")
+return require((...):gsub("%.init$", "") .. ".ecs")

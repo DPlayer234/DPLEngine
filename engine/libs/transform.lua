@@ -1,12 +1,11 @@
 --[[
 Entity Transform
 ]]
-local currentModule = miscMod.getModule(..., false)
 local math = math
 
 local TYPE_NAME = "Transform" --#const
 
-local Vector2 = require(currentModule .. ".vector2")
+local Vector2 = require "Engine.Vector2"
 
 -- Explicit methods
 local methods = {

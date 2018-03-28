@@ -1,19 +1,12 @@
 -- Load general files
-require "errhand"
 require "r_redirect"
 
 class = require "libs.class"
 
 function love.load()
 	-- Load libraries
-	input   = require "libs.input2"
 	miscMod = require "libs.misc_mod"
 	sounds  = require "libs.sounds2"
-
-	-- Register input callbacks
-	input.setUpKeyboard(true)
-	input.setUpGamepads(true)
-	input.setUpMouse(true)
 
 	do
 		-- Creating the window
@@ -47,15 +40,15 @@ function love.load()
 		do
 			local entity = ecs:addEntity(Engine.ECS.Entity())
 
-			entity:addComponent(require "engine.components.rigidbody" ())
-			entity:addComponent(require "engine.components.rectangle_collider" (0, 0, 100, 100, 0)):getFixture():setRestitution(0.5)
-			entity:addComponent(require "engine.components.circle_collider" (70, 70, 50)):getFixture():setRestitution(0.5)
+			entity:addComponent(Engine.components.Rigidbody())
+			entity:addComponent(Engine.components.RectangleCollider(0, 0, 100, 100, 0)):getFixture():setRestitution(0.5)
+			entity:addComponent(Engine.components.CircleCollider(70, 70, 50)):getFixture():setRestitution(0.5)
 
-			local animator = entity:addComponent(require "engine.components.animator" (love.graphics.newImage("assets/textures/azure.png"), 15, 19))
+			local animator = entity:addComponent(Engine.components.Animator(love.graphics.newImage("assets/textures/azure.png"), 15, 19))
 			animator:newAnimation("idle"):setRate(12):addFrames(4, 0,0, 1,0):setLoop(true)
 			animator:setAnimation("idle")
 
-			local renderer = entity:addComponent(require "engine.components.animation_renderer" ())
+			local renderer = entity:addComponent(Engine.components.AnimationRenderer())
 			renderer:setAnimator(animator)
 			renderer:setCenter(Engine.Vector2(7.5, 9.5))
 
@@ -67,10 +60,10 @@ function love.load()
 
 		do
 			local entity = ecs:addEntity(Engine.ECS.Entity())
-			local rigidbody = entity:addComponent(require "engine.components.rigidbody" ())
+			local rigidbody = entity:addComponent(Engine.components.Rigidbody())
 			rigidbody:getBody():setType("static")
 
-			entity:addComponent(require "engine.components.chain_collider" (false, {
+			entity:addComponent(Engine.components.ChainCollider(false, {
 				0, 500,
 				400, 600,
 				600, 550,
@@ -109,9 +102,7 @@ end
 
 function love.update(dt)
 	Engine:update(dt)
-
 	sounds.update(dt)
-	input.endFrame(dt)
 end
 
 function love.draw()

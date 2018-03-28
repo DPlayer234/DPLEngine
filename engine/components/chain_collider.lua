@@ -1,11 +1,9 @@
 --[[
 Collider made up of several line segments
 ]]
-local currentModule = miscMod.getModule(..., false)
-
 local physics = require "love.physics"
 
-local Collider = require(currentModule .. ".collider")
+local Collider = require("Engine.components").Collider
 local ChainCollider = class("ChainCollider", Collider)
 
 -- Creates a new collider

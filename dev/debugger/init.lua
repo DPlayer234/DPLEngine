@@ -40,14 +40,10 @@ end
 
 debugger.doTempPrint = false
 
-local keyboardInput = input.KeyboardInput({})
-local mouseInput    = input.MouseInput({})
+require(currentModule .. ".add_commands")(debugger)
+require(currentModule .. ".add_aliases")(debugger)
 
-input.add(keyboardInput)
-input.add(mouseInput)
-
-require(currentModule .. ".add_commands")(debugger, keyboardInput, mouseInput)
-require(currentModule .. ".add_aliases")(debugger, keyboardInput, mouseInput)
+love.errhand = debugger.errhand
 
 -- Add as global variable
 _debug = debugger()

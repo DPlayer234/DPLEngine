@@ -1,11 +1,9 @@
 --[[
 Renders and updates an animation
 ]]
-local currentModule = miscMod.getModule(..., false)
-
 local graphics = require "love.graphics"
 
-local DrawableRenderer = require(currentModule .. ".drawable_renderer")
+local DrawableRenderer = require("Engine.components").DrawableRenderer
 local AnimationRenderer = class("AnimationRenderer", DrawableRenderer)
 
 function AnimationRenderer:getAnimator()

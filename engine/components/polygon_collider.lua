@@ -1,11 +1,9 @@
 --[[
 Collider for a polygon shape. Has at most 8 vertices.
 ]]
-local currentModule = miscMod.getModule(..., false)
-
 local physics = require "love.physics"
 
-local Collider = require(currentModule .. ".collider")
+local Collider = require("Engine.components").Collider
 local PolygonCollider = class("PolygonCollider", Collider)
 
 -- Creates a new collider

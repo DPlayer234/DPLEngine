@@ -2,7 +2,7 @@
 Adding aliases for commands
 ]]
 --#exclude start
-return function(debugger, keyboardInput, mouseInput)
+return function(debugger)
 	local aliasCommand = debugger.aliasCommand
 end
 --#exclude end

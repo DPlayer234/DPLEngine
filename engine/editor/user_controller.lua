@@ -1,7 +1,7 @@
 --[[
 Entity following the mouse
 ]]
-local currentModule = miscMod.getModule(..., false)
+local currentModule = (...):gsub("%.[^%.]+$", "")
 
 local colors = require "libs.colors"
 local Vector2 = require "Engine.Vector2"

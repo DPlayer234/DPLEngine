@@ -1,11 +1,9 @@
 --[[
 Circular Collider
 ]]
-local currentModule = miscMod.getModule(..., false)
-
 local physics = require "love.physics"
 
-local Collider = require(currentModule .. ".collider")
+local Collider = require("Engine.components").Collider
 local CircleCollider = class("CircleCollider", Collider)
 
 -- Creates a new collider

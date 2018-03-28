@@ -132,6 +132,16 @@ function ComponentStorage:drawAll()
 	end
 end
 
+-- Destroys all contained components
+function ComponentStorage:destroyAll()
+	for i=1, #self._components do
+		local list = self._components[i]
+		for j=1, #list do
+			list[j]:destroy()
+		end
+	end
+end
+
 -- Marks this storage needing a clear
 function ComponentStorage:queueClear()
 	self._needsClear = true

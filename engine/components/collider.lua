@@ -1,8 +1,6 @@
 --[[
 A Collider for rigidbodies (Fixture)
 ]]
-local currentModule = miscMod.getModule(..., false)
-
 local physics = require "love.physics"
 
 local Collider = class("Collider", require "Engine.ECS.Component")

@@ -1,37 +1,37 @@
 --[[
 The engine itself
 ]]
-local currentModule = miscMod.getModule(..., false)
-
-local physics  = require "love.physics"
-local graphics = require "love.graphics"
-local Timer    = require "libs.timer"
+local Timer = require "libs.timer"
 
 -- Class for the game engine
 local Engine = class("Engine")
 
 -- Load Libraries
-Engine.Mat3x3    = require(currentModule .. ".libs.mat3x3")
-Engine.Vector2   = require(currentModule .. ".libs.vector2")
-Engine.Transform = require(currentModule .. ".libs.transform")
+Engine.input     = require "Engine.input"
+Engine.Mat3x3    = require "Engine.Mat3x3"
+Engine.Vector2   = require "Engine.Vector2"
+Engine.Transform = require "Engine.Transform"
 
 -- Load primary classes
-Engine.ECS       = require(currentModule .. ".ecs")
-Engine.Editor    = require(currentModule .. ".editor")
-Engine.GameState = require(currentModule .. ".game_state")
+Engine.ECS         = require "Engine.ECS"
+Engine.GameState   = require "Engine.GameState"
+Engine.Initializer = require "Engine.Initializer"
+
+-- Quick access
+Engine.entities   = require "Engine.entities"
+Engine.components = require "Engine.components"
 
 -- Instantiates a new engine state
 function Engine:new()
 	self._gameStates = {}
 	self.timer = Timer()
+
+	self.initializer = Engine.Initializer(self)
 end
 
 -- Initializes the engine
 function Engine:initialize(args)
-	args = args or {}
-
-	physics.setMeter(args.meter or 30)
-	graphics.setDefaultFilter(args.textureFilter or "nearest")
+	self.initializer:initialize(args)
 end
 
 -- Returns the currently active game state
@@ -54,7 +54,10 @@ end
 -- Pops the current game state of the stack
 function Engine:popGameState()
 	local state = self:getGameState()
-	if state then state:popped() end
+	if state then
+		state:popped()
+		state:destroy()
+	end
 
 	table.remove(self._gameStates, #self._gameStates)
 
@@ -68,12 +71,25 @@ function Engine:update(dt)
 
 	local state = self:getGameState()
 	if state then state:update(dt) end
+
+	self.input.endFrame(dt)
 end
 
 -- Draws the active game state
 function Engine:draw()
 	local state = self:getGameState()
 	if state then state:draw() end
+end
+
+-- For optional libraries
+function Engine:__index(key)
+	local value
+	if key == "Editor" then
+		value = require "Engine.Editor"
+	end
+
+	Engine[key] = value
+	return value
 end
 
 return Engine()

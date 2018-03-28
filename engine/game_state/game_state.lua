@@ -1,14 +1,11 @@
 --[[
 The base class for any Game State
 ]]
-local currentModule = miscMod.getModule(..., false)
-local parentModule = miscMod.getModule(currentModule, false)
-
 local physicsWorldDraw = require "dev.physics_world_draw"
 local physics = require "love.physics"
 
-local ECS = require(parentModule .. ".ecs")
-local Transformation = require(currentModule .. ".transformation")
+local ECS = require "Engine.ECS"
+local Transformation = require "Engine.Transformation"
 
 local Timer = require "libs.timer"
 
@@ -67,6 +64,15 @@ function GameState:draw()
 	self.ecs:draw()
 
 	physicsWorldDraw(self.world, 0, 0, love.graphics.getDimensions())
+end
+
+-- Destroys the ECS and associated destroyable resources
+function GameState:destroy()
+	self.ecs:destroy()
+
+	-- Disabled because it MAY cause crashes.
+	-- It's still being garbage-collected, so it shouldn't cause any issues.
+	--self.world:destroy()
 end
 
 -- Sets the callbacks to the world

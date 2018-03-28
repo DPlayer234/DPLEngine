@@ -2,7 +2,7 @@
 Adding some commands for debugging :)
 ]]
 --#exclude start
-return function(debugger, keyboardInput, mouseInput)
+return function(debugger)
 	local newCommand = debugger.newCommand
 end
 --#exclude end
