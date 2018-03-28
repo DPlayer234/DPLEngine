@@ -14,14 +14,26 @@ function Object:new()
 	self._destroyed = false
 end
 
--- By default, does nothing
-function Object:update() end
+--[[ Update and Draw callbacks ]]
+-- Update the object before the physics simulation
+-- > function Object:update()
 
--- By default, does nothing
-function Object:postUpdate() end
+-- Update the object after the physics simulation
+-- > function Object:postUpdate()
 
--- By default, does nothing
-function Object:draw() end
+-- Draw the object
+-- > function Object:draw()
+
+-- The following six optional callbacks all receive an Engine.GameState.Collision as an argument
+--[[ Collision callbacks ]]
+-- > function Object:onCollisionBegin(collision)
+-- > function Object:onCollisionStay(collision)
+-- > function Object:onCollisionEnd(collision)
+
+--[[ Sensor callbacks ]]
+-- > function Object:onSensorBegin(collision)
+-- > function Object:onSensorStay(collision)
+-- > function Object:onSensorEnd(collision)
 
 -- Destroys the object
 function Object:destroy()

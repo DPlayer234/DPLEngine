@@ -22,16 +22,6 @@ end
 -- Called after the ECS is attached
 function Entity:initialize() end
 
--- Collision callbacks
-function Entity:onCollisionBegin(other, contact) end
-function Entity:onCollisionStay(other, contact) end
-function Entity:onCollisionEnd(other, contact) end
-
--- Sensor callbacks
-function Entity:onSensorBegin(other, contact) end
-function Entity:onSensorStay(other, contact) end
-function Entity:onSensorEnd(other, contact) end
-
 -- Attaches an ECS to the entity
 function Entity:attachToECS(ecs)
 	self.ecs = ecs
@@ -97,6 +87,12 @@ function Entity:destroy()
 	self.ecs._entStorage:queueClear()
 	self.Object.destroy(self)
 	self._compStorage:destroyAll()
+end
+
+-- Calls the named function for all of its components and itself
+function Entity:_callEvent(funcName, ...)
+	if self[funcName] then self[funcName](self, ...) end
+	return self._compStorage:callAll(funcName, ...)
 end
 
 return Entity

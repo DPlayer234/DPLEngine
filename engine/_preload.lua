@@ -14,6 +14,7 @@ local hooks = {
 	["Engine.ECS.Object"]           = ".ecs.object",
 	["Engine.Editor"]               = ".editor",
 	["Engine.GameState"]            = ".game_state",
+	["Engine.GameState.Collision"]  = ".game_state.collision",
 	["Engine.input"]                = ".libs.input",
 	["Engine.Mat3x3"]               = ".libs.mat3x3",
 	["Engine.Material"]             = ".libs.material",

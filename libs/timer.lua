@@ -7,17 +7,9 @@ local coroutine = coroutine
 
 local Timer = {}
 
-function Timer.construct()
-	return {
-		time = 0,
-		tasks = {}
-	}
-end
-
 function Timer:new(start)
-	if start ~= nil then
-		self.time = start
-	end
+	self.time = start or 0
+	self.tasks = {}
 end
 
 local coroutineWait = function(time)

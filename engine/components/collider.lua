@@ -41,6 +41,16 @@ function Collider:setMaterial(value)
 	self:getFixture():setRestitution(value.bounciness)
 end
 
+-- Gets this collider's sensor state
+function Collider:isSensor()
+	return self:getFixture():isSensor()
+end
+
+-- Sets this collider's sensor state
+function Collider:setSensor(value)
+	return self:getFixture():setSensor(value)
+end
+
 function Collider:onDestroy()
 	if not self._rigidbody:isDestroyed() then
 		self._fixture:destroy()

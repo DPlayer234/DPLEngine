@@ -62,15 +62,15 @@ end
 -- Updates the system
 function ECS:update()
 	-- Update Entities
-	self._entStorage:updateAll()
-	self._compStorage:updateAll()
+	self._entStorage:callAll("update")
+	self._compStorage:callAll("update")
 end
 
 -- Post-Updates the system
 function ECS:postUpdate()
 	-- Update Entities
-	self._entStorage:postUpdateAll()
-	self._compStorage:postUpdateAll()
+	self._entStorage:callAll("postUpdate")
+	self._compStorage:callAll("postUpdate")
 
 	self._entStorage:handle()
 	self._compStorage:handle()
@@ -78,8 +78,8 @@ end
 
 -- Draws the system
 function ECS:draw()
-	self._entStorage:drawAll()
-	self._compStorage:drawAll()
+	self._entStorage:callAll("draw")
+	self._compStorage:callAll("draw")
 end
 
 -- Destroy and clear all entities and components associated

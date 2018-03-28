@@ -91,24 +91,19 @@ function EntityStorage:getAllType(typeName)
 	return entities
 end
 
--- Updates all contained entities
-function EntityStorage:updateAll()
+-- Calls the named function on every entity, if the entity has one
+function EntityStorage:callAll(funcName, ...)
 	for i=1, #self._entities do
-		self._entities[i]:update()
+		local entity = self._entities[i]
+		if entity[funcName] then entity[funcName](entity, ...) end
 	end
 end
 
--- Post-Updates all contained entities
-function EntityStorage:postUpdateAll()
+-- Calls the named function on every entity
+function EntityStorage:callAllAnyways(funcName, ...)
 	for i=1, #self._entities do
-		self._entities[i]:postUpdate()
-	end
-end
-
--- Draws all contained entities
-function EntityStorage:drawAll()
-	for i=1, #self._entities do
-		self._entities[i]:draw()
+		local entity = self._entities[i]
+		entity[funcName](entity, ...)
 	end
 end
 

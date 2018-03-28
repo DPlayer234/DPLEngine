@@ -109,32 +109,26 @@ function ComponentStorage:getAllExact(typeName)
 	return { unpack(self:_getTypeList(typeName)) }
 end
 
--- Updates all contained components
-function ComponentStorage:updateAll()
+-- Calls the named function on every component, if the component has the function
+function ComponentStorage:callAll(funcName, ...)
 	for i=1, #self._components do
 		local list = self._components[i]
-		for j=1, #list do
-			list[j]:update()
+		if self._classes[list.name][funcName] then
+			for j=1, #list do
+				local component = list[j]
+				component[funcName](component, ...)
+			end
 		end
 	end
 end
 
--- Post-Updates all contained components
-function ComponentStorage:postUpdateAll()
+-- Calls the named function on every component
+function ComponentStorage:callAllAnyways(funcName, ...)
 	for i=1, #self._components do
 		local list = self._components[i]
 		for j=1, #list do
-			list[j]:postUpdate()
-		end
-	end
-end
-
--- Draws all contained components
-function ComponentStorage:drawAll()
-	for i=1, #self._components do
-		local list = self._components[i]
-		for j=1, #list do
-			list[j]:draw()
+			local component = list[j]
+			component[funcName](component, ...)
 		end
 	end
 end

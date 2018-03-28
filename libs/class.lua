@@ -69,7 +69,7 @@ classMeta = {
 		return "class "..tostring(self.NAME).." : "..tostring(self.PARENT.NAME)
 	end,
 	new = function(self, ...)
-		local obj = setmetatable(self.CONSTRUCT and self.CONSTRUCT() or {}, self.BASE)
+		local obj = setmetatable({}, self.BASE)
 		self.NEW(obj, ...)
 		return obj
 	end,
@@ -179,7 +179,6 @@ function class.class(name, rawbase, parent)
 	local cls = setmetatable({
 		BASE = base,
 		NEW = base.new or parent and parent.NEW or noNew,
-		CONSTRUCT = parent and parent.construct or base.construct or nil,
 		NAME = name,
 		CHILDREN = setmetatable({}, weakTable),
 		PARENT = parent,

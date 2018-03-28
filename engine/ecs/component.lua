@@ -8,7 +8,7 @@ function Component:new()
 	self:Object()
 end
 
--- Called after the entity is attached
+-- Called after the entity and ECS is attached
 function Component:initialize() end
 
 -- Attaches an entity to the component
@@ -38,8 +38,7 @@ end
 
 -- Returns whether this component is updatable
 function Component:isUpdatable()
-	local super = self.Component
-	return self.update ~= super.update or self.postUpdate ~= super.postUpdate or self.draw ~= super.draw
+	return (self.update or self.postUpdate or self.draw) and true
 end
 
 return Component

@@ -4,13 +4,16 @@ The base class for any Game State
 local physicsWorldDraw = require "dev.physics_world_draw"
 local physics = require "love.physics"
 
-local ECS = require "Engine.ECS"
+local ECS            = require "Engine.ECS"
 local Transformation = require "Engine.Transformation"
+local Collision      = require "Engine.GameState.Collision"
 
 local Timer = require "libs.timer"
 
 -- The class
 local GameState = class("GameState")
+
+GameState.Collision = Collision
 
 -- Creates a new GameState
 function GameState:new()
@@ -78,47 +81,29 @@ end
 -- Sets the callbacks to the world
 function GameState:_setWorldCallbacks()
 	-- All callbacks receive the two fixtures and their contact point
+	local function getCallback(sensor, collision)
+		return function(fixA, fixB, contact)
+			local colA = fixA:getUserData()
+			local colB = fixB:getUserData()
+
+			local cntA = Collision(contact, colA, colB, false)
+			local cntB = Collision(contact, colB, colA, true)
+
+			if colA:isSensor() or colB:isSensor() then
+				colA.entity:_callEvent(sensor, cntA)
+				colB.entity:_callEvent(sensor, cntB)
+			else
+				colA.entity:_callEvent(collision, cntA)
+				colB.entity:_callEvent(collision, cntB)
+			end
+		end
+	end
+
 	self.world:setCallbacks(
-		function(a, b, contact)
-			-- Begin
-			local entityA = a:getUserData().entity
-			local entityB = b:getUserData().entity
-
-			if a:isSensor() or b:isSensor() then
-				entityA:onSensorBegin(entityB, contact)
-				entityB:onSensorBegin(entityA, contact)
-			else
-				entityA:onCollisionBegin(entityB, contact)
-				entityB:onCollisionBegin(entityA, contact)
-			end
-		end,
-		function(a, b, contact)
-			-- End
-			local entityA = a:getUserData().entity
-			local entityB = b:getUserData().entity
-
-			if a:isSensor() or b:isSensor() then
-				entityA:onSensorEnd(entityB, contact)
-				entityB:onSensorEnd(entityA, contact)
-			else
-				entityA:onCollisionEnd(entityB, contact)
-				entityB:onCollisionEnd(entityA, contact)
-			end
-		end,
-		function(a, b, contact)
-			-- PreSolve
-			local entityA = a:getUserData().entity
-			local entityB = b:getUserData().entity
-
-			if a:isSensor() or b:isSensor() then
-				entityA:onSensorStay(entityB, contact)
-				entityB:onSensorStay(entityA, contact)
-			else
-				entityA:onCollisionStay(entityB, contact)
-				entityB:onCollisionStay(entityA, contact)
-			end
-		end)
+		getCallback("onSensorBegin", "onCollisionBegin"), -- Begin
+		getCallback("onSensorEnd",   "onCollisionEnd"), -- End
+		getCallback("onSensorStay",  "onCollisionStay") -- PreSolve
+	)
 end
-
 
 return GameState
