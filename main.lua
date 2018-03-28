@@ -40,9 +40,11 @@ function love.load()
 		do
 			local entity = ecs:addEntity(Engine.ECS.Entity())
 
-			entity:addComponent(Engine.components.Rigidbody())
-			entity:addComponent(Engine.components.RectangleCollider(0, 0, 100, 100, 0)):getFixture():setRestitution(0.5)
-			entity:addComponent(Engine.components.CircleCollider(70, 70, 50)):getFixture():setRestitution(0.5)
+			local rigidbody = entity:addComponent(Engine.components.Rigidbody())
+			rigidbody:setMaterial(Engine.Material() { friction = 0, bounciness = 2 })
+
+			entity:addComponent(Engine.components.RectangleCollider(0, 0, 100, 100, 0))
+			entity:addComponent(Engine.components.CircleCollider(70, 70, 50))
 
 			local animator = entity:addComponent(Engine.components.Animator(love.graphics.newImage("assets/textures/azure.png"), 15, 19))
 			animator:newAnimation("idle"):setRate(12):addFrames(4, 0,0, 1,0):setLoop(true)
@@ -60,8 +62,7 @@ function love.load()
 
 		do
 			local entity = ecs:addEntity(Engine.ECS.Entity())
-			local rigidbody = entity:addComponent(Engine.components.Rigidbody())
-			rigidbody:getBody():setType("static")
+			local rigidbody = entity:addComponent(Engine.components.Rigidbody("static"))
 
 			entity:addComponent(Engine.components.ChainCollider(false, {
 				0, 500,

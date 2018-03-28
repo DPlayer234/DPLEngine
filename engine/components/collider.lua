@@ -18,11 +18,27 @@ function Collider:initialize()
 
 	self._fixture = physics.newFixture(self._rigidbody:getBody(), self._shape, self._density or 1)
 	self._fixture:setUserData(self)
+
+	self:setMaterial(self._rigidbody:getMaterial())
 end
 
 -- Returns the fixture
 function Collider:getFixture()
 	return self._fixture
+end
+
+-- Gets the Material of the collider
+function Collider:getMaterial()
+	return self._material:instantiate()
+end
+
+-- Sets the Material of the collider
+function Collider:setMaterial(value)
+	if not value:typeOf("Material") then error("Can only set Materials!") end
+	self._material = value:instantiate()
+
+	self:getFixture():setFriction(value.friction)
+	self:getFixture():setRestitution(value.bounciness)
 end
 
 function Collider:onDestroy()

@@ -104,6 +104,7 @@ local meta = {
 	end,
 	-- Equality
 	__eq = function(a, b)
+		if ffi.istype(Vector2, a) ~= ffi.istype(Vector2, b) then return false end
 		return a.x == b.x and a.y == b.y
 	end,
 	-- Nicer string format

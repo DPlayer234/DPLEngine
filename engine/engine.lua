@@ -9,6 +9,7 @@ local Engine = class("Engine")
 -- Load Libraries
 Engine.input     = require "Engine.input"
 Engine.Mat3x3    = require "Engine.Mat3x3"
+Engine.Material  = require "Engine.Material"
 Engine.Vector2   = require "Engine.Vector2"
 Engine.Transform = require "Engine.Transform"
 

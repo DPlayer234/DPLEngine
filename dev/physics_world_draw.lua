@@ -22,11 +22,11 @@ local function drawFixture(fixture)
 	if (shapeType == "circle") then
 		local x,y = shape:getPoint()
 		local radius = shape:getRadius()
-		love.graphics.circle("fill",x,y,radius,15)
+		love.graphics.circle("fill",x,y,radius)
 		love.graphics.setColor(color.outline)
-		love.graphics.circle("line",x,y,radius,15)
+		love.graphics.circle("line",x,y,radius)
 		local eyeRadius = radius/4
-		love.graphics.circle("fill",0,-radius+eyeRadius,eyeRadius,10)
+		love.graphics.circle("fill",0,-radius+eyeRadius,eyeRadius)
 	elseif (shapeType == "polygon") then
 		local points = {shape:getPoints()}
 		love.graphics.polygon("fill",points)

@@ -188,6 +188,8 @@ function ComponentStorage:_sort()
 		typeIds[self._components[i].name] = i
 	end
 
+	typeIds.id = #self._components
+
 	self._typeIds = setmetatable(typeIds, typeIdsMeta)
 
 	self._needsSort = false
