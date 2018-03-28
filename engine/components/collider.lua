@@ -4,7 +4,6 @@ A Collider for rigidbodies (Fixture)
 local currentModule = miscMod.getModule(..., false)
 
 local physics = require "love.physics"
-local Vector2 = require "Engine.Vector2"
 
 local Rigidbody = require(currentModule .. ".rigidbody")
 

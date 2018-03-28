@@ -2,7 +2,7 @@
 require "errhand"
 require "r_redirect"
 
-class = require "class"
+class = require "libs.class"
 
 function love.load()
 	-- Load libraries
@@ -46,8 +46,9 @@ function love.load()
 
 		do
 			local entity = ecs:addEntity(Engine.ECS.Entity())
+
 			entity:addComponent(require "engine.components.rigidbody" ())
-			entity:addComponent(require "engine.components.collider" (love.physics.newRectangleShape(100, 100))).fixture:setRestitution(0.7)
+			entity:addComponent(require "engine.components.rectangle_collider" (100, 100)).fixture:setRestitution(0.5)
 
 			entity.transform.position = Engine.Vector2(200, 100)
 		end
@@ -57,10 +58,12 @@ function love.load()
 			local rigidbody = entity:addComponent(require "engine.components.rigidbody" ())
 			rigidbody.body:setType("static")
 
-			entity:addComponent(require "engine.components.collider" (love.physics.newRectangleShape(1000, 50)))
-
-			entity.transform.position = Engine.Vector2(500, 500)
-			entity.transform.rotation = 0.06
+			entity:addComponent(require "engine.components.chain_collider" (false, {
+				0, 500,
+				400, 600,
+				600, 550,
+				900, 800
+			}))
 		end
 
 		-- Set a function to run after 5 seconds
@@ -78,9 +81,9 @@ function love.load()
 		Engine:pushGameState(gameState)
 	end
 
-	--setState()
+	setState()
 
-	Engine:pushGameState(Engine.Editor())
+	--Engine:pushGameState(Engine.Editor())
 
 	require "dev"
 end

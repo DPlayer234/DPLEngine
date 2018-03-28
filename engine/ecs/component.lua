@@ -7,7 +7,7 @@ local Object = require(currentModule .. ".object")
 local Component = class("Component", Object)
 
 -- Creates a new component instance
-function Component:new(entity)
+function Component:new()
 	self:Object()
 end
 
@@ -22,7 +22,9 @@ function Component:attachToEntity(entity)
 	self.transform = self.entity.transform
 
 	self.entity._compStorage:add(self)
-	self.ecs._compStorage:add(self)
+	if self:isUpdatable() then
+		self.ecs._compStorage:add(self)
+	end
 
 	self:initialize()
 end
@@ -30,9 +32,17 @@ end
 -- Destroys the component
 function Component:destroy()
 	self.entity._compStorage:queueClear()
-	self.ecs._compStorage:queueClear()
+	if self:isUpdatable() then
+		self.ecs._compStorage:queueClear()
+	end
 
 	return self.Object.destroy(self)
+end
+
+-- Returns whether this component is updatable
+function Component:isUpdatable()
+	local override = self.CLASS.OVERRIDE
+	return override.update or override.postUpdate or override.draw
 end
 
 return Component

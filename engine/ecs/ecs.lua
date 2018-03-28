@@ -8,14 +8,14 @@ local EventStore = require "libs.event_store"
 -- The Entity Component System class
 local ECS = class("ECS")
 
--- Load important class
+-- Load important classes
 ECS.ComponentStorage = require(currentModule .. ".component_storage")
 ECS.Component        = require(currentModule .. ".component")
 ECS.EntityStorage    = require(currentModule .. ".entity_storage")
 ECS.Entity           = require(currentModule .. ".entity")
 
 -- Initializes a new Entity Component System
-function ECS:new(world)
+function ECS:new()
 	self._entStorage = ECS.EntityStorage()
 	self._compStorage = ECS.ComponentStorage()
 
@@ -24,27 +24,24 @@ function ECS:new(world)
 	self.world = nil
 	self.timer = nil
 	self.transformation = nil
+	self.gameState = nil
 end
 
 -- Adds an entity to the system and returns it
 function ECS:addEntity(entity)
 	entity:attachToECS(self)
-	return self._entStorage:add(entity)
+	return entity
 end
 
 -- Updates the system
-function ECS:update(dt)
-	self.deltaTime = dt
-
+function ECS:update()
 	-- Update Entities
 	self._entStorage:updateAll()
 	self._compStorage:updateAll()
 end
 
 -- Post-Updates the system
-function ECS:postUpdate(dt)
-	self.deltaTime = dt
-
+function ECS:postUpdate()
 	-- Update Entities
 	self._entStorage:postUpdateAll()
 	self._compStorage:postUpdateAll()

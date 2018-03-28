@@ -29,6 +29,11 @@ end
 -- Called when the object is actually destroyed
 function Object:onDestroy() end
 
+-- Returns whether the object was set for destruction
+function Object:toBeDestroyed()
+	return self._destroy
+end
+
 -- Returns whether the object was destroyed already and cannot be used anymore
 function Object:wasDestroyed()
 	return self._destroyed

@@ -21,12 +21,14 @@ function GameState:new()
 	self:_setWorldCallbacks()
 
 	self.timer = Timer()
+	self.timeScale = 1
 	self.transformation = Transformation()
 
 	self.ecs = ECS()
 	self.ecs.world = self.world
 	self.ecs.timer = self.timer
 	self.ecs.transformation = self.transformation
+	self.ecs.gameState = self
 
 	self:initialize()
 end
@@ -48,12 +50,15 @@ function GameState:resumed() end
 
 -- Updates the game state
 function GameState:update(dt)
-	self.ecs:update(dt)
+	dt = dt * self.timeScale
+	self.ecs.deltaTime = dt
+
+	self.ecs:update()
 
 	self.world:update(dt)
 	self.timer:update(dt)
 
-	self.ecs:postUpdate(dt)
+	self.ecs:postUpdate()
 end
 
 -- Draws the game state

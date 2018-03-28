@@ -12,15 +12,17 @@ function Rigidbody:initialize()
 
 	self.body = physics.newBody(self.ecs.world, x, y, "dynamic")
 	self.body:setUserData(self)
-	self.body:setAngle(self.transform.rotation)
+	self.body:setAngle(self.transform.angle)
 
-	self.transform:hook(self.body)
+	self.transform:hookBody(self.body)
 end
 
-function Rigidbody:destroy()
+function Rigidbody:onDestroy()
 	self.body:destroy()
 
-	return self.Component.destroy(self)
+	if not self.entity:toBeDestroyed() then
+		self.transform:unhookBody()
+	end
 end
 
 return Rigidbody

@@ -13,10 +13,31 @@ local methods = {
 	-- Applies the velocity given the time passed
 	applyVelocity = function(self, dt)
 		self.position = self.position + self.velocity * dt
+		self.angle = self.angle + self.angularVelocity * dt
 	end,
 	-- Hook
-	hook = function(self, hook)
-		self._hook = hook
+	hookBody = function(self, body)
+		if self:isHookedToBody() then error("Transform is already hooked to a Body!") end
+
+		rawset(self, "position", nil)
+		rawset(self, "velocity", nil)
+		rawset(self, "angle", nil)
+		rawset(self, "angularVelocity", nil)
+
+		self._body = body
+	end,
+	unhookBody = function(self)
+		if not self:isHookedToBody() then error("Transform isn't hooked to a Body!") end
+
+		rawset(self, "position", self.position)
+		rawset(self, "velocity", self.velocity)
+		rawset(self, "angle", self.angle)
+		rawset(self, "angularVelocity", self.angularVelocity)
+
+		self._body = nil
+	end,
+	isHookedToBody = function(self)
+		return self._hook and true
 	end,
 	-- Type
 	type = function() return TYPE_NAME end,
@@ -26,37 +47,33 @@ local methods = {
 -- Value getter
 local getter = {
 	position = function(self)
-		if self._hook then
-			return Vector2(self._hook:getPosition())
-		else
-			return self._position
-		end
+		return Vector2(self._body:getPosition())
 	end,
-	rotation = function(self)
-		if self._hook then
-			return self._hook:getAngle()
-		else
-			return self._rotation
-		end
-	end
+	velocity = function(self)
+		return Vector2(self._body:getLinearVelocity())
+	end,
+	angle = function(self)
+		return self._body:getAngle()
+	end,
+	angularVelocity = function(self)
+		return self._body:getAngularVelocity()
+	end,
 }
 
 -- Value setter
 local setter = {
 	position = function(self, value)
-		if self._hook then
-			self._hook:setPosition(value:unpack())
-		else
-			self._position = value
-		end
+		return self._body:setPosition(value:unpack())
 	end,
-	rotation = function(self, value)
-		if self._hook then
-			self._hook:setAngle(value)
-		else
-			self._rotation = value
-		end
-	end
+	velocity = function(self, value)
+		return self._body:setLinearVelocity(value:unpack())
+	end,
+	angle = function(self, value)
+		return self._body:setAngle(value)
+	end,
+	angularVelocity = function(self, value)
+		return self._body:setAngularVelocity(value)
+	end,
 }
 
 -- Metatable, including operators
@@ -80,11 +97,13 @@ local meta = {
 }
 
 -- Creates a new transform object
-local function Transform(position, rotation, scale)
+local function Transform()
 	return setmetatable({
-		_position = position or Vector2(),
-		_rotation = rotation or 0,
-		scale = scale or Vector2(1, 1)
+		position = Vector2(),
+		velocity = Vector2(),
+		angle = 0,
+		angularVelocity = 0,
+		scale = Vector2(1, 1)
 	}, meta)
 end
 

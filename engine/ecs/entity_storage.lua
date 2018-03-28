@@ -65,11 +65,11 @@ function EntityStorage:clearDestroyed()
 	-- Clear out destroyed entities
 	if not self._needsClear then return false end
 
-	for i=1, #self._entities do
+	for i=#self._entities, 1, -1 do
 		if self._entities[i]._destroy then
 			self._entities[i]._destroyed = true
 			self._entities[i]:onDestroy()
-			table.remove(self._entities, j)
+			table.remove(self._entities, i)
 		end
 	end
 

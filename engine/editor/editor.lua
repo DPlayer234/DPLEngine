@@ -3,7 +3,7 @@ The GameState editor
 ]]
 local currentModule = miscMod.getModule(..., false)
 
-local Mouse = require(currentModule .. ".mouse")
+local UserController = require(currentModule .. ".user_controller")
 local GameState = require "Engine.GameState"
 
 local Editor = class("Editor", GameState)
@@ -12,7 +12,9 @@ local Editor = class("Editor", GameState)
 function Editor:initialize(gameStateClass)
 	self.stateClass = gameStateClass or GameState
 
-	self.mouse = self.ecs:addEntity(Mouse())
+	self.timeScale = 0
+
+	self.user = self.ecs:addEntity(UserController())
 end
 
 return Editor

@@ -125,10 +125,12 @@ function ComponentStorage:clearDestroyed()
 
 	for i=1, #self._components do
 		local list = self._components[i]
-		for j=1, #list do
+		for j=#list, 1, -1 do
 			if list[j]._destroy then
-				list[j]._destroyed = true
-				list[j]:onDestroy()
+				if not list[j]._destroyed then
+					list[j]._destroyed = true
+					list[j]:onDestroy()
+				end
 				table.remove(list, j)
 			end
 		end

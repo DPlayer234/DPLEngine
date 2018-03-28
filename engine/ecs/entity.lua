@@ -20,7 +20,7 @@ function Entity:new()
 
 	self.transform = Transform()
 
-	self._compStorage = ComponentStorage()
+	self._compStorage = ComponentStorage(false)
 	self._tags = {}
 end
 
@@ -40,6 +40,7 @@ function Entity:onSensorEnd(other, contact) end
 -- Attaches an ECS to the entity
 function Entity:attachToECS(ecs)
 	self.ecs = ecs
+	self.ecs._entStorage:add(self)
 
 	self:initialize()
 end
@@ -47,7 +48,7 @@ end
 -- Adds a component to the entity
 function Entity:addComponent(component)
 	component:attachToEntity(self)
-	return self._compStorage:add(component)
+	return component
 end
 
 -- Gets an attached component of the given type
@@ -88,12 +89,11 @@ end
 -- Destroys this entity and all of its components
 function Entity:destroy()
 	self.ecs._entStorage:queueClear()
+	self.Object.destroy(self)
 
 	for _, component in ipairs(self:getComponents(Component)) do
 		component:destroy()
 	end
-
-	return self.Object.destroy(self)
 end
 
 return Entity
