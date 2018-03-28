@@ -30,7 +30,7 @@ end
 function Object:onDestroy() end
 
 -- Returns whether the object was set for destruction
-function Object:toBeDestroyed()
+function Object:isDestroyed()
 	return self._destroy
 end
 

@@ -41,8 +41,8 @@ end
 
 -- Returns whether this component is updatable
 function Component:isUpdatable()
-	local override = self.CLASS.OVERRIDE
-	return override.update or override.postUpdate or override.draw
+	local super = self.Component
+	return self.update ~= super.update or self.postUpdate ~= super.postUpdate or self.draw ~= super.draw
 end
 
 return Component

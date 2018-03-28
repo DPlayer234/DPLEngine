@@ -6,7 +6,7 @@ local math = math
 
 local TYPE_NAME = "Transform" --#const
 
-local Vector2  = require(currentModule .. ".vector2")
+local Vector2 = require(currentModule .. ".vector2")
 
 -- Explicit methods
 local methods = {
@@ -14,6 +14,14 @@ local methods = {
 	applyVelocity = function(self, dt)
 		self.position = self.position + self.velocity * dt
 		self.angle = self.angle + self.angularVelocity * dt
+	end,
+	-- Flips the scaling horizontally
+	flipHorizontal = function(self)
+		self.scale = Vector2(-self.scale.x, self.scale.y)
+	end,
+	-- Flips the scaling vertically
+	flipVertical = function(self)
+		self.scale = Vector2(self.scale.x, -self.scale.y)
 	end,
 	-- Hook
 	hookBody = function(self, body)

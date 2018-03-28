@@ -5,8 +5,6 @@ local currentModule = miscMod.getModule(..., false)
 
 local physics = require "love.physics"
 
-local Rigidbody = require(currentModule .. ".rigidbody")
-
 local Collider = class("Collider", require "Engine.ECS.Component")
 
 -- Creates a new Collider
@@ -18,10 +16,21 @@ function Collider:new(shape, density)
 end
 
 function Collider:initialize()
-	self.rigidbody = assert(self.entity:getComponent(Rigidbody), "Colliders require a Rigidbody.")
+	self._rigidbody = assert(self.entity:getComponent("Rigidbody"), "Colliders require a Rigidbody.")
 
-	self.fixture = physics.newFixture(self.rigidbody.body, self._shape, self._density or 1)
-	self.fixture:setUserData(self)
+	self._fixture = physics.newFixture(self._rigidbody:getBody(), self._shape, self._density or 1)
+	self._fixture:setUserData(self)
+end
+
+-- Returns the fixture
+function Collider:getFixture()
+	return self._fixture
+end
+
+function Collider:onDestroy()
+	if not self._rigidbody:isDestroyed() then
+		self._fixture:destroy()
+	end
 end
 
 return Collider

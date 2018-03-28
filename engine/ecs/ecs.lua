@@ -3,8 +3,6 @@ The Entity Component System
 ]]
 local currentModule = miscMod.getModule(..., false)
 
-local EventStore = require "libs.event_store"
-
 -- The Entity Component System class
 local ECS = class("ECS")
 
@@ -31,6 +29,36 @@ end
 function ECS:addEntity(entity)
 	entity:attachToECS(self)
 	return entity
+end
+
+-- Finds a single entity with a given tag
+function ECS:findEntityByTag(tag)
+	return self._entStorage:getWithTag(tag)
+end
+
+-- Finds all entities with a given tag
+function ECS:findEntitiesByTag(tag)
+	return self._entStorage:getAllWithTag(tag)
+end
+
+-- Finds a single entity with all of the given tags
+function ECS:findEntityByAllTags(...)
+	return self._entStorage:getWithAllTags(...)
+end
+
+-- Finds all entities with all of the given tags
+function ECS:findEntitiesByAllTags(...)
+	return self._entStorage:getAllWithAllTags(...)
+end
+
+-- Finds a single entity of a given type
+function ECS:findEntityByType(tag)
+	return self._entStorage:getType(tag)
+end
+
+-- Finds all entities of a given type
+function ECS:findEntitiesByType(tag)
+	return self._entStorage:getAllType(tag)
 end
 
 -- Updates the system

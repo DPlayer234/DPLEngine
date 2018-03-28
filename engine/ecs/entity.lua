@@ -52,23 +52,23 @@ function Entity:addComponent(component)
 end
 
 -- Gets an attached component of the given type
-function Entity:getComponent(class)
-	return self._compStorage:get(class)
+function Entity:getComponent(typeName)
+	return self._compStorage:get(typeName)
 end
 
 -- Gets an attached component of exactly the given type
-function Entity:getExactComponent(class)
-	return self._compStorage:getExact(class)
+function Entity:getExactComponent(typeName)
+	return self._compStorage:getExact(typeName)
 end
 
 -- Gets all attached components of the given type
-function Entity:getComponents(class)
-	return self._compStorage:getAll(class)
+function Entity:getComponents(typeName)
+	return self._compStorage:getAll(typeName)
 end
 
 -- Gets all attached components of exactly the given type
-function Entity:getExactComponents(class)
-	return self._compStorage:getAllExact(class)
+function Entity:getExactComponents(typeName)
+	return self._compStorage:getAllExact(typeName)
 end
 
 -- Tags the entity
@@ -86,12 +86,23 @@ function Entity:isTagged(tag)
 	return self._tags[tag] and true
 end
 
+-- Returns whether the entity is tagged with all given tags
+function Entity:isTaggedWithAll(...)
+	local tags = {...}
+	for i=1, #tags do
+		if not self:isTagged(tags[i]) then
+			return false
+		end
+	end
+	return true
+end
+
 -- Destroys this entity and all of its components
 function Entity:destroy()
 	self.ecs._entStorage:queueClear()
 	self.Object.destroy(self)
 
-	for _, component in ipairs(self:getComponents(Component)) do
+	for _, component in ipairs(self:getComponents("Component")) do
 		component:destroy()
 	end
 end

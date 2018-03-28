@@ -3,9 +3,9 @@ The engine itself
 ]]
 local currentModule = miscMod.getModule(..., false)
 
-local physics    = require "love.physics"
-local Timer      = require "libs.timer"
-local EventStore = require "libs.event_store"
+local physics  = require "love.physics"
+local graphics = require "love.graphics"
+local Timer    = require "libs.timer"
 
 -- Class for the game engine
 local Engine = class("Engine")
@@ -29,7 +29,9 @@ end
 -- Initializes the engine
 function Engine:initialize(args)
 	args = args or {}
+
 	physics.setMeter(args.meter or 30)
+	graphics.setDefaultFilter(args.textureFilter or "nearest")
 end
 
 -- Returns the currently active game state

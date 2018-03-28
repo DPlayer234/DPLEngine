@@ -29,24 +29,84 @@ function EntityStorage:add(entity)
 	return entity
 end
 
--- Updates all contained entities
-function EntityStorage:updateAll(dt)
+-- Gets a single entity with a given tag
+function EntityStorage:getWithTag(tag)
 	for i=1, #self._entities do
-		self._entities[i]:update(dt)
+		if self._entities[i]:isTagged(tag) then
+			return self._entities[i]
+		end
+	end
+end
+
+-- Gets all entities with a certain tag
+function EntityStorage:getAllWithTag(tag)
+	local entities = {}
+	for i=1, #self._entities do
+		if self._entities[i]:isTagged(tag) then
+			entities[#entities + 1] = self._entities[i]
+		end
+	end
+	return entities
+end
+
+-- Gets a single entity with all given tags
+function EntityStorage:getWithAllTags(...)
+	for i=1, #self._entities do
+		if self._entities[i]:isTaggedWithAll(...) then
+			return self._entities[i]
+		end
+	end
+end
+
+-- Gets all entities with all given tags
+function EntityStorage:getAllWithAllTags(...)
+	local entities = {}
+	for i=1, #self._entities do
+		if self._entities[i]:isTaggedWithAll(...) then
+			entities[#entities + 1] = self._entities[i]
+		end
+	end
+	return entities
+end
+
+-- Gets a single entity of a given type
+function EntityStorage:getType(typeName)
+	for i=1, #self._entities do
+		if self._entities[i]:typeOf(typeName) then
+			return self._entities[i]
+		end
+	end
+end
+
+-- Gets all entities of a given type
+function EntityStorage:getAllType(typeName)
+	local entities = {}
+	for i=1, #self._entities do
+		if self._entities[i]:typeOf(typeName) then
+			entities[#entities + 1] = self._entities[i]
+		end
+	end
+	return entities
+end
+
+-- Updates all contained entities
+function EntityStorage:updateAll()
+	for i=1, #self._entities do
+		self._entities[i]:update()
 	end
 end
 
 -- Post-Updates all contained entities
-function EntityStorage:postUpdateAll(dt)
+function EntityStorage:postUpdateAll()
 	for i=1, #self._entities do
-		self._entities[i]:postUpdate(dt)
+		self._entities[i]:postUpdate()
 	end
 end
 
 -- Draws all contained entities
-function EntityStorage:drawAll(dt)
+function EntityStorage:drawAll()
 	for i=1, #self._entities do
-		self._entities[i]:draw(dt)
+		self._entities[i]:draw()
 	end
 end
 

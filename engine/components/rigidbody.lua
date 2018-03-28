@@ -10,17 +10,22 @@ local Rigidbody = class("Rigidbody", require "Engine.ECS.Component")
 function Rigidbody:initialize()
 	local x, y = self.transform.position:unpack()
 
-	self.body = physics.newBody(self.ecs.world, x, y, "dynamic")
-	self.body:setUserData(self)
-	self.body:setAngle(self.transform.angle)
+	self._body = physics.newBody(self.ecs.world, x, y, "dynamic")
+	self._body:setUserData(self)
+	self._body:setAngle(self.transform.angle)
 
-	self.transform:hookBody(self.body)
+	self.transform:hookBody(self._body)
+end
+
+-- Returns the physics body
+function Rigidbody:getBody()
+	return self._body
 end
 
 function Rigidbody:onDestroy()
-	self.body:destroy()
+	self._body:destroy()
 
-	if not self.entity:toBeDestroyed() then
+	if not self.entity:isDestroyed() then
 		self.transform:unhookBody()
 	end
 end

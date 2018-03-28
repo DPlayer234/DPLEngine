@@ -102,6 +102,10 @@ local meta = {
 	__unm = function(a)
 		return Vector2(-a.x, -a.y)
 	end,
+	-- Equality
+	__eq = function(a, b)
+		return a.x == b.x and a.y == b.y
+	end,
 	-- Nicer string format
 	__tostring = function(self)
 		return ("Vector2: %.3f, %.3f"):format(self.x, self.y)
