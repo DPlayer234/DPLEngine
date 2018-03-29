@@ -7,14 +7,16 @@ function TestState:initialize()
 	-- Create a game state
 	local ecs = self.ecs
 
+	local Vector2 = Engine.Vector2
+
 	do
 		local entity = ecs:addEntity(Engine.ECS.Entity())
 
 		local rigidbody = entity:addComponent(Engine.components.Rigidbody())
 		rigidbody:setMaterial(Engine.Material() { friction = 0, bounciness = 2 })
 
-		entity:addComponent(Engine.components.RectangleCollider(0, 0, 100, 100, 0))
-		entity:addComponent(Engine.components.CircleCollider(70, 70, 50))
+		entity:addComponent(Engine.components.RectangleCollider(Vector2(0, 0), Vector2(100, 100), 0))
+		entity:addComponent(Engine.components.CircleCollider(Vector2(70, 70), 50))
 
 		local animator = entity:addComponent(Engine.components.Animator(love.graphics.newImage("assets/textures/azure.png"), 15, 19))
 		animator:newAnimation("idle"):setRate(12):addFrames(4, 0,0, 1,0):setLoop(true)
@@ -22,10 +24,10 @@ function TestState:initialize()
 
 		local renderer = entity:addComponent(Engine.components.AnimationRenderer())
 		renderer:setAnimator(animator)
-		renderer:setCenter(Engine.Vector2(7.5, 9.5))
+		renderer:setCenter(Vector2(7.5, 9.5))
 
-		entity.transform:setPosition(Engine.Vector2(200, 100))
-		entity.transform:setScale(Engine.Vector2(10, 10))
+		entity.transform:setPosition(Vector2(200, 100))
+		entity.transform:setScale(Vector2(10, 10))
 
 		entity:tagAs("Azure")
 	end
@@ -35,19 +37,19 @@ function TestState:initialize()
 		local rigidbody = entity:addComponent(Engine.components.Rigidbody("static"))
 
 		entity:addComponent(Engine.components.ChainCollider(false, {
-			0, 500,
-			400, 600,
-			600, 550,
-			900, 800
+			Vector2(0, 500),
+			Vector2(400, 600),
+			Vector2(600, 550),
+			Vector2(900, 800)
 		}))
 	end
 
 	do
 		local entity = ecs:addEntity(Engine.ECS.Entity())
 
-		entity:addComponent(Engine.components.Rigidbody("static"))
-		entity:addComponent(Engine.components.ImageCollider(love.image.newImageData("assets/textures/test_collider.png"), 0.71))
-		entity.transform:setPosition(Engine.Vector2(550, 150))
+		entity:addComponent(Engine.components.Rigidbody("kinematic"))
+		entity:addComponent(Engine.components.ImageCollider(love.image.newImageData("assets/textures/test_collider.png"), Vector2(), 0.71))
+		entity.transform:setPosition(Vector2(550, 150))
 	end
 
 	self.timer:coTask(function(wait)

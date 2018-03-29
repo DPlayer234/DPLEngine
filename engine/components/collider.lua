@@ -57,4 +57,14 @@ function Collider:onDestroy()
 	end
 end
 
+-- Converts a list of Vector2s to numbers
+function Collider:_vectorToNumberList(vpoints)
+	local points = {}
+	for i=1, #vpoints do
+		points[i*2-1] = vpoints[i].x
+		points[i * 2] = vpoints[i].y
+	end
+	return points
+end
+
 return Collider

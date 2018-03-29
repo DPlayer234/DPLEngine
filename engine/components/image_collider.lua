@@ -18,11 +18,21 @@ local ImageCollider = class("ImageCollider", Collider)
 local DETECTION_THRESHOLD = 50 --#const
 
 -- Creates a new collider
--- > ImageCollider(imageData, strip, [density])
--- 'strip' is the strip-off threshold. 0.71 (~sqrt(2)/2) works well most of the time.
-function ImageCollider:new(imageData, strip, density)
+-- > ImageCollider(imageData, [strip, density])
+-- > ImageCollider(imageData, offset, [strip, density])
+-- 'strip' is the strip-off threshold. 0.71 (~sqrt(2)/2) is the default works well for most cases.
+-- Center default to half the width and height of the image
+function ImageCollider:new(a, b, c, d)
+	local imageData, offset, strip, density
+	if ffi.istype(Vector2, b) then
+		imageData, offset, strip, density = a, b, c, d
+	else
+		imageData, offset, strip, density = a, Vector2(a:getDimensions()) * 0.5, b, c
+	end
+
 	self._data = imageData
-	self._strip = strip
+	self._strip = strip or 0.71
+	self._offset = offset
 	self._width, self._height = self._data:getDimensions()
 
 	self:_findSolidPixels()
@@ -38,6 +48,11 @@ end
 -- Returns the amount of edges in the shape
 function ImageCollider:getEdgeCount()
 	return self._edgeCount
+end
+
+-- Returns the image offset
+function ImageCollider:getOffset()
+	return self._offset:copy()
 end
 
 -- Assigns a flattened 2D-array of booleans, defining whether the given pixel is solid.
@@ -152,8 +167,9 @@ end
 function ImageCollider:_createShape()
 	local pointTable = {}
 	for i=1, #self._edge do
-		pointTable[i*2-1] = self._edge[i].x
-		pointTable[i * 2] = self._edge[i].y
+		local point = self._edge[i] - self._offset
+		pointTable[i*2-1] = point.x
+		pointTable[i * 2] = point.y
 	end
 
 	self._shape = physics.newChainShape(self._loop, pointTable)

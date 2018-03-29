@@ -56,17 +56,17 @@ end
 
 -- Overrides the velocity
 function Rigidbody:setVelocity(value)
-	return Vector2(self:getBody():setLinearVelocity(value:unpack()))
+	return self:getBody():setLinearVelocity(value:unpack())
 end
 
 -- Gets rotational velocity
 function Rigidbody:getAngularVelocity()
-	return Vector2(self:getBody():getAngularVelocity())
+	return self:getBody():getAngularVelocity()
 end
 
 -- Overrides the angular velocity
 function Rigidbody:setAngularVelocity(value)
-	return Vector2(self:getBody():setAngularVelocity(value:unpack()))
+	return self:getBody():setAngularVelocity(value)
 end
 
 -- Gets linear damping. Basically friction with the air
