@@ -42,6 +42,14 @@ function TestState:initialize()
 		}))
 	end
 
+	do
+		local entity = ecs:addEntity(Engine.ECS.Entity())
+
+		entity:addComponent(Engine.components.Rigidbody("static"))
+		entity:addComponent(Engine.components.ImageCollider(love.image.newImageData("assets/textures/test_collider.png"), 0.71))
+		entity.transform:setPosition(Engine.Vector2(550, 150))
+	end
+
 	self.timer:coTask(function(wait)
 		while true do
 			wait(1)

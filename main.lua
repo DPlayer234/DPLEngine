@@ -33,7 +33,7 @@ function love.load()
 
 	require "dev"
 
-	Engine:pushGameState(require "test_states.a" ())
+	Engine:pushGameState(require "test_states.b" ())
 end
 
 function love.update(dt)
