@@ -8,11 +8,11 @@ local SelectionBox = class("SelectionBox", require "Engine.ECS.Component")
 
 function SelectionBox:initialize()
 	assert(self.entity:typeOf("UserController"), "SelectionBox must be attached to a UserController!")
-	self.origin = self.transform.position
+	self.origin = self.transform:getPosition()
 end
 
 function SelectionBox:postUpdate()
-	self.dimensions = self.transform.position - self.origin
+	self.dimensions = self.transform:getPosition() - self.origin
 end
 
 function SelectionBox:draw()
@@ -29,13 +29,14 @@ function SelectionBox:onDestroy()
 		math.min(self.origin.y, self.origin.y + self.dimensions.y)
 	)
 
-	self.bottomRight = Vector2(
-		math.max(self.origin.x, self.origin.x + self.dimensions.x),
-		math.max(self.origin.y, self.origin.y + self.dimensions.y)
+	self.dimensions = Vector2(
+		math.max(1, math.abs(self.dimensions.x)),
+		math.max(1, math.abs(self.dimensions.y))
 	)
 
 	if self.callback then
-		self.ecs.world:queryBoundingBox(self.topLeft.x, self.topLeft.y, self.bottomRight.x, self.bottomRight.y, self.callback)
+		--self.ecs.world:queryBoundingBox(self.topLeft.x, self.topLeft.y, self.bottomRight.x, self.bottomRight.y, self.callback)
+		self:callback()
 	end
 end
 

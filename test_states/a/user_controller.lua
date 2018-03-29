@@ -27,7 +27,7 @@ function UserController:initialize()
 end
 
 function UserController:update()
-	self.transform.position = self.ecs.transformation:inverseApplyPoint(Vector2(love.mouse.getPosition()))
+	self.transform:setPosition(self.ecs.transformation:inverseApplyPoint(Vector2(love.mouse.getPosition())))
 
 	-- Mouse state
 	for i=1, 3 do
@@ -49,15 +49,26 @@ end
 function UserController:draw()
 	love.graphics.setColor(self.color)
 
-	local x, y = self.transform.position:unpack()
+	local x, y = self.transform:getPosition():unpack()
 	love.graphics.points(x, y)
 
 	love.graphics.printf(("%.0f, %.0f"):format(x, y), x - 1000, y, 1000, "right")
 end
 
 releaseCallbacks = {
-	[1] = function(fixture)
-		print(fixture)
+	[1] = function(box)
+		local e = box.ecs:addEntity(Engine.ECS.Entity())
+
+		e:addComponent(Engine.components.Rigidbody("dynamic"))
+		e:addComponent(Engine.components.RectangleCollider(box.dimensions:unpack()))
+		e.transform:setPosition(box.topLeft + box.dimensions * 0.5)
+	end,
+	[2] = function(box)
+		local e = box.ecs:addEntity(Engine.ECS.Entity())
+
+		e:addComponent(Engine.components.Rigidbody("static"))
+		e:addComponent(Engine.components.RectangleCollider(box.dimensions:unpack()))
+		e.transform:setPosition(box.topLeft + box.dimensions * 0.5)
 	end
 }
 

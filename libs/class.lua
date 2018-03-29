@@ -50,7 +50,8 @@ function metaNew(base, self, ...)
 end
 
 reservedClassFields = {
-	CLASS = true
+	CLASS = true,
+	__index = true
 }
 
 classMeta = {
@@ -93,13 +94,6 @@ classMeta = {
 	extendExact = function(self, k, v)
 		if reservedClassFields[k] then
 			error("Field '"..tostring(k).."' is reserved in classes.", 3)
-		elseif k == "__index" then
-			local bmeta = getmetatable(self.BASE)
-			if bmeta then
-				rawset(bmeta, "__index", v)
-			else
-				setmetatable(self.BASE, { __index = v })
-			end
 		else
 			if k == "new" then
 				rawset(self, "NEW", v == nil and (self.PARENT and self.PARENT.NEW or noNew) or v)
@@ -137,14 +131,7 @@ function class.class(name, rawbase, parent)
 	-- Copying parent fields
 	if parent then
 		for k,v in pairs(parent.BASE) do
-			if not (k == "__index" and v == parent.BASE) then
-				base[k] = v
-			end
-		end
-
-		local pmeta = getmetatable(parent.BASE)
-		if pmeta and pmeta.__index then
-			base.__index = pmeta.__index
+			base[k] = v
 		end
 
 		for k,v in pairs(parent.TYPEOF) do
@@ -171,7 +158,6 @@ function class.class(name, rawbase, parent)
 		__call = metaNew
 	}
 
-	if base.__index then bmeta.__index = base.__index end
 	base.__index = base
 	setmetatable(base, bmeta)
 

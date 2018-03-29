@@ -57,16 +57,16 @@ end
 function DrawableRenderer:draw()
 	if self:getDrawable() == nil then return end
 
-	local x,  y  = self.transform.position:unpack()
-	local sx, sy = self.transform.scale:unpack()
+	local x,  y  = self.transform:getPosition():unpack()
+	local sx, sy = self.transform:getScale():unpack()
 	local cx, cy = self:getCenter():unpack()
 
 	graphics.setColor(self:getColor())
 
 	if self:getQuad() then
-		graphics.draw(self:getDrawable(), self:getQuad(), x, y, self.transform.angle, sx, sy, cx, cy)
+		graphics.draw(self:getDrawable(), self:getQuad(), x, y, self.transform:getAngle(), sx, sy, cx, cy)
 	else
-		graphics.draw(self:getDrawable(), x, y, self.transform.angle, sx, sy, cx, cy)
+		graphics.draw(self:getDrawable(), x, y, self.transform:getAngle(), sx, sy, cx, cy)
 	end
 end
 

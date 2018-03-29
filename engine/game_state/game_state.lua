@@ -30,10 +30,11 @@ function GameState:new()
 	self.ecs.transformation = self.transformation
 	self.ecs.gameState = self
 
-	self:initialize()
+	self.engine = nil
 end
 
 -- Initializes the game state and, f.e., sets the entities and terrain used when instantiating
+-- Called when the game state is first pushed
 function GameState:initialize() end
 
 -- Called when the state is pushed onto the stack

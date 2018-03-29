@@ -1,117 +1,87 @@
 --[[
 Entity Transform
 ]]
-local math = math
-
-local TYPE_NAME = "Transform" --#const
-
 local Vector2 = require "Engine.Vector2"
 
--- Explicit methods
-local methods = {
-	-- Applies the velocity given the time passed
-	applyVelocity = function(self, dt)
-		self.position = self.position + self.velocity * dt
-		self.angle = self.angle + self.angularVelocity * dt
-	end,
-	-- Flips the scaling horizontally
-	flipHorizontal = function(self)
-		self.scale = Vector2(-self.scale.x, self.scale.y)
-	end,
-	-- Flips the scaling vertically
-	flipVertical = function(self)
-		self.scale = Vector2(self.scale.x, -self.scale.y)
-	end,
-	-- Hook
-	hookBody = function(self, body)
-		if self:isHookedToBody() then error("Transform is already hooked to a Body!") end
-
-		rawset(self, "position", nil)
-		rawset(self, "velocity", nil)
-		rawset(self, "angle", nil)
-		rawset(self, "angularVelocity", nil)
-
-		self._body = body
-	end,
-	unhookBody = function(self)
-		if not self:isHookedToBody() then error("Transform isn't hooked to a Body!") end
-
-		rawset(self, "position", self.position)
-		rawset(self, "velocity", self.velocity)
-		rawset(self, "angle", self.angle)
-		rawset(self, "angularVelocity", self.angularVelocity)
-
-		self._body = nil
-	end,
-	isHookedToBody = function(self)
-		return self._hook and true
-	end,
-	-- Type
-	type = function() return TYPE_NAME end,
-	typeOf = function(self, name) return name == TYPE_NAME end
-}
-
--- Value getter
-local getter = {
-	position = function(self)
-		return Vector2(self._body:getPosition())
-	end,
-	velocity = function(self)
-		return Vector2(self._body:getLinearVelocity())
-	end,
-	angle = function(self)
-		return self._body:getAngle()
-	end,
-	angularVelocity = function(self)
-		return self._body:getAngularVelocity()
-	end,
-}
-
--- Value setter
-local setter = {
-	position = function(self, value)
-		return self._body:setPosition(value:unpack())
-	end,
-	velocity = function(self, value)
-		return self._body:setLinearVelocity(value:unpack())
-	end,
-	angle = function(self, value)
-		return self._body:setAngle(value)
-	end,
-	angularVelocity = function(self, value)
-		return self._body:setAngularVelocity(value)
-	end,
-}
-
--- Metatable, including operators
-local meta = {
-	-- Nicer string format
-	__tostring = function(self)
-		return ("Transform: Pos. %.3f, %.3f"):format(self.position:unpack())
-	end,
-	__index = function(self, k)
-		if getter[k] then
-			return getter[k](self)
-		end
-		return methods[k]
-	end,
-	__newindex = function(self, k, v)
-		if setter[k] then
-			return setter[k](self, v)
-		end
-		return rawset(self, k, v)
-	end
-}
+local Transform = class("Transform")
 
 -- Creates a new transform object
-local function Transform()
-	return setmetatable({
-		position = Vector2(),
-		velocity = Vector2(),
-		angle = 0,
-		angularVelocity = 0,
-		scale = Vector2(1, 1)
-	}, meta)
+function Transform:new()
+	self._position = Vector2()
+	self._angle = 0
+	self._scale = Vector2(1, 1)
+end
+
+-- Flips the scaling horizontally
+function Transform:flipHorizontal()
+	self.scale = Vector2(-self.scale.x, self.scale.y)
+end
+
+-- Flips the scaling vertically
+function Transform:flipVertical()
+	self.scale = Vector2(self.scale.x, -self.scale.y)
+end
+
+-- Gets the body this is hooked to
+function Transform:getBody()
+	return self._body
+end
+
+-- Sets the body this is hooked to
+function Transform:setBody(value, overrideBody)
+	if self:getBody() then
+		self._position = self:getPosition()
+		self._angle = self:getAngle()
+	end
+
+	self._body = value
+	if value and overrideBody then
+		self:setPosition(self._position)
+		self:setAngle(self._angle)
+	end
+end
+
+-- Position
+function Transform:getPosition()
+	if self:getBody() then
+		return Vector2(self:getBody():getPosition())
+	end
+	return self._position:copy()
+end
+
+function Transform:setPosition(value)
+	if self:getBody() then
+		return self:getBody():setPosition(value:unpack())
+	end
+	self._position = value:copy()
+end
+
+-- Angle
+function Transform:getAngle()
+	if self:getBody() then
+		return self:getBody():getAngle()
+	end
+	return self._angle
+end
+
+function Transform:setAngle(value)
+	if self:getBody() then
+		return self:getBody():setAngle(value)
+	end
+	self._angle = value
+end
+
+-- Scaling (for renderers)
+function Transform:getScale()
+	return self._scale:copy()
+end
+
+function Transform:setScale(value)
+	self._scale = value:copy()
+end
+
+function Transform:__tostring()
+	return ("Transform: Pos. %.3f, %.3f"):format(self:getPosition():unpack())
 end
 
 return Transform

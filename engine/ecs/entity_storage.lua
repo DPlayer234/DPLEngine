@@ -141,15 +141,16 @@ end
 
 -- Clears all destroyed entities out
 function EntityStorage:_clearDestroyed()
+	self._needsClear = false
+
 	for i=#self._entities, 1, -1 do
-		if self._entities[i]._destroy then
-			self._entities[i]._destroyed = true
-			self._entities[i]:onDestroy()
+		local entity = self._entities[i]
+		if entity._destroy then
+			entity._destroyed = true
+			entity:onDestroy()
 			table.remove(self._entities, i)
 		end
 	end
-
-	self._needsClear = false
 end
 
 -- Sorting callback

@@ -11,6 +11,8 @@ Engine.input     = require "Engine.input"
 Engine.Mat3x3    = require "Engine.Mat3x3"
 Engine.Material  = require "Engine.Material"
 Engine.Vector2   = require "Engine.Vector2"
+Engine.Vector3   = require "Engine.Vector3"
+Engine.Vector4   = require "Engine.Vector4"
 Engine.Transform = require "Engine.Transform"
 
 -- Load primary classes
@@ -48,6 +50,10 @@ function Engine:pushGameState(gameState)
 	if state then state:suspended() end
 
 	self._gameStates[#self._gameStates + 1] = gameState
+	if gameState.engine ~= self then
+		gameState.engine = self
+		gameState:initialize()
+	end
 
 	gameState:pushed()
 end
@@ -55,10 +61,7 @@ end
 -- Pops the current game state of the stack
 function Engine:popGameState()
 	local state = self:getGameState()
-	if state then
-		state:popped()
-		state:destroy()
-	end
+	if state then state:popped() end
 
 	table.remove(self._gameStates, #self._gameStates)
 
@@ -82,15 +85,9 @@ function Engine:draw()
 	if state then state:draw() end
 end
 
--- For optional libraries
-function Engine:__index(key)
-	local value
-	if key == "Editor" then
-		value = require "Engine.Editor"
-	end
-
-	Engine[key] = value
-	return value
+-- Makes instances act as a class as well
+function Engine:__call()
+	return self.CLASS:new()
 end
 
 return Engine()

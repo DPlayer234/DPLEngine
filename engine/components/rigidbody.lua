@@ -15,15 +15,12 @@ end
 
 -- Initializes the Rigidbody
 function Rigidbody:initialize()
-	local x, y = self.transform.position:unpack()
-
-	self._body = physics.newBody(self.ecs.world, x, y, self._type)
+	self._body = physics.newBody(self.ecs.world, 0, 0, self._type)
 	self._body:setUserData(self)
-	self._body:setAngle(self.transform.angle)
 
 	self._material = Material()
 
-	self.transform:hookBody(self._body)
+	self.transform:setBody(self._body, true)
 end
 
 -- Returns the physics body
@@ -50,6 +47,26 @@ end
 -- Sets whether the body is active.
 function Rigidbody:setActive(value)
 	return self:getBody():setActive(value)
+end
+
+-- Gets the velocity
+function Rigidbody:getVelocity()
+	return Vector2(self:getBody():getLinearVelocity())
+end
+
+-- Overrides the velocity
+function Rigidbody:setVelocity(value)
+	return Vector2(self:getBody():setLinearVelocity(value:unpack()))
+end
+
+-- Gets rotational velocity
+function Rigidbody:getAngularVelocity()
+	return Vector2(self:getBody():getAngularVelocity())
+end
+
+-- Overrides the angular velocity
+function Rigidbody:setAngularVelocity(value)
+	return Vector2(self:getBody():setAngularVelocity(value:unpack()))
 end
 
 -- Gets linear damping. Basically friction with the air

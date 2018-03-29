@@ -191,6 +191,8 @@ end
 
 -- Clears all destroyed components out
 function ComponentStorage:_clearDestroyed()
+	self._needsClear = false
+
 	for i=1, #self._components do
 		local list = self._components[i]
 		for j=#list, 1, -1 do
@@ -203,8 +205,6 @@ function ComponentStorage:_clearDestroyed()
 			end
 		end
 	end
-
-	self._needsClear = false
 end
 
 -- Gets the component list for the class of the given component
