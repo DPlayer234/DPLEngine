@@ -14,12 +14,12 @@ end
 
 -- Flips the scaling horizontally
 function Transform:flipHorizontal()
-	self.scale = Vector2(-self.scale.x, self.scale.y)
+	self:setScale(Vector2.multiply(self:getScale(), Vector2(-1, 1)))
 end
 
 -- Flips the scaling vertically
 function Transform:flipVertical()
-	self.scale = Vector2(self.scale.x, -self.scale.y)
+	self:setScale(Vector2.multiply(self:getScale(), Vector2(1, -1)))
 end
 
 -- Gets the body this is hooked to

@@ -32,6 +32,9 @@ local taskHandler = {
 			local ok, wait = coroutine.resume(task.rout, coroutineWait)
 			if ok then
 				task.wait = type(wait) == "number" and wait or 0
+			else
+				self._errorBy = task.rout
+				error(wait)
 			end
 		else
 			return remove(self.tasks, i)
