@@ -4,16 +4,17 @@ The base class for any Game State
 local physicsWorldDraw = require "dev.physics_world_draw"
 local physics = require "love.physics"
 
-local ECS            = require "Engine.ECS"
-local Transformation = require "Engine.Transformation"
-local Collision      = require "Engine.GameState.Collision"
+local ECS            = require "Heartbeat.ECS"
+local Transformation = require "Heartbeat.GameState.Transformation"
+local Collision      = require "Heartbeat.GameState.Collision"
 
-local Timer = require "libs.timer"
+local Timer = require "Heartbeat.Timer"
 
 -- The class
 local GameState = class("GameState")
 
 GameState.Collision = Collision
+GameState.Transformation = Transformation
 
 -- Creates a new GameState
 function GameState:new()
@@ -30,7 +31,7 @@ function GameState:new()
 	self.ecs.transformation = self.transformation
 	self.ecs.gameState = self
 
-	self.engine = nil
+	self.heartbeat = nil
 end
 
 -- Initializes the game state and, f.e., sets the entities and terrain used when instantiating

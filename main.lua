@@ -27,20 +27,20 @@ function love.load()
 	end
 
 	-- Load and initialize the engine
-	Engine = require "engine"
+	Heartbeat = require "heartbeat"
 
-	Engine:initialize { meter = 100 }
+	Heartbeat:initialize { meter = 100 }
 
 	require "dev"
 
-	Engine:pushGameState(require "test_states.b" ())
+	Heartbeat:pushGameState(require "test_states.b" ())
 end
 
 function love.update(dt)
-	Engine:update(dt)
+	Heartbeat:update(dt)
 	sounds.update(dt)
 end
 
 function love.draw()
-	Engine:draw()
+	Heartbeat:draw()
 end

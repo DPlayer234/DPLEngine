@@ -1,8 +1,8 @@
 --[[
 Render Transformation for GameStates
 ]]
-local Mat3x3 = require "Engine.Mat3x3"
-local Vector2 = require "Engine.Vector2"
+local Mat3x3 = require "Heartbeat.Mat3x3"
+local Vector2 = require "Heartbeat.Vector2"
 
 local Transformation = class("Transformation")
 

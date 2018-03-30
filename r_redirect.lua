@@ -9,11 +9,12 @@ local package, require = package, require
 for i,f in ipairs {
 	-- List of directories to redirect to *.init
 	"dev",
-	"engine",
-	"engine.ecs",
-	"engine.editor",
-	"engine.game_state",
-	"engine.libs.input",
+	"heartbeat",
+	"heartbeat.components",
+	"heartbeat.ecs",
+	"heartbeat.entities",
+	"heartbeat.game_state",
+	"heartbeat.libs.input",
 	"libs.mathf",
 	-- End of list
 } do

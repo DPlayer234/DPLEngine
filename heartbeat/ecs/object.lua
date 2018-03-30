@@ -24,7 +24,7 @@ end
 -- Draw the object
 -- > function Object:draw()
 
--- The following six optional callbacks all receive an Engine.GameState.Collision as an argument
+-- The following six optional callbacks all receive a Heartbeat.GameState.Collision as an argument
 --[[ Collision callbacks ]]
 -- > function Object:onCollisionBegin(collision)
 -- > function Object:onCollisionStay(collision)

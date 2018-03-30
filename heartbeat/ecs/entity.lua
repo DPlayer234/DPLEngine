@@ -1,13 +1,13 @@
 --[[
 The base class for any entity to be added to a scene
 ]]
-local Component = require "Engine.ECS.Component"
-local ComponentStorage = require "Engine.ECS.ComponentStorage"
+local Component = require "Heartbeat.ECS.Component"
+local ComponentStorage = require "Heartbeat.ECS.ComponentStorage"
 
-local Transform = require "Engine.Transform"
+local Transform = require "Heartbeat.ECS.Transform"
 
 -- Class
-local Entity = class("Entity", require "Engine.ECS.Object")
+local Entity = class("Entity", require "Heartbeat.ECS.Object")
 
 -- Initializes a new Entity
 function Entity:new()

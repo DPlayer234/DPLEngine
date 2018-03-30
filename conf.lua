@@ -4,13 +4,13 @@ Löve Startup Configuration File
 function love.conf(t)
 	-- General data
 	_game = {
-		title     = "DPLEngine",
+		title     = "Heartbeat",
 		subtitle  = "Löve Engine",
 		copyright = "Copyright © 2018 Darius \"DPlay\" K.",
 		developer = "Darius \"DPlay\" K.",
 		publisher = "None",
 		version   = "0.0.0",
-		identity  = "DPLEngine"
+		identity  = "heartbeat-engine"
 	}
 
 	_game.fullTitle = _game.subtitle and _game.title .. ": " .. _game.subtitle or _game.title

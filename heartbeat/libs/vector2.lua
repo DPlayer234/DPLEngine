@@ -1,33 +1,31 @@
 --[[
-4D-Vector (using C-FFI Struct)
+2D-Vector (using C-FFI Struct)
 ]]
 local math = math
 local ffi = require "ffi"
 
-local TYPE_NAME = "Vector4" --#const
+local TYPE_NAME = "Vector2" --#const
 
 -- Define the C structs
 ffi.cdef [[
 typedef struct {
 	double x;
 	double y;
-	double z;
-	double w;
-} Engine_Vector4
+} Heartbeat_Vector2
 ]]
 
 -- Get the type in Lua (also used for construction)
-local Vector4 = ffi.typeof("Engine_Vector4")
+local Vector2 = ffi.typeof("Heartbeat_Vector2")
 
 -- Explicit methods
 local methods = {
 	-- Copy the current vector
 	copy = function(self)
-		return Vector4(self.x, self.y, self.z, self.w)
+		return Vector2(self.x, self.y)
 	end,
 	-- Get the squared magnitude/length
 	getMagnitudeSqr = function(self)
-		return self.x * self.x + self.y * self.y + self.z * self.z + self.w * self.w
+		return self.x * self.x + self.y * self.y
 	end,
 	-- Get the magnitude
 	getMagnitude = function(self)
@@ -45,6 +43,26 @@ local methods = {
 	getNormalized = function(self)
 		return self / self:getMagnitude()
 	end,
+	getAngle = function(self)
+		return math.atan2(self.y, self.x)
+	end,
+	-- Returns a new vector, which is the original vector rotated by rad radians around origin or (0, 0)
+	rotate = function(self, rad, origin)
+		if origin == nil then origin = Vector2(0, 0) end
+		self = self - origin
+
+		local sin = math.sin(rad)
+		local cos = math.cos(rad)
+
+		return Vector2(
+			self.x * cos - self.y * sin,
+			self.y * cos + self.x * sin
+		) + origin
+	end,
+	-- Returns the "cross" product of two vectors. Equals the area of the parallelo gram the two vectors define.
+	cross = function(a, b)
+		return math.abs(a.x * b.y - a.y * b.x)
+	end,
 	-- Memberwise addition (+)
 	add = function(a, b)
 		return a + b
@@ -55,23 +73,23 @@ local methods = {
 	end,
 	-- Memberwise multiplication (*)
 	multiply = function(a, b)
-		return Vector4(a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w)
+		return Vector2(a.x * b.x, a.y * b.y)
 	end,
 	-- Memberwise division (/)
 	divide = function(a, b)
-		return Vector4(a.x / b.x, a.y / b.y, a.z / b.z, a.w / b.w)
+		return Vector2(a.x / b.x, a.y / b.y)
 	end,
 	-- Memberwise modulo division (%)
 	modulo = function(a, b)
-		return Vector4(a.x % b.x, a.y % b.y, a.z % b.z, a.w % b.w)
+		return Vector2(a.x % b.x, a.y % b.y)
 	end,
 	-- Memberwise exponent (^)
 	power = function(a, b)
-		return Vector4(a.x ^ b.x, a.y ^ b.y, a.z ^ b.z, a.w ^ b.w)
+		return Vector2(a.x ^ b.x, a.y ^ b.y)
 	end,
-	-- Returns all components in order
+	-- Returns both components in order
 	unpack = function(self)
-		return self.x, self.y, self.z, self.w
+		return self.x, self.y
 	end,
 	-- Type
 	type = function() return TYPE_NAME end,
@@ -82,45 +100,45 @@ local methods = {
 local meta = {
 	-- Addition
 	__add = function(a, b)
-		return Vector4(a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w)
+		return Vector2(a.x + b.x, a.y + b.y)
 	end,
 	-- Subtraction
 	__sub = function(a, b)
-		return Vector4(a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w)
+		return Vector2(a.x - b.x, a.y - b.y)
 	end,
 	-- Vector * scalar or Scalar-Multiplication
 	__mul = function(a, b)
 		if type(a) == "number" then
-			return Vector4(a * b.x, a * b.y, a * b.z, a * b.w)
+			return Vector2(a * b.x, a * b.y)
 		elseif type(b) == "number" then
-			return Vector4(a.x * b, a.y * b, a.z * b, a.w * b)
+			return Vector2(a.x * b, a.y * b)
 		end
-		return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w
+		return a.x * b.x + a.y * b.y
 	end,
 	-- Vector / scalar
 	__div = function(a, b)
 		if type(b) == "number" then
-			return Vector4(a.x / b, a.y / b, a.z / b, a.w / b)
+			return Vector2(a.x / b, a.y / b)
 		end
 		error("Invalid operation.")
 	end,
 	-- Unary minus
 	__unm = function(a)
-		return Vector4(-a.x, -a.y, -a.z, -a.w)
+		return Vector2(-a.x, -a.y)
 	end,
 	-- Equality
 	__eq = function(a, b)
-		if ffi.istype(Vector4, a) ~= ffi.istype(Vector4, b) then return false end
-		return a.x == b.x and a.y == b.y and a.z == b.z and a.w == b.w
+		if ffi.istype(Vector2, a) ~= ffi.istype(Vector2, b) then return false end
+		return a.x == b.x and a.y == b.y
 	end,
 	-- Nicer string format
 	__tostring = function(self)
-		return ("Vector4: %.3f, %.3f, %.3f, %.3f"):format(self.x, self.y, self.z, self.w)
+		return ("Vector2: %.3f, %.3f"):format(self.x, self.y)
 	end,
 	__index = methods
 }
 
 -- Assign metatable
-ffi.metatype(Vector4, meta)
+ffi.metatype(Vector2, meta)
 
-return Vector4
+return Vector2

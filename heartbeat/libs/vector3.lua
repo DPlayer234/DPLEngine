@@ -12,11 +12,11 @@ typedef struct {
 	double x;
 	double y;
 	double z;
-} Engine_Vector3
+} Heartbeat_Vector3
 ]]
 
 -- Get the type in Lua (also used for construction)
-local Vector3 = ffi.typeof("Engine_Vector3")
+local Vector3 = ffi.typeof("Heartbeat_Vector3")
 
 -- Explicit methods
 local methods = {

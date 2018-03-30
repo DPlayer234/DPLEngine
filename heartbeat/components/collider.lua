@@ -3,7 +3,7 @@ A Collider for rigidbodies (Fixture)
 ]]
 local physics = require "love.physics"
 
-local Collider = class("Collider", require "Engine.ECS.Component")
+local Collider = class("Collider", require "Heartbeat.ECS.Component")
 
 -- Creates a new Collider
 function Collider:new(shape, density)

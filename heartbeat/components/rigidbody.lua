@@ -2,10 +2,10 @@
 A Rigidbody (Body)
 ]]
 local physics = require "love.physics"
-local Vector2 = require "Engine.Vector2"
-local Material = require "Engine.Material"
+local Vector2 = require "Heartbeat.Vector2"
+local Material = require "Heartbeat.Material"
 
-local Rigidbody = class("Rigidbody", require "Engine.ECS.Component")
+local Rigidbody = class("Rigidbody", require "Heartbeat.ECS.Component")
 
 -- Creates a new Rigidbody, optionally with a certain body type
 function Rigidbody:new(bodyType)
@@ -26,6 +26,32 @@ end
 -- Returns the physics body
 function Rigidbody:getBody()
 	return self._body
+end
+
+-- Applies a force to the body
+function Rigidbody:applyForce(force, position)
+	if position then
+		return self:getBody():applyForce(force.x, force.y, position:unpack())
+	end
+	return self:getBody():applyForce(force:unpack())
+end
+
+-- Applies torque (rotational force) to the body
+function Rigidbody:applyTorque(torque)
+	return self:getBody():applyTorque(torque)
+end
+
+-- Applies an impulse to the body
+function Rigidbody:applyImpulse(impulse)
+	if position then
+		return self:getBody():applyLinearImpulse(impulse.x, impulse.y, position:unpack())
+	end
+	return self:getBody():applyLinearImpulse(impulse:unpack())
+end
+
+-- Applies a rotational impulse to the body
+function Rigidbody:applyAngularImpulse(impulse)
+	return self:getBody():applyAngularImpulse(impulse)
 end
 
 -- Gets the default Material for any colliders added
@@ -137,6 +163,16 @@ end
 -- Sets whether this is using bullet collisions.
 function Rigidbody:setBullet(value)
 	return self:getBody():setBullet(value)
+end
+
+-- Gets the gravity scale
+function Rigidbody:getGravityScale()
+	return self:getBody():getGravityScale()
+end
+
+-- Sets the gravity scale
+function Rigidbody:setGravityScale(value)
+	return self:getBody():setGravityScale(value)
 end
 
 function Rigidbody:onDestroy()

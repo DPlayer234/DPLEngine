@@ -4,7 +4,7 @@ The GameState editor
 local currentModule = (...):gsub("%.init$", "")
 
 local UserController = require(currentModule .. ".user_controller")
-local GameState = require "Engine.GameState"
+local GameState = require "Heartbeat.GameState"
 
 local TestState = class("TestState", GameState)
 

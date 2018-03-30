@@ -4,11 +4,11 @@ Entity following the mouse
 local currentModule = (...):gsub("%.[^%.]+$", "")
 
 local colors = require "libs.colors"
-local Vector2 = require "Engine.Vector2"
+local Vector2 = require "Heartbeat.Vector2"
 
 local SelectionBox = require(currentModule .. ".selection_box")
 
-local UserController = class("UserController", require "Engine.ECS.Entity")
+local UserController = class("UserController", require "Heartbeat.ECS.Entity")
 
 local color = {
 	neutral = colors.new(255, 255, 255, 255),
@@ -57,17 +57,17 @@ end
 
 releaseCallbacks = {
 	[1] = function(box)
-		local e = box.ecs:addEntity(Engine.ECS.Entity())
+		local e = box.ecs:addEntity(Heartbeat.ECS.Entity())
 
-		e:addComponent(Engine.components.Rigidbody("dynamic"))
-		e:addComponent(Engine.components.RectangleCollider(box.dimensions:unpack()))
+		e:addComponent(Heartbeat.components.Rigidbody("dynamic"))
+		e:addComponent(Heartbeat.components.RectangleCollider(box.dimensions:unpack()))
 		e.transform:setPosition(box.topLeft + box.dimensions * 0.5)
 	end,
 	[2] = function(box)
-		local e = box.ecs:addEntity(Engine.ECS.Entity())
+		local e = box.ecs:addEntity(Heartbeat.ECS.Entity())
 
-		e:addComponent(Engine.components.Rigidbody("static"))
-		e:addComponent(Engine.components.RectangleCollider(box.dimensions:unpack()))
+		e:addComponent(Heartbeat.components.Rigidbody("static"))
+		e:addComponent(Heartbeat.components.RectangleCollider(box.dimensions:unpack()))
 		e.transform:setPosition(box.topLeft + box.dimensions * 0.5)
 	end
 }

@@ -4,12 +4,12 @@ Loading stuff
 local physics  = require "love.physics"
 local graphics = require "love.graphics"
 
-local EventStore = require "libs.event_store"
+local EventStore = require "Heartbeat.EventStore"
 
 local Initializer = class("Initializer")
 
-function Initializer:new(engine)
-	self.engine = engine
+function Initializer:new(heartbeat)
+	self.heartbeat = heartbeat
 end
 
 -- Initializes the engine
@@ -23,21 +23,21 @@ function Initializer:initialize(args)
 		self:setUpInput()
 	end
 
-	if args.cbEventStores ~= false then
-		self:wrapCallbacks()
-	end
+	self:wrapCallbacks()
 end
 
 -- Sets up the input system
 function Initializer:setUpInput()
-	local input = self.engine.input
+	local input = self.heartbeat.input
 
 	input.setUpKeyboard(true)
 	input.setUpGamepads(true)
 	input.setUpMouse(true)
+
+	self.heartbeat.usesInput = true
 end
 
--- Wraps all callbacks into EventStore for easier modification
+-- Wraps all callbacks into an EventStore for easier modification
 function Initializer:wrapCallbacks()
 	for _, callback in ipairs {
 		"keypressed",

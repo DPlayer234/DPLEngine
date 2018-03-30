@@ -1,7 +1,7 @@
 --[[
 Wraps the Contact object to be more similar to the rest of the engine
 ]]
-local Vector2 = require "Engine.Vector2"
+local Vector2 = require "Heartbeat.Vector2"
 
 local Collision = class("Collision")
 

@@ -9,9 +9,9 @@ Corner-connections are ignored.
 ]]
 local ffi = require "ffi"
 local physics = require "love.physics"
-local Vector2 = require "Engine.Vector2"
+local Vector2 = require "Heartbeat.Vector2"
 
-local Collider = require("Engine.components").Collider
+local Collider = require("Heartbeat.components").Collider
 local ImageCollider = class("ImageCollider", Collider)
 
 -- Image-Color-Components must have at least this value to be considered

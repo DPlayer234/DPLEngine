@@ -3,9 +3,9 @@ Collider made up of several line segments
 ]]
 local ffi = require "ffi"
 local physics = require "love.physics"
-local Vector2 = require "Engine.Vector2"
+local Vector2 = require "Heartbeat.Vector2"
 
-local Collider = require("Engine.components").Collider
+local Collider = require("Heartbeat.components").Collider
 local ChainCollider = class("ChainCollider", Collider)
 
 -- Creates a new collider

@@ -3,9 +3,9 @@ Renders any drawable object
 ]]
 local graphics = require "love.graphics"
 local colors = require "libs.colors"
-local Vector2 = require "Engine.Vector2"
+local Vector2 = require "Heartbeat.Vector2"
 
-local DrawableRenderer = class("DrawableRenderer", require "Engine.ECS.Component")
+local DrawableRenderer = class("DrawableRenderer", require "Heartbeat.ECS.Component")
 
 DrawableRenderer.priority = -100
 

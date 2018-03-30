@@ -3,9 +3,9 @@ Circular Collider
 ]]
 local ffi = require "ffi"
 local physics = require "love.physics"
-local Vector2 = require "Engine.Vector2"
+local Vector2 = require "Heartbeat.Vector2"
 
-local Collider = require("Engine.components").Collider
+local Collider = require("Heartbeat.components").Collider
 local CircleCollider = class("CircleCollider", Collider)
 
 -- Creates a new collider
