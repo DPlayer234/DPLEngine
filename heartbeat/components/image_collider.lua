@@ -40,7 +40,7 @@ function ImageCollider:new(a, b, c, d)
 	self:_createShape()
 
 	self._edgeCount = #self._edge - 1
-	self:Collider(self._shape, density)
+	self:Collider("Image", self._shape, density)
 
 	self:_clearData()
 end

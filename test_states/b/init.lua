@@ -15,8 +15,8 @@ function TestState:initialize()
 		local rigidbody = entity:addComponent(Heartbeat.components.Rigidbody())
 		rigidbody:setMaterial(Heartbeat.Material() { friction = 0, bounciness = 2 })
 
-		entity:addComponent(Heartbeat.components.RectangleCollider(Vector2(0, 0), Vector2(100, 100), 0))
-		entity:addComponent(Heartbeat.components.CircleCollider(Vector2(70, 70), 50))
+		entity:addComponent(Heartbeat.components.Collider("Rectangle", Vector2(0, 0), Vector2(100, 100), 0))
+		entity:addComponent(Heartbeat.components.Collider("Circle", Vector2(70, 70), 50))
 
 		local animator = entity:addComponent(Heartbeat.components.Animator(love.graphics.newImage("assets/textures/azure.png"), 15, 19))
 		animator:newAnimation("idle"):setRate(12):addFrames(4, 0,0, 1,0):setLoop(true)
@@ -36,7 +36,7 @@ function TestState:initialize()
 		local entity = ecs:addEntity(Heartbeat.ECS.Entity())
 		local rigidbody = entity:addComponent(Heartbeat.components.Rigidbody("static"))
 
-		entity:addComponent(Heartbeat.components.ChainCollider(false, {
+		entity:addComponent(Heartbeat.components.Collider("Chain", false, {
 			Vector2(0, 500),
 			Vector2(400, 600),
 			Vector2(600, 550),
