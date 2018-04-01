@@ -52,7 +52,7 @@ end
 function Collider:initialize()
 	self._rigidbody = assert(self.entity:getComponent("Rigidbody"), "Colliders require a Rigidbody.")
 
-	self._fixture = physics.newFixture(self._rigidbody:getBody(), self._shape, self._density or 1)
+	self._fixture = physics.newFixture(self._rigidbody:getLBody(), self._shape, self._density or 1)
 	self._fixture:setUserData(self)
 
 	self:setMaterial(self._rigidbody:getMaterial())
@@ -63,9 +63,14 @@ function Collider:getType()
 	return self._type
 end
 
--- Returns the fixture
-function Collider:getFixture()
+-- Returns the Löve fixture
+function Collider:getLFixture()
 	return self._fixture
+end
+
+-- Returns the Löve shape used to construct the fixture
+function Collider:getLShape()
+	return self._shape
 end
 
 -- Gets the Material of the collider
@@ -78,18 +83,18 @@ function Collider:setMaterial(value)
 	if not value:typeOf("Material") then error("Can only set Materials!") end
 	self._material = value:instantiate()
 
-	self:getFixture():setFriction(value.friction)
-	self:getFixture():setRestitution(value.bounciness)
+	self:getLFixture():setFriction(value.friction)
+	self:getLFixture():setRestitution(value.bounciness)
 end
 
 -- Gets this collider's sensor state
 function Collider:isSensor()
-	return self:getFixture():isSensor()
+	return self:getLFixture():isSensor()
 end
 
 -- Sets this collider's sensor state
 function Collider:setSensor(value)
-	return self:getFixture():setSensor(value)
+	return self:getLFixture():setSensor(value)
 end
 
 function Collider:onDestroy()

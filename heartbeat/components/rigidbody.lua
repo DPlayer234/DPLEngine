@@ -20,38 +20,38 @@ function Rigidbody:initialize()
 
 	self._material = Material()
 
-	self.transform:setBody(self._body, true)
+	self.transform:setLBody(self._body, true)
 end
 
--- Returns the physics body
-function Rigidbody:getBody()
+-- Returns the Löve physics body
+function Rigidbody:getLBody()
 	return self._body
 end
 
 -- Applies a force to the body
 function Rigidbody:applyForce(force, position)
 	if position then
-		return self:getBody():applyForce(force.x, force.y, position:unpack())
+		return self:getLBody():applyForce(force.x, force.y, position:unpack())
 	end
-	return self:getBody():applyForce(force:unpack())
+	return self:getLBody():applyForce(force:unpack())
 end
 
 -- Applies torque (rotational force) to the body
 function Rigidbody:applyTorque(torque)
-	return self:getBody():applyTorque(torque)
+	return self:getLBody():applyTorque(torque)
 end
 
 -- Applies an impulse to the body
 function Rigidbody:applyImpulse(impulse)
 	if position then
-		return self:getBody():applyLinearImpulse(impulse.x, impulse.y, position:unpack())
+		return self:getLBody():applyLinearImpulse(impulse.x, impulse.y, position:unpack())
 	end
-	return self:getBody():applyLinearImpulse(impulse:unpack())
+	return self:getLBody():applyLinearImpulse(impulse:unpack())
 end
 
 -- Applies a rotational impulse to the body
 function Rigidbody:applyAngularImpulse(impulse)
-	return self:getBody():applyAngularImpulse(impulse)
+	return self:getLBody():applyAngularImpulse(impulse)
 end
 
 -- Gets the default Material for any colliders added
@@ -67,67 +67,67 @@ end
 
 -- Gets whether the body is active and partaking in the physics simulation.
 function Rigidbody:isActive()
-	return self:getBody():isActive()
+	return self:getLBody():isActive()
 end
 
 -- Sets whether the body is active.
 function Rigidbody:setActive(value)
-	return self:getBody():setActive(value)
+	return self:getLBody():setActive(value)
 end
 
 -- Gets the velocity
 function Rigidbody:getVelocity()
-	return Vector2(self:getBody():getLinearVelocity())
+	return Vector2(self:getLBody():getLinearVelocity())
 end
 
 -- Overrides the velocity
 function Rigidbody:setVelocity(value)
-	return self:getBody():setLinearVelocity(value:unpack())
+	return self:getLBody():setLinearVelocity(value:unpack())
 end
 
 -- Gets rotational velocity
 function Rigidbody:getAngularVelocity()
-	return self:getBody():getAngularVelocity()
+	return self:getLBody():getAngularVelocity()
 end
 
 -- Overrides the angular velocity
 function Rigidbody:setAngularVelocity(value)
-	return self:getBody():setAngularVelocity(value)
+	return self:getLBody():setAngularVelocity(value)
 end
 
 -- Gets linear damping. Basically friction with the air
 function Rigidbody:getDamping()
-	return self:getBody():getLinearDamping()
+	return self:getLBody():getLinearDamping()
 end
 
 -- Sets linear damping.
 function Rigidbody:setDamping(value)
-	return self:getBody():setLinearDamping(value)
+	return self:getLBody():setLinearDamping(value)
 end
 
 -- Gets angular damping. Basically friction with the air for rotational velocity
 function Rigidbody:getAngularDamping()
-	return self:getBody():getAngularDamping()
+	return self:getLBody():getAngularDamping()
 end
 
 -- Sets angular damping.
 function Rigidbody:setAngularDamping(value)
-	return self:getBody():setAngularDamping(value)
+	return self:getLBody():setAngularDamping(value)
 end
 
 -- Gets whether the rotation is locked and cannot be changed by the physics simulation
 function Rigidbody:isRotationLocked()
-	return self:getBody():isFixedRotation()
+	return self:getLBody():isFixedRotation()
 end
 
 -- Sets whether the rotation is locked
 function Rigidbody:setRotationLocked(value)
-	return self:getBody():setFixedRotation(value)
+	return self:getLBody():setFixedRotation(value)
 end
 
 -- Gets the mass, inertia and local center of mass
 function Rigidbody:getMass()
-	local x, y, mass, inertia = self:getBody():getMassData()
+	local x, y, mass, inertia = self:getLBody():getMassData()
 	return mass, inertia, Vector2(x, y)
 end
 
@@ -135,44 +135,44 @@ end
 -- If no arguments are passed, they are instead recalculated from the attached Colliders.
 function Rigidbody:setMass(mass, inertia, center)
 	if center then
-		return self:getBody():setMassData(center.x, center.y, mass, inertia)
+		return self:getLBody():setMassData(center.x, center.y, mass, inertia)
 	elseif inertia then
-		self:getBody():setInertia(inertia)
+		self:getLBody():setInertia(inertia)
 	end
 	if mass then
-		return self:getBody():setMass(mass)
+		return self:getLBody():setMass(mass)
 	end
-	return self:getBody():resetMassData()
+	return self:getLBody():resetMassData()
 end
 
 -- Gets the body type. Either "static", "dynamic" or "kinematic"
 function Rigidbody:getType()
-	return self:getBody():getType()
+	return self:getLBody():getType()
 end
 
 -- Sets the body type
 function Rigidbody:setType(type)
-	return self:getBody():setType(type)
+	return self:getLBody():setType(type)
 end
 
 -- Gets whether this is using bullet collisions. Bullets take more time to calculate but are more accurate
 function Rigidbody:isBullet()
-	return self:getBody():isBullet()
+	return self:getLBody():isBullet()
 end
 
 -- Sets whether this is using bullet collisions.
 function Rigidbody:setBullet(value)
-	return self:getBody():setBullet(value)
+	return self:getLBody():setBullet(value)
 end
 
 -- Gets the gravity scale
 function Rigidbody:getGravityScale()
-	return self:getBody():getGravityScale()
+	return self:getLBody():getGravityScale()
 end
 
 -- Sets the gravity scale
 function Rigidbody:setGravityScale(value)
-	return self:getBody():setGravityScale(value)
+	return self:getLBody():setGravityScale(value)
 end
 
 function Rigidbody:onDestroy()

@@ -30,6 +30,11 @@ function Entity:attachToECS(ecs)
 	self:initialize()
 end
 
+-- Returns whether this entity is attached to an ECS
+function Entity:isAttachedToECS()
+	return self.ecs ~= nil
+end
+
 -- Adds a component to the entity
 function Entity:addComponent(component)
 	component:attachToEntity(self)

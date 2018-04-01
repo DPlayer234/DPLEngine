@@ -22,14 +22,14 @@ function Transform:flipVertical()
 	self:setScale(Vector2.multiply(self:getScale(), Vector2(1, -1)))
 end
 
--- Gets the body this is hooked to
-function Transform:getBody()
+-- Gets the Löve body this is hooked to
+function Transform:getLBody()
 	return self._body
 end
 
--- Sets the body this is hooked to
-function Transform:setBody(value, overrideBody)
-	if self:getBody() then
+-- Sets the Löve body this is hooked to
+function Transform:setLBody(value, overrideBody)
+	if self:getLBody() then
 		self._position = self:getPosition()
 		self._angle = self:getAngle()
 	end
@@ -43,30 +43,30 @@ end
 
 -- Position
 function Transform:getPosition()
-	if self:getBody() then
-		return Vector2(self:getBody():getPosition())
+	if self:getLBody() then
+		return Vector2(self:getLBody():getPosition())
 	end
 	return self._position:copy()
 end
 
 function Transform:setPosition(value)
-	if self:getBody() then
-		return self:getBody():setPosition(value:unpack())
+	if self:getLBody() then
+		return self:getLBody():setPosition(value:unpack())
 	end
 	self._position = value:copy()
 end
 
 -- Angle
 function Transform:getAngle()
-	if self:getBody() then
-		return self:getBody():getAngle()
+	if self:getLBody() then
+		return self:getLBody():getAngle()
 	end
 	return self._angle
 end
 
 function Transform:setAngle(value)
-	if self:getBody() then
-		return self:getBody():setAngle(value)
+	if self:getLBody() then
+		return self:getLBody():setAngle(value)
 	end
 	self._angle = value
 end

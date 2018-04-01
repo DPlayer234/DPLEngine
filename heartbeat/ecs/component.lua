@@ -13,6 +13,9 @@ function Component:initialize() end
 
 -- Attaches an entity to the component
 function Component:attachToEntity(entity)
+	if self:isAttachedToEntity() then error("Cannot attach a Component multiple times.") end
+	if not entity:isAttachedToECS() then error("Cannot attach Components to Entities not attached to an ECS.") end
+
 	self.entity = entity
 
 	self.ecs = self.entity.ecs
@@ -24,6 +27,11 @@ function Component:attachToEntity(entity)
 	end
 
 	self:initialize()
+end
+
+-- Returns whether this component is attached to an Entity
+function Component:isAttachedToEntity()
+	return self.entity ~= nil
 end
 
 -- Destroys the component
