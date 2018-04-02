@@ -15,7 +15,6 @@ for i,f in ipairs {
 	"heartbeat.entities",
 	"heartbeat.game_state",
 	"heartbeat.libs.input",
-	"libs.mathf",
 	-- End of list
 } do
 	-- Setup the redirection

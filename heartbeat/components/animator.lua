@@ -1,7 +1,7 @@
 --[[
 Stores and updates animations
 ]]
-local graphics = require "love.graphics"
+local lgraphics = require "love.graphics"
 local Vector2 = require "Heartbeat.Vector2"
 
 local getQuad, framesMeta
@@ -172,7 +172,7 @@ getQuad = function(sheet, x, y)
 	local field = ("%f;%f"):format(x, y)
 
 	if sheet[field] == nil then
-		sheet[field] = graphics.newQuad(
+		sheet[field] = lgraphics.newQuad(
 			sheet._frameSize.x * x, sheet._frameSize.y * y,
 			sheet._frameSize.x, sheet._frameSize.y,
 			sheet._totalSize.x, sheet._totalSize.y

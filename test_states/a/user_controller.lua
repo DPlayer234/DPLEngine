@@ -27,7 +27,7 @@ function UserController:initialize()
 end
 
 function UserController:update()
-	self.transform:setPosition(self.ecs.transformation:inverseApplyPoint(Vector2(love.mouse.getPosition())))
+	self.transform:setPosition(self.ecs.transformation:inverseTransformPoint(Vector2(love.mouse.getPosition())))
 
 	-- Mouse state
 	for i=1, 3 do

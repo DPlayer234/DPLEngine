@@ -1,8 +1,6 @@
 --[[
 Renders and updates an animation
 ]]
-local graphics = require "love.graphics"
-
 local DrawableRenderer = require("Heartbeat.components").DrawableRenderer
 local AnimationRenderer = class("AnimationRenderer", DrawableRenderer)
 

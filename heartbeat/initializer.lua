@@ -2,7 +2,7 @@
 Loading stuff
 ]]
 local physics  = require "love.physics"
-local graphics = require "love.graphics"
+local lgraphics = require "love.graphics"
 
 local EventStore = require "Heartbeat.EventStore"
 
@@ -17,7 +17,7 @@ function Initializer:initialize(args)
 	args = args or {}
 
 	physics.setMeter(args.meter or 30)
-	graphics.setDefaultFilter(args.textureFilter or "nearest")
+	lgraphics.setDefaultFilter(args.textureFilter or "nearest")
 
 	if args.inputHandler ~= false then
 		self:setUpInput()

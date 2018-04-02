@@ -1,7 +1,7 @@
 --[[
 Renders any drawable object
 ]]
-local graphics = require "love.graphics"
+local lgraphics = require "love.graphics"
 local colors = require "libs.colors"
 local Vector2 = require "Heartbeat.Vector2"
 
@@ -61,12 +61,12 @@ function DrawableRenderer:draw()
 	local sx, sy = self.transform:getScale():unpack()
 	local cx, cy = self:getCenter():unpack()
 
-	graphics.setColor(self:getColor())
+	lgraphics.setColor(self:getColor())
 
 	if self:getQuad() then
-		graphics.draw(self:getDrawable(), self:getQuad(), x, y, self.transform:getAngle(), sx, sy, cx, cy)
+		lgraphics.draw(self:getDrawable(), self:getQuad(), x, y, self.transform:getAngle(), sx, sy, cx, cy)
 	else
-		graphics.draw(self:getDrawable(), x, y, self.transform:getAngle(), sx, sy, cx, cy)
+		lgraphics.draw(self:getDrawable(), x, y, self.transform:getAngle(), sx, sy, cx, cy)
 	end
 end
 

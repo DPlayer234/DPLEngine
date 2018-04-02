@@ -53,9 +53,8 @@ end
 
 -- Input classes
 -- Base Input class
-local Input = (function()
-	local Input = {}
-
+local Input = class("Input")
+do
 	function Input:new()
 		self:reset()
 	end
@@ -155,14 +154,11 @@ local Input = (function()
 	for _, event in ipairs(eventList) do
 		Input[event] = emptyHandler
 	end
-
-	return class("Input", Input)
-end)()
+end
 
 -- Keyboard Input
-local KeyboardInput = (function()
-	local KeyboardInput = {}
-
+local KeyboardInput = class("KeyboardInput", Input)
+do
 	function KeyboardInput:new(bound, down, up)
 		self:Input()
 
@@ -191,14 +187,11 @@ local KeyboardInput = (function()
 			self:_onUp(self._bound[scancode], key, scancode)
 		end
 	end
-
-	return class("KeyboardInput", KeyboardInput, Input)
-end)()
+end
 
 -- Gamepad Button Input
-local GamepadButtonInput = (function()
-	local GamepadButtonInput = {}
-
+local GamepadButtonInput = class("GamepadInput", Input)
+do
 	function GamepadButtonInput:new(joystick, bound, down, up)
 		self:Input()
 		self._joystick = joystick
@@ -228,14 +221,11 @@ local GamepadButtonInput = (function()
 			self:_onUp(self._bound[button], joystick, button)
 		end
 	end
-
-	return class("GamepadButtonInput", GamepadButtonInput, Input)
-end)()
+end
 
 -- Gamepad Axis Input
-local GamepadAxisInput = (function()
-	local GamepadAxisInput = {}
-
+local GamepadAxisInput = class("GamepadAxisInput", Input)
+do
 	function GamepadAxisInput:new(joystick, bound, down, up)
 		self:Input()
 		self._joystick = joystick
@@ -286,14 +276,11 @@ local GamepadAxisInput = (function()
 			end
 		end
 	end
-
-	return class("GamepadAxisInput", GamepadAxisInput, Input)
-end)()
+end
 
 -- Mouse Input
-local MouseInput = (function()
-	local MouseInput = {}
-
+local MouseInput = class("MouseInput", Input)
+do
 	function MouseInput:new(bound, down, up)
 		self:Input()
 
@@ -357,14 +344,11 @@ local MouseInput = (function()
 			end
 		end
 	end
-
-	return class("MouseInput", MouseInput, Input)
-end)()
+end
 
 -- Merges multiple input instances into one
-local MergedInput = (function()
-	local MergedInput = {}
-
+local MergedInput = class("MergedInput", Input)
+do
 	function MergedInput:new(...)
 		self.handlers = {...}
 	end
@@ -447,14 +431,11 @@ local MergedInput = (function()
 
 	MergedInput.bindUpEvent = Input._noBindSet
 	MergedInput.bindDownEvent = Input._noBindSet
-
-	return class("MergedInput", MergedInput, Input)
-end)()
+end
 
 -- Merges GamepadButtonInput and GamepadAxisInput
-local GamepadInput = (function()
-	local GamepadInput = {}
-
+local GamepadInput = class("GamepadInput", MergedInput)
+do
 	function GamepadInput:new(...)
 		self.buttons = GamepadButtonInput(...)
 		self.axes = GamepadAxisInput(...)
@@ -473,7 +454,7 @@ local GamepadInput = (function()
 	function GamepadInput:bindAxis(axis, idneg, idpos)
 		self.axes:bindAxis(axis, idneg, idpos)
 	end
-	
+
 	function GamepadInput:getButtonBinding(what)
 		return self.buttons:getButtonBinding(what)
 	end
@@ -491,9 +472,7 @@ local GamepadInput = (function()
 		self.buttons:bindDownEvent(id, event)
 		self.axes:bindDownEvent(id, event)
 	end
-
-	return class("GamepadInput", GamepadInput, MergedInput)
-end)()
+end
 
 -- Binding keys to the global binding table
 function input2.bindKey(scancode, id)
