@@ -37,6 +37,17 @@ function Initializer:setUpInput()
 	self.heartbeat.usesInput = true
 end
 
+-- Sets the default callbacks
+function Initializer:setCallbacks()
+	--[[love.quit:add(function()
+		for i=1, self.engine:getGameStateCount() do
+			local state = self.engine:getActiveGameState()
+			self.engine:popGameState()
+			state:destroy()
+		end
+	end)]]
+end
+
 -- Wraps all callbacks into an EventStore for easier modification
 function Initializer:wrapCallbacks()
 	for _, callback in ipairs {
@@ -60,7 +71,8 @@ function Initializer:wrapCallbacks()
 		"joystickhat",
 		"joystickpressed",
 		"joystickreleased",
-		"joystickremoved"
+		"joystickremoved",
+		"quit"
 	} do
 		local love_callback = love[callback]
 		love[callback] = EventStore { type = "handler" }

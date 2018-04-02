@@ -9,6 +9,14 @@ local color = {
 	contact = colors.new(255,   0,   0, 255),
 }
 
+local cmin = 0.1 * colors.max
+local cmax = colors.max
+local calpha = 0.35 * colors.max
+
+local randomValue = function()
+	return rng:random() * (cmax - cmin) + cmin
+end
+
 local function drawFixture(fixture)
 	local shape = fixture:getShape()
 	local shapeType = shape:getType()
@@ -16,7 +24,7 @@ local function drawFixture(fixture)
 	if (fixture:isSensor()) then
 		love.graphics.setColor(color.sensor)
 	else
-		love.graphics.setColor(rng:random(32,255),rng:random(32,255),rng:random(32,255),96)
+		love.graphics.setColor(randomValue(), randomValue(), randomValue(), calpha)
 	end
 
 	if (shapeType == "circle") then
@@ -51,7 +59,7 @@ local function drawBody(body)
 
 	rng:setSeed(seed)
 
-	local fixtures = body:getFixtureList()
+	local fixtures = body:getFixtures()
 	for i=1,#fixtures do
 		drawFixture(fixtures[i])
 	end
@@ -76,7 +84,7 @@ local function debugWorldDraw(world,topLeft_x,topLeft_y,width,height)
 	love.graphics.setColor(color.joint)
 	love.graphics.setLineWidth(3)
 	love.graphics.setPointSize(3)
-	local joints = world:getJointList()
+	local joints = world:getJoints()
 	for i=1,#joints do
 		local x1,y1,x2,y2 = joints[i]:getAnchors()
 		if (x1 and x2) then
@@ -93,7 +101,7 @@ local function debugWorldDraw(world,topLeft_x,topLeft_y,width,height)
 
 	love.graphics.setColor(color.contact)
 	love.graphics.setPointSize(3)
-	local contacts = world:getContactList()
+	local contacts = world:getContacts()
 	for i=1,#contacts do
 		local x1,y1,x2,y2 = contacts[i]:getPositions()
 		if (x1) then

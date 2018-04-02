@@ -8,6 +8,8 @@ function love.load()
 	miscMod = require "libs.misc_mod"
 	sounds  = require "libs.sounds2"
 
+	ffi = require "ffi"
+
 	do
 		-- Creating the window
 		local width, height = love.window.getDesktopDimensions()

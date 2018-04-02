@@ -15,7 +15,7 @@ local Collider = require("Heartbeat.components").Collider
 local ImageCollider = class("ImageCollider", Collider)
 
 -- Image-Color-Components must have at least this value to be considered
-local DETECTION_THRESHOLD = 50 --#const
+local DETECTION_THRESHOLD = 0.2 --#const
 
 -- Creates a new collider
 -- > ImageCollider(imageData, [strip, density])
