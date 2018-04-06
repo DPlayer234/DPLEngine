@@ -60,14 +60,14 @@ releaseCallbacks = {
 		local e = box.ecs:addEntity(Heartbeat.ECS.Entity())
 
 		e:addComponent(Heartbeat.components.Rigidbody("dynamic"))
-		e:addComponent(Heartbeat.components.Collider("Rectangle", box.dimensions:unpack()))
+		e:addComponent(Heartbeat.components.Collider("Rectangle", box.dimensions))
 		e.transform:setPosition(box.topLeft + box.dimensions * 0.5)
 	end,
 	[2] = function(box)
 		local e = box.ecs:addEntity(Heartbeat.ECS.Entity())
 
 		e:addComponent(Heartbeat.components.Rigidbody("static"))
-		e:addComponent(Heartbeat.components.Collider("Rectangle", box.dimensions:unpack()))
+		e:addComponent(Heartbeat.components.Collider("Rectangle", box.dimensions))
 		e.transform:setPosition(box.topLeft + box.dimensions * 0.5)
 	end
 }

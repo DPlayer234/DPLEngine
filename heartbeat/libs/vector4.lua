@@ -45,6 +45,14 @@ local methods = {
 	getNormalized = function(self)
 		return self / self:getMagnitude()
 	end,
+	-- Gets the angle of a vector in relation to the coordinate grid
+	getAngle = function(self)
+		return self:getAngleTo(Vector4(1, 0, 0, 0))
+	end,
+	-- Gets the angle between two vectors
+	getAngleTo = function(a, b)
+		return (a * b) / (a:getMagnitude() * b:getMagnitude())
+	end,
 	-- Memberwise addition (+)
 	add = function(a, b)
 		return a + b

@@ -35,7 +35,7 @@ function love.load()
 
 	require "dev"
 
-	Heartbeat:pushGameState(require "test_states.b" ())
+	Heartbeat:pushGameState(require "test_states.a" ())
 end
 
 function love.update(dt)

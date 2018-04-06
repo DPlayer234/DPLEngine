@@ -43,8 +43,13 @@ local methods = {
 	getNormalized = function(self)
 		return self / self:getMagnitude()
 	end,
+	-- Gets the angle of a vector in relation to the coordinate grid
 	getAngle = function(self)
 		return math.atan2(self.y, self.x)
+	end,
+	-- Gets the angle between two vectors
+	getAngleTo = function(a, b)
+		return (a * b) / (a:getMagnitude() * b:getMagnitude())
 	end,
 	-- Returns a new vector, which is the original vector rotated by rad radians around origin or (0, 0)
 	rotate = function(self, rad, origin)
