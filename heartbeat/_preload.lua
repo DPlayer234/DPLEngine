@@ -17,6 +17,7 @@ local hooks = {
 	["Heartbeat.GameState.Collision"]      = ".game_state.collision",
 	["Heartbeat.GameState.Transformation"] = ".game_state.transformation",
 	["Heartbeat.input"]                    = ".libs.input",
+	["Heartbeat.complex"]                  = ".libs.complex",
 	["Heartbeat.EventStore"]               = ".libs.event_store",
 	["Heartbeat.Mat3x3"]                   = ".libs.mat3x3",
 	["Heartbeat.Material"]                 = ".libs.material",

@@ -8,6 +8,7 @@ local Heartbeat = class("Heartbeat")
 
 -- Load Libraries
 Heartbeat.input      = require "Heartbeat.input"
+Heartbeat.complex    = require "Heartbeat.complex"
 Heartbeat.EventStore = require "Heartbeat.EventStore"
 Heartbeat.Mat3x3     = require "Heartbeat.Mat3x3"
 Heartbeat.Material   = require "Heartbeat.Material"

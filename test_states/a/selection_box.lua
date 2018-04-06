@@ -2,9 +2,9 @@
 Selection Box
 ]]
 local colors = require "libs.colors"
-local Vector2 = require "Heartbeat.Vector2"
+local Vector2 = heartbeat.Vector2
 
-local SelectionBox = class("SelectionBox", require "Heartbeat.ECS.Component")
+local SelectionBox = class("SelectionBox", heartbeat.ECS.Component)
 
 function SelectionBox:initialize()
 	assert(self.entity:typeOf("UserController"), "SelectionBox must be attached to a UserController!")

@@ -1,28 +1,28 @@
 --[[
 Repeating test state
 ]]
-local TestState = class("TestState", Heartbeat.GameState)
+local TestState = class("TestState", heartbeat.GameState)
 
 function TestState:initialize()
 	-- Create a game state
 	local ecs = self.ecs
 
-	local Vector2 = Heartbeat.Vector2
+	local Vector2 = heartbeat.Vector2
 
 	do
-		local entity = ecs:addEntity(Heartbeat.ECS.Entity())
+		local entity = ecs:addEntity(heartbeat.ECS.Entity())
 
-		local rigidbody = entity:addComponent(Heartbeat.components.Rigidbody())
-		rigidbody:setMaterial(Heartbeat.Material() { friction = 0, bounciness = 2 })
+		local rigidbody = entity:addComponent(heartbeat.components.Rigidbody())
+		rigidbody:setMaterial(heartbeat.Material() { friction = 0, bounciness = 2 })
 
-		entity:addComponent(Heartbeat.components.Collider("Rectangle", Vector2(0, 0), Vector2(100, 100), 0))
-		entity:addComponent(Heartbeat.components.Collider("Circle", Vector2(70, 70), 50))
+		entity:addComponent(heartbeat.components.Collider("Rectangle", Vector2(0, 0), Vector2(100, 100), 0))
+		entity:addComponent(heartbeat.components.Collider("Circle", Vector2(70, 70), 50))
 
-		local animator = entity:addComponent(Heartbeat.components.Animator(love.graphics.newImage("assets/textures/azure.png"), 15, 19))
+		local animator = entity:addComponent(heartbeat.components.Animator(love.graphics.newImage("assets/textures/azure.png"), 15, 19))
 		animator:newAnimation("idle"):setRate(12):addFrames(4, 0,0, 1,0):setLoop(true)
 		animator:setAnimation("idle")
 
-		local renderer = entity:addComponent(Heartbeat.components.AnimationRenderer())
+		local renderer = entity:addComponent(heartbeat.components.AnimationRenderer())
 		renderer:setAnimator(animator)
 		renderer:setCenter(Vector2(7.5, 9.5))
 
@@ -33,10 +33,10 @@ function TestState:initialize()
 	end
 
 	do
-		local entity = ecs:addEntity(Heartbeat.ECS.Entity())
-		local rigidbody = entity:addComponent(Heartbeat.components.Rigidbody("static"))
+		local entity = ecs:addEntity(heartbeat.ECS.Entity())
+		local rigidbody = entity:addComponent(heartbeat.components.Rigidbody("static"))
 
-		entity:addComponent(Heartbeat.components.Collider("Chain", false, {
+		entity:addComponent(heartbeat.components.Collider("Chain", false, {
 			Vector2(0, 500),
 			Vector2(400, 600),
 			Vector2(600, 550),
@@ -45,10 +45,10 @@ function TestState:initialize()
 	end
 
 	do
-		local entity = ecs:addEntity(Heartbeat.ECS.Entity())
+		local entity = ecs:addEntity(heartbeat.ECS.Entity())
 
-		local rigidbody = entity:addComponent(Heartbeat.components.Rigidbody("dynamic"))
-		entity:addComponent(Heartbeat.components.ImageCollider(love.image.newImageData("assets/textures/test_collider.png"), 0.71))
+		local rigidbody = entity:addComponent(heartbeat.components.Rigidbody("dynamic"))
+		entity:addComponent(heartbeat.components.ImageCollider(love.image.newImageData("assets/textures/test_collider.png"), 0.71))
 
 		rigidbody:setGravityScale(0)
 		rigidbody:setMass(1, 1)
