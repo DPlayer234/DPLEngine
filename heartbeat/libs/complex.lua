@@ -112,6 +112,9 @@ local methods = {
 	end,
 	abssqr = function(z)
 		return z:real() ^ 2 + z:imag() ^ 2
+	end,
+	is = function(value)
+		return ffi.istype(complex, value)
 	end
 }
 
@@ -166,7 +169,7 @@ local meta = {
 	end,
 	-- Comparison
 	__eq = function(x, y)
-		if not ffi.istype(complex, x) or not ffi.istype(complex, y) then return false end
+		if complex.is(x) ~= complex.is(y) then return false end
 		return x:real() == y:real() and x:imag() == y:imag()
 	end,
 	__index = methods

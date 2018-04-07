@@ -7,9 +7,9 @@ local Transform = class("Transform")
 
 -- Creates a new transform object
 function Transform:new()
-	self._position = Vector2()
+	self._position = Vector2.zero
 	self._angle = 0
-	self._scale = Vector2(1, 1)
+	self._scale = Vector2.one
 end
 
 -- Flips the scaling horizontally

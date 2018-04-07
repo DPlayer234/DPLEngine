@@ -15,7 +15,7 @@ function TestState:initialize()
 		local rigidbody = entity:addComponent(heartbeat.components.Rigidbody())
 		rigidbody:setMaterial(heartbeat.Material() { friction = 0, bounciness = 2 })
 
-		entity:addComponent(heartbeat.components.Collider("Rectangle", Vector2(0, 0), Vector2(100, 100), 0))
+		entity:addComponent(heartbeat.components.Collider("Rectangle", Vector2.zero, Vector2(100, 100), 0))
 		entity:addComponent(heartbeat.components.Collider("Circle", Vector2(70, 70), 50))
 
 		local animator = entity:addComponent(heartbeat.components.Animator(love.graphics.newImage("assets/textures/azure.png"), 15, 19))
@@ -48,7 +48,7 @@ function TestState:initialize()
 		local entity = ecs:addEntity(heartbeat.ECS.Entity())
 
 		local rigidbody = entity:addComponent(heartbeat.components.Rigidbody("dynamic"))
-		entity:addComponent(heartbeat.components.ImageCollider(love.image.newImageData("assets/textures/test_collider.png"), 0.71))
+		entity:addComponent(heartbeat.components.ImageCollider(love.image.newImageData("assets/textures/test_collider.png"), nil, Vector2(12, 12)))
 
 		rigidbody:setGravityScale(0)
 		rigidbody:setMass(1, 1)

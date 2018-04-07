@@ -19,6 +19,18 @@ typedef struct {
 -- Get the type in Lua (also used for construction)
 local Vector4 = ffi.typeof("Heartbeat_Vector4")
 
+-- Constants
+local const = {
+	zero  = function() return Vector4( 0, 0, 0, 0) end,
+	one   = function() return Vector4( 1, 1, 1, 1) end,
+	left  = function() return Vector4(-1, 0, 0, 0) end,
+	right = function() return Vector4( 1, 0, 0, 0) end,
+	up    = function() return Vector4( 0,-1, 0, 0) end,
+	down  = function() return Vector4( 0, 1, 0, 0) end,
+	back  = function() return Vector4( 0, 0,-1, 0) end,
+	front = function() return Vector4( 0, 0, 1, 0) end,
+}
+
 -- Explicit methods
 local methods = {
 	-- Copy the current vector
@@ -53,6 +65,10 @@ local methods = {
 	getAngleTo = function(a, b)
 		return (a * b) / (a:getMagnitude() * b:getMagnitude())
 	end,
+	-- Returns the result of a point multiplication. Equal to a * b.
+	point = function(a, b)
+		return a * b
+	end,
 	-- Memberwise addition (+)
 	add = function(a, b)
 		return a + b
@@ -83,7 +99,8 @@ local methods = {
 	end,
 	-- Type
 	type = function() return TYPE_NAME end,
-	typeOf = function(self, name) return name == TYPE_NAME end
+	typeOf = function(self, name) return name == TYPE_NAME end,
+	is = function(value) return ffi.istype(Vector4, value) end
 }
 
 -- Metatable, including operators
@@ -118,14 +135,20 @@ local meta = {
 	end,
 	-- Equality
 	__eq = function(a, b)
-		if ffi.istype(Vector4, a) ~= ffi.istype(Vector4, b) then return false end
+		if Vector4.is(a) ~= Vector4.is(b) then return false end
 		return a.x == b.x and a.y == b.y and a.z == b.z and a.w == b.w
 	end,
 	-- Nicer string format
 	__tostring = function(self)
 		return ("Vector4: %.3f, %.3f, %.3f, %.3f"):format(self.x, self.y, self.z, self.w)
 	end,
-	__index = methods
+	-- Indexer
+	__index = function(self, key)
+		if const[key] then
+			return const[key]()
+		end
+		return methods[key]
+	end
 }
 
 -- Assign metatable

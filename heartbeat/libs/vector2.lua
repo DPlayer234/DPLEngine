@@ -17,6 +17,16 @@ typedef struct {
 -- Get the type in Lua (also used for construction)
 local Vector2 = ffi.typeof("Heartbeat_Vector2")
 
+-- Constants
+local const = {
+	zero  = function() return Vector2( 0, 0) end,
+	one   = function() return Vector2( 1, 1) end,
+	left  = function() return Vector2(-1, 0) end,
+	right = function() return Vector2( 1, 0) end,
+	up    = function() return Vector2( 0,-1) end,
+	down  = function() return Vector2( 0, 1) end,
+}
+
 -- Explicit methods
 local methods = {
 	-- Copy the current vector
@@ -53,7 +63,7 @@ local methods = {
 	end,
 	-- Returns a new vector, which is the original vector rotated by rad radians around origin or (0, 0)
 	rotate = function(self, rad, origin)
-		if origin == nil then origin = Vector2(0, 0) end
+		if origin == nil then origin = Vector2.zero end
 		self = self - origin
 
 		local sin = math.sin(rad)
@@ -67,6 +77,10 @@ local methods = {
 	-- Returns the "cross" product of two vectors. Equals the area of the parallelo gram the two vectors define.
 	cross = function(a, b)
 		return math.abs(a.x * b.y - a.y * b.x)
+	end,
+	-- Returns the result of a point multiplication. Equal to a * b.
+	point = function(a, b)
+		return a * b
 	end,
 	-- Memberwise addition (+)
 	add = function(a, b)
@@ -98,7 +112,8 @@ local methods = {
 	end,
 	-- Type
 	type = function() return TYPE_NAME end,
-	typeOf = function(self, name) return name == TYPE_NAME end
+	typeOf = function(self, name) return name == TYPE_NAME end,
+	is = function(value) return ffi.istype(Vector2, value) end
 }
 
 -- Metatable, including operators
@@ -133,14 +148,20 @@ local meta = {
 	end,
 	-- Equality
 	__eq = function(a, b)
-		if ffi.istype(Vector2, a) ~= ffi.istype(Vector2, b) then return false end
+		if Vector2.is(a) ~= Vector2.is(b) then return false end
 		return a.x == b.x and a.y == b.y
 	end,
 	-- Nicer string format
 	__tostring = function(self)
 		return ("Vector2: %.3f, %.3f"):format(self.x, self.y)
 	end,
-	__index = methods
+	-- Indexer
+	__index = function(self, key)
+		if const[key] then
+			return const[key]()
+		end
+		return methods[key]
+	end
 }
 
 -- Assign metatable

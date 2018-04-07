@@ -21,24 +21,24 @@ function Collider:new(shapeType, a, b, c, d)
 	self:Component()
 
 	if shapeType == "Rectangle" then
-		if ffi.istype(Vector2, b) then
+		if Vector2.is(b) then
 			self:_init(physics.newRectangleShape(a.x, a.y, b.x, b.y, c), d)
 		else
 			self:_init(physics.newRectangleShape(a.x, a.y), b)
 		end
 	elseif shapeType == "Circle" then
-		if ffi.istype(Vector2, a) then
+		if Vector2.is(a) then
 			self:_init(physics.newCircleShape(a.x, a.y, b), c)
 		else
 			self:_init(physics.newCircleShape(a), b)
 		end
 	elseif shapeType == "Polygon" then
-		if ffi.istype(Vector2, a[1]) then
+		if Vector2.is(a[1]) then
 			a = self:_vectorToNumberList(a)
 		end
 		self:_init(physics.newPolygonShape(a), b)
 	elseif shapeType == "Chain" then
-		if ffi.istype(Vector2, b[1]) then
+		if Vector2.is(b[1]) then
 			b = self:_vectorToNumberList(b)
 		end
 		self:_init(physics.newChainShape(a, b), c)

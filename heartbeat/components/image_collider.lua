@@ -1,11 +1,10 @@
 --[[
 Generates a shape from an image and creates a collider based off of that.
-Any blue pixel is considered to be part of the shape
-There must be exactly one green pixel denoting the beginning of the shape.
-There may be one red pixel denoting the end of the shape. This is not necessary if the shape loops.
-If the shape does loop, it's insides should filled. Otherwise there may be artifacts.
-To be considered part of the shape, a pixel must directly connect to other pixels of the shape.
-Corner-connections are ignored.
+A green pixel defines the first vertex of the shape.
+Red pixels define any additional vertices.
+They have to be connected by blue lines. These pixels of these lines must connect by their
+edges to each other the vertex-pixels. The line may not be thicker than 1 pixel, may not
+loop in on itself or connect more than 2 vertices.
 ]]
 local ffi = require "ffi"
 local physics = require "love.physics"
@@ -18,28 +17,20 @@ local ImageCollider = class("ImageCollider", Collider)
 local DETECTION_THRESHOLD = 0.2 --#const
 
 -- Creates a new collider
--- > ImageCollider(imageData, [strip, density])
--- > ImageCollider(imageData, offset, [strip, density])
--- 'strip' is the strip-off threshold. 0.71 (~sqrt(2)/2) is the default works well for most cases.
--- Center default to half the width and height of the image
-function ImageCollider:new(a, b, c, d)
-	local imageData, offset, strip, density
-	if ffi.istype(Vector2, b) then
-		imageData, offset, strip, density = a, b, c, d
-	else
-		imageData, offset, strip, density = a, Vector2(a:getDimensions()) * 0.5, b, c
-	end
-
+-- > ImageCollider(imageData, [offset, scale, density])
+-- 'offset' and 'scale' are Vector2s and default to half the image dimensions and (1, 1).
+function ImageCollider:new(imageData, offset, scale, density)
 	self._data = imageData
-	self._strip = strip or 0.71
-	self._offset = offset
+	self._offset = offset or Vector2(imageData:getDimensions()) * 0.5
+	self._scale = scale or Vector2.one
 	self._width, self._height = self._data:getDimensions()
 
 	self:_findSolidPixels()
 	self:_findEdge()
 	self:_createShape()
 
-	self._edgeCount = #self._edge - 1
+	self._vertexCount = #self._vertices
+	self._edgeCount = self._vertexCount - (self._loop and 0 or 1)
 	self:Collider("Image", self._shape, density)
 
 	self:_clearData()
@@ -50,124 +41,120 @@ function ImageCollider:getEdgeCount()
 	return self._edgeCount
 end
 
+-- Returns the amount of vertices in the shape
+function ImageCollider:getVertexCount()
+	return self._vertexCount
+end
+
 -- Returns the image offset
 function ImageCollider:getOffset()
 	return self._offset:copy()
 end
 
--- Assigns a flattened 2D-array of booleans, defining whether the given pixel is solid.
--- Also finds the beginning and end-pixels of the shape
+-- Returns whether the collider edges loop
+function ImageCollider:isLooping()
+	return self._loop
+end
+
+-- Assigns a flattened 2D-array of bytes, defining whether the given pixel is a connection, a vertex or empty.
+-- Also finds the _first pixel of the shape.
 function ImageCollider:_findSolidPixels()
-	self._solid = ffi.new("bool[?]", self._width * self._height)
+	self._solid = ffi.new("uint8_t[?]", self._width * self._height)
+
+	local verts = 0
 
 	self._data:mapPixel(function(x, y, r, g, b, a)
 		self._solid[self:_getIndex(x, y)] =
-			b > DETECTION_THRESHOLD or
-			r > DETECTION_THRESHOLD or
-			g > DETECTION_THRESHOLD
+			b > DETECTION_THRESHOLD and 1 or
+			r > DETECTION_THRESHOLD and 2 or
+			g > DETECTION_THRESHOLD and 2 or 0
 
 		if g > DETECTION_THRESHOLD then
-			if self._first then error("More than one beginning pixel!") end
 			self._first = Vector2(x, y)
+			verts = verts + 1
 		elseif r > DETECTION_THRESHOLD then
-			if self._first then error("More than one ending pixel!") end
-			self._last = Vector2(x, y)
+			verts = verts + 1
 		end
 
 		return r, g, b, a
 	end)
 
-	assert(self._first, "There is no beginning pixel.")
+	assert(self._first, "There is no red pixel to indicate the beginning")
+	assert(verts >= 3, "There need to be at least 3 vertices.")
 end
 
 -- Find and defines the edge
 function ImageCollider:_findEdge()
-	self._edge = { self._first }
+	self._vertices = { self._first }
 
 	repeat
-		self._edge[#self._edge + 1] = self:_getNextPoint()
-	until self:_getLastPoint(0) == self._last or self:_getLastPoint(0) == self._first
+		local point = self:_getNextPoint()
+		self._vertices[#self._vertices + 1] = point
+		print(point)
+	until point == self._first or point == nil
 
 	self._loop = self:_getLastPoint(0) == self._first
 
-	self:_stripEdge()
+	if self._loop then
+		table.remove(self._vertices, #self._vertices)
+	end
 end
 
 -- Returns the next valid edge point
 function ImageCollider:_getNextPoint()
-	local l0 = self:_getLastPoint(0)
-	local l1 = self:_getLastPoint(1)
+	local pos = self:_getPointHelper {
+		Vector2( 1, 0), Vector2( 0, 1),
+		Vector2(-1, 0), Vector2( 0,-1),
+	}
 
-	for i, v in ipairs {
-		Vector2(l0.x, l0.y - 1),
-		Vector2(l0.x - 1, l0.y),
-		Vector2(l0.x + 1, l0.y),
-		Vector2(l0.x, l0.y + 1),
-	} do
-		if v ~= l1 and self:_isEdgePoint(v.x, v.y) then
-			return v
-		end
-	end
-	error("Cannot find Edge continuation? Make sure the image shape never ends in a single-pixel lines.")
+	if pos ~= self:_getLastPoint(1) then return pos end
+
+	local pos = self:_getPointHelper {
+		Vector2(-1, 0), Vector2( 0,-1),
+		Vector2( 1, 0), Vector2( 0, 1),
+	}
+
+	if pos == self:_getLastPoint(1) then return nil end
+
+	return pos
 end
 
--- Returns whether the given pixel is a valid edge point
-function ImageCollider:_isEdgePoint(x, y)
-	if not self:_isSolid(x, y) then return false end
-
-	for x_ = x - 1, x + 1 do
-		for y_ = y - 1, y + 1 do
-			if not self:_isSolid(x_, y_) then
-				return true
+-- Sub-routine for finding a point
+function ImageCollider:_getPointHelper(offsetList)
+	local pos = self:_getLastPoint(0)
+	local lpos = pos
+	repeat
+		for _, v in ipairs(offsetList) do
+			v = pos + v
+			if v ~= lpos and self:_getPixel(v.x, v.y) > 0 then
+				lpos = pos
+				pos = v
+				break
 			end
 		end
-	end
-	return false
+	until self:_getPixel(pos.x, pos.y) == 2
+
+	return pos
 end
 
--- Reverse-indexing _edge
+-- Reverse-indexing _vertices
 function ImageCollider:_getLastPoint(i)
-	return self._edge[#self._edge - i]
+	return self._vertices[#self._vertices - i]
 end
 
 -- Returns whether the given pixel is solid
-function ImageCollider:_isSolid(x, y)
+function ImageCollider:_getPixel(x, y)
 	if x < 0 or x >= self._width or y < 0 or y >= self._height then
-		return false
+		return 0
 	end
 	return self._solid[self:_getIndex(x, y)]
 end
 
--- Strips the edge points to reduce the amount of points needed
-function ImageCollider:_stripEdge()
-	for i = #self._edge - 1, 2, -1 do
-		local l1 = self._edge[i + 1]
-		local l2 = self._edge[i - 1]
-		local p  = self._edge[i]
-
-		if self:_closeToLine(p, l1, l2) then
-			table.remove(self._edge, i)
-		end
-	end
-
-	if self._loop then
-		table.remove(self._edge, #self._edge)
-	end
-end
-
--- Returns whether the point is too close to the line defined by l1 and l2
-function ImageCollider:_closeToLine(p, l1, l2)
-	local lv = l2 - l1
-	local r = l1 - p
-	local distance = Vector2.cross(lv, r) / lv:getMagnitude()
-	return distance < self._strip
-end
-
--- Creates the shape from the _edge
+-- Creates the shape from the _vertices
 function ImageCollider:_createShape()
 	local pointTable = {}
-	for i=1, #self._edge do
-		local point = self._edge[i] - self._offset
+	for i=1, #self._vertices do
+		local point = Vector2.multiply((self._vertices[i] - self._offset), self._scale)
 		pointTable[i*2-1] = point.x
 		pointTable[i * 2] = point.y
 	end
@@ -182,9 +169,7 @@ end
 
 -- Clears out data no longer needed after initialization
 function ImageCollider:_clearData()
-	self._data, self._width, self._height,
-	self._solid, self._edge, self._first, self._last,
-	self._loop, self._strip = nil
+	self._data, self._width, self._height, self._solid, self._vertices, self._first = nil
 end
 
 return ImageCollider

@@ -10,7 +10,7 @@ local DrawableRenderer = class("DrawableRenderer", require "Heartbeat.ECS.Compon
 DrawableRenderer.priority = -100
 
 function DrawableRenderer:initialize()
-	self._center = Vector2()
+	self._center = Vector2.zero
 	self._color = colors.vec4(1, 1, 1, 1)
 end
 
