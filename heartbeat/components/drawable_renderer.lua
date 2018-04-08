@@ -7,7 +7,7 @@ local Vector2 = require "Heartbeat.Vector2"
 
 local DrawableRenderer = class("DrawableRenderer", require "Heartbeat.ECS.Component")
 
-DrawableRenderer.priority = -100
+DrawableRenderer.priority = -1
 
 function DrawableRenderer:initialize()
 	self._center = Vector2.zero

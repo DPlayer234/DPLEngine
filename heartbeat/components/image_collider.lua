@@ -1,10 +1,9 @@
 --[[
 Generates a shape from an image and creates a collider based off of that.
+The general shape is defined by a blue line or blue filled shape. The pixels
+of this line/shape have to connect to each other horizontally or vertically.
 A green pixel defines the first vertex of the shape.
 Red pixels define any additional vertices.
-They have to be connected by blue lines. These pixels of these lines must connect by their
-edges to each other the vertex-pixels. The line may not be thicker than 1 pixel, may not
-loop in on itself or connect more than 2 vertices.
 ]]
 local ffi = require "ffi"
 local physics = require "love.physics"
@@ -14,7 +13,7 @@ local Collider = require("Heartbeat.components").Collider
 local ImageCollider = class("ImageCollider", Collider)
 
 -- Image-Color-Components must have at least this value to be considered
-local DETECTION_THRESHOLD = 0.2 --#const
+local DETECTION_THRESHOLD = 0.4 --#const
 
 -- Creates a new collider
 -- > ImageCollider(imageData, [offset, scale, density])
@@ -90,7 +89,6 @@ function ImageCollider:_findEdge()
 	repeat
 		local point = self:_getNextPoint()
 		self._vertices[#self._vertices + 1] = point
-		print(point)
 	until point == self._first or point == nil
 
 	self._loop = self:_getLastPoint(0) == self._first
@@ -126,7 +124,7 @@ function ImageCollider:_getPointHelper(offsetList)
 	repeat
 		for _, v in ipairs(offsetList) do
 			v = pos + v
-			if v ~= lpos and self:_getPixel(v.x, v.y) > 0 then
+			if v ~= lpos and self:_isEdgePoint(v.x, v.y) then
 				lpos = pos
 				pos = v
 				break
@@ -135,6 +133,20 @@ function ImageCollider:_getPointHelper(offsetList)
 	until self:_getPixel(pos.x, pos.y) == 2
 
 	return pos
+end
+
+-- Returns whether the given pixel is a valid edge point
+function ImageCollider:_isEdgePoint(x, y)
+	if self:_getPixel(x, y) == 0 then return false end
+
+	for x_ = x - 1, x + 1 do
+		for y_ = y - 1, y + 1 do
+			if self:_getPixel(x_, y_) == 0 then
+				return true
+			end
+		end
+	end
+	return false
 end
 
 -- Reverse-indexing _vertices
