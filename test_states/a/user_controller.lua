@@ -44,6 +44,12 @@ function UserController:update()
 	end
 
 	self.color = self.held[1] and color.lmb or self.held[2] and color.rmb or self.held[3] and color.mmb or color.neutral
+
+	if love.keyboard.isDown("escape") then
+		for i,v in ipairs(self.ecs:findEntitiesByTag("Box")) do
+			v:destroy()
+		end
+	end
 end
 
 function UserController:draw()
@@ -59,13 +65,17 @@ releaseCallbacks = {
 	[1] = function(box)
 		local e = box.ecs:addEntity(heartbeat.ECS.Entity())
 
+		e:tagAs("Box")
 		e:addComponent(heartbeat.components.Rigidbody("dynamic"))
 		e:addComponent(heartbeat.components.Collider("Rectangle", box.dimensions))
 		e.transform:setPosition(box.topLeft + box.dimensions * 0.5)
+
+		e:addComponent(heartbeat.components.ShapeRenderer("fill", "polygon", { -box.dimensions.x * 0.5, -box.dimensions.y * 0.5, box.dimensions.x * 0.5, -box.dimensions.y * 0.5, box.dimensions.x * 0.5, box.dimensions.y * 0.5 }))
 	end,
 	[2] = function(box)
 		local e = box.ecs:addEntity(heartbeat.ECS.Entity())
 
+		e:tagAs("Box")
 		e:addComponent(heartbeat.components.Rigidbody("static"))
 		e:addComponent(heartbeat.components.Collider("Rectangle", box.dimensions))
 		e.transform:setPosition(box.topLeft + box.dimensions * 0.5)

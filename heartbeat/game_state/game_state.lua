@@ -1,7 +1,6 @@
 --[[
 The base class for any Game State
 ]]
-local physicsWorldDraw = require "dev.physics_world_draw"
 local physics = require "love.physics"
 
 local ECS            = require "Heartbeat.ECS"
@@ -67,8 +66,6 @@ end
 function GameState:draw()
 	self.transformation:apply()
 	self.ecs:draw()
-
-	physicsWorldDraw(self.world, 0, 0, love.graphics.getDimensions())
 end
 
 -- Destroys the ECS and associated destroyable resources

@@ -1,7 +1,7 @@
 -- Load general files
 require "r_redirect"
 
-class = require "libs.class"
+class = require "heartbeat.class"
 
 function love.load()
 	-- Load libraries
@@ -35,7 +35,7 @@ function love.load()
 
 	require "dev"
 
-	heartbeat:pushGameState(require "test_states.b" ())
+	heartbeat:pushGameState(require "test_states.a" ())
 end
 
 function love.update(dt)
@@ -43,6 +43,13 @@ function love.update(dt)
 	sounds.update(dt)
 end
 
+local physicsWorldDraw = require "dev.physics_world_draw"
+
 function love.draw()
 	heartbeat:draw()
+
+	local gameState = heartbeat:getActiveGameState()
+	if gameState then
+		physicsWorldDraw(gameState.world, 0, 0, love.graphics.getDimensions())
+	end
 end

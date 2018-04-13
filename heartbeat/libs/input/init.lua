@@ -7,8 +7,6 @@ local love, math, table, ipairs, pairs = love, math, table, ipairs, pairs
 
 local input2 = {}
 
-local class = require "libs.class"
-
 local keyNames    = require(currentModule .. ".key_names")
 local buttonNames = require(currentModule .. ".button_names")
 
