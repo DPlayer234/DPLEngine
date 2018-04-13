@@ -1,7 +1,6 @@
 --[[
 Render Transformation for GameStates
 ]]
-local Mat3x3 = require "Heartbeat.Mat3x3"
 local Vector2 = require "Heartbeat.Vector2"
 local lgraphics = require "love.graphics"
 local lmath = require "love.math"
@@ -21,7 +20,11 @@ end
 
 -- Scales the transformation
 function Transformation:scale(sc)
-	self._transform:scale(sc.x, sc.y)
+	if Vector2.is(sc) then
+		self._transform:scale(sc.x, sc.y)
+	else
+		self._transform:scale(sc)
+	end
 	return self
 end
 

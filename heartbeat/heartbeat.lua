@@ -10,7 +10,6 @@ local Heartbeat = class("Heartbeat")
 Heartbeat.input      = require "Heartbeat.input"
 Heartbeat.complex    = require "Heartbeat.complex"
 Heartbeat.EventStore = require "Heartbeat.EventStore"
-Heartbeat.Mat3x3     = require "Heartbeat.Mat3x3"
 Heartbeat.Material   = require "Heartbeat.Material"
 Heartbeat.mathf      = require "Heartbeat.mathf"
 Heartbeat.Timer      = require "Heartbeat.Timer"

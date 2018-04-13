@@ -19,7 +19,6 @@ local hooks = {
 	["Heartbeat.input"]                    = ".libs.input",
 	["Heartbeat.complex"]                  = ".libs.complex",
 	["Heartbeat.EventStore"]               = ".libs.event_store",
-	["Heartbeat.Mat3x3"]                   = ".libs.mat3x3",
 	["Heartbeat.Material"]                 = ".libs.material",
 	["Heartbeat.mathf"]                    = ".libs.mathf",
 	["Heartbeat.Timer"]                    = ".libs.timer",
