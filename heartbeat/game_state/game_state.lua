@@ -2,6 +2,7 @@
 The base class for any Game State
 ]]
 local physics = require "love.physics"
+local EventStore = require "Heartbeat.EventStore"
 
 local ECS            = require "Heartbeat.ECS"
 local Transformation = require "Heartbeat.GameState.Transformation"
@@ -31,23 +32,15 @@ function GameState:new()
 	self.ecs.gameState = self
 
 	self.heartbeat = nil
+
+	self.onPause = EventStore { type = "handler" }
+	self.onResume = EventStore { type = "handler" }
+	self.onDestroy = EventStore { type = "handler" }
 end
 
 -- Initializes the game state and, f.e., sets the entities and terrain used when instantiating
 -- Called when the game state is first pushed
 function GameState:initialize() end
-
--- Called when the state is pushed onto the stack
-function GameState:pushed() end
-
--- Called when the state is popped off the stack
-function GameState:popped() end
-
--- Called when the state is suspended and becomes inactive
-function GameState:suspended() end
-
--- Called when the state is resumed and becomes active once more
-function GameState:resumed() end
 
 -- Updates the game state
 function GameState:update(dt)
@@ -70,6 +63,7 @@ end
 
 -- Destroys the ECS and associated destroyable resources
 function GameState:destroy()
+	self:onDestroy()
 	self.ecs:destroy()
 
 	-- Disabled because it MAY cause crashes.

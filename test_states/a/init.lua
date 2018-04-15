@@ -15,18 +15,4 @@ function TestState:initialize(gameStateClass)
 	self.user = self.ecs:addEntity(UserController())
 end
 
-function TestState:pushed()
-	self:resumed()
-end
-
-function TestState:popped()
-	self:suspended()
-end
-
-function TestState:resumed()
-end
-
-function TestState:suspended()
-end
-
 return TestState

@@ -1,10 +1,17 @@
 --[[
 The engine itself
 ]]
+local ltimer = require "love.timer"
 local Timer = require "Heartbeat.Timer"
 
 -- Class for the game engine
 local Heartbeat = class("Heartbeat")
+
+local ES_IDLE              = "idle" --#const
+local ES_INITIALIZE        = "initialize" --#const
+local ES_TIMER_UPDATE      = "timer:update" --#const
+local ES_GAME_STATE_UPDATE = "gameState:update" --#const
+local ES_GAME_STATE_DRAW   = "gameState:draw" --#const
 
 -- Load Libraries
 Heartbeat.input      = require "Heartbeat.input"
@@ -31,13 +38,18 @@ function Heartbeat:new()
 	self._gameStates = {}
 	self.timer = Timer()
 	self.usesInput = false
+	self._engineState = ES_IDLE
 
 	self.initializer = Heartbeat.Initializer(self)
 end
 
 -- Initializes the engine
 function Heartbeat:initialize(args)
+	self._engineState = ES_INITIALIZE
+
 	self.initializer:initialize(args)
+
+	self._engineState = ES_IDLE
 end
 
 -- Returns the currently active game state
@@ -61,7 +73,7 @@ function Heartbeat:pushGameState(gameState)
 	if not gameState:typeOf("GameState") then error("Can only push objects of type 'GameState' as a game state.") end
 
 	local state = self:getActiveGameState()
-	if state then state:suspended() end
+	if state then state:onPause() end
 
 	self._gameStates[#self._gameStates + 1] = gameState
 	if gameState.heartbeat ~= self then
@@ -69,26 +81,50 @@ function Heartbeat:pushGameState(gameState)
 		gameState:initialize()
 	end
 
-	gameState:pushed()
+	gameState:onResume()
+
+	if self:getEngineState() == ES_GAME_STATE_UPDATE then
+		gameState:update(ltimer.getDelta())
+	end
 end
 
 -- Pops the current game state of the stack
 function Heartbeat:popGameState()
 	local state = self:getActiveGameState()
-	if state then state:popped() end
+	if state then
+		state:onPause()
+		state:destroy()
+	end
 
 	table.remove(self._gameStates, #self._gameStates)
 
 	local state = self:getActiveGameState()
-	if state then state:resumed() end
+	if state then
+		state:onResume()
+
+		if self:getEngineState() == ES_GAME_STATE_UPDATE then
+			state:update(ltimer.getDelta())
+		end
+	end
+end
+
+-- Gets the current update state of the engine
+function Heartbeat:getEngineState()
+	return self._engineState
 end
 
 -- Updates the engine and active game state
 function Heartbeat:update(dt)
+	self._engineState = ES_TIMER_UPDATE
+
 	self.timer:update(dt)
+
+	self._engineState = ES_GAME_STATE_UPDATE
 
 	local state = self:getActiveGameState()
 	if state then state:update(dt) end
+
+	self._engineState = ES_IDLE
 
 	if self.usesInput then
 		self.input.endFrame(dt)
@@ -97,8 +133,12 @@ end
 
 -- Draws the active game state
 function Heartbeat:draw()
+	self._engineState = ES_GAME_STATE_DRAW
+
 	local state = self:getActiveGameState()
 	if state then state:draw() end
+
+	self._engineState = ES_IDLE
 end
 
 -- ToString, including the amount of stored game-states

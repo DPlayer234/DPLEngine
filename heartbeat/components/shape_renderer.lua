@@ -76,7 +76,8 @@ function ShapeRenderer:draw()
 	local sx, sy = self.transform:getScale():unpack()
 	local cx, cy = self:getCenter():unpack()
 
-	lgraphics.translate(x + cx, y + cy)
+	lgraphics.translate(x - cx, y - cy)
+	lgraphics.scale(sx, sy)
 	lgraphics.rotate(self.transform:getAngle())
 	lgraphics.setColor(self:getColor())
 

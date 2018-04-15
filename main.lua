@@ -35,7 +35,7 @@ function love.load()
 
 	require "dev"
 
-	heartbeat:pushGameState(require "test_states.a" ())
+	heartbeat:pushGameState(require "test_states.b" ())
 end
 
 function love.update(dt)
@@ -50,6 +50,6 @@ function love.draw()
 
 	local gameState = heartbeat:getActiveGameState()
 	if gameState then
-		physicsWorldDraw(gameState.world, 0, 0, love.graphics.getDimensions())
+		--physicsWorldDraw(gameState.world, 0, 0, love.graphics.getDimensions())
 	end
 end

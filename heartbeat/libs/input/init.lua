@@ -549,7 +549,9 @@ function input2.getButtonName(button, controller)
 	return buttonNames[controller or "xinput"][button] or "None"
 end
 
-local handlerList = {}
+local handlerList = setmetatable({}, {
+	__mode = "v"
+})
 
 -- Adds a handler to be updated and have its callbacks triggered
 function input2.add(handler)
