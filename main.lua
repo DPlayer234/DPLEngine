@@ -50,6 +50,6 @@ function love.draw()
 
 	local gameState = heartbeat:getActiveGameState()
 	if gameState then
-		--physicsWorldDraw(gameState.world, 0, 0, love.graphics.getDimensions())
+		physicsWorldDraw(gameState.world, 0, 0, love.graphics.getDimensions())
 	end
 end

@@ -8,6 +8,8 @@ local Vector2 = require "Heartbeat.Vector2"
 local ShapeRenderer = class("ShapeRenderer", require "Heartbeat.ECS.Component")
 
 function ShapeRenderer:new(drawMode, shape, arg)
+	self:Component()
+
 	self:setDrawMode(drawMode)
 
 	self:setShape(shape, arg)

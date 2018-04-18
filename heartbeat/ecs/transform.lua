@@ -24,7 +24,9 @@ end
 
 -- Gets the Löve body this is hooked to
 function Transform:getLBody()
-	return self._body
+	if self._body and not self._body:isDestroyed() then
+		return self._body
+	end
 end
 
 -- Sets the Löve body this is hooked to

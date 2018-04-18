@@ -109,26 +109,30 @@ function ComponentStorage:getAllExact(typeName)
 	return { unpack(self:_getTypeList(typeName)) }
 end
 
--- Calls the named function on every component, if the component has the function
+-- Calls the named function on every component that has the function is enabled
 function ComponentStorage:callAll(funcName, ...)
 	for i=1, #self._components do
 		local list = self._components[i]
-		if self._classes[list.name][funcName] then
+		if self._classes[list.name].BASE[funcName] then
 			for j=1, #list do
 				local component = list[j]
-				component[funcName](component, ...)
+				if component:isEnabled() and component.entity:isActive() then
+					component[funcName](component, ...)
+				end
 			end
 		end
 	end
 end
 
--- Calls the named function on every component
-function ComponentStorage:callAllAnyways(funcName, ...)
+-- Calls the named function on every component that has the function
+function ComponentStorage:callAllAlways(funcName, ...)
 	for i=1, #self._components do
 		local list = self._components[i]
-		for j=1, #list do
-			local component = list[j]
-			component[funcName](component, ...)
+		if self._classes[list.name].BASE[funcName] then
+			for j=1, #list do
+				local component = list[j]
+				component[funcName](component, ...)
+			end
 		end
 	end
 end

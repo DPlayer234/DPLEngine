@@ -15,6 +15,7 @@ function Entity:new()
 
 	self.transform = Transform()
 
+	self._active = true
 	self._compStorage = ComponentStorage(false)
 	self._tags = {}
 end
@@ -24,6 +25,8 @@ function Entity:initialize() end
 
 -- Attaches an ECS to the entity
 function Entity:attachToECS(ecs)
+	if self:isAttachedToECS() then error("Cannot attach an Entity multiple times.") end
+
 	self.ecs = ecs
 	self.ecs._entStorage:add(self)
 
@@ -59,6 +62,22 @@ end
 -- Gets all attached components of exactly the given type
 function Entity:getExactComponents(typeName)
 	return self._compStorage:getAllExact(typeName)
+end
+
+-- Sets whether the entity is active and will be updated
+function Entity:setActive(value)
+	assert(type(value) == "boolean", "Activity value must be a boolean.")
+
+	if value ~= self._active then
+		self._active = value
+
+		self._compStorage:callAllAlways(value and "onEnable" or "onDisable")
+	end
+end
+
+-- Gets whether the entity is active and will be updated
+function Entity:isActive()
+	return self._active
 end
 
 -- Tags the entity

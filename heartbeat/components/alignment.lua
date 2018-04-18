@@ -8,7 +8,7 @@ local Alignment = class("Alignment", require "Heartbeat.ECS.Component")
 
 -- Creates a new aligner
 function Alignment:new()
-	self._active = false
+	self._used = false
 	self._alignment = self:_getDefaults()
 
 	self:Component()
@@ -18,11 +18,11 @@ end
 function Alignment:set(args)
 	if args == nil then
 		self._alignment = self:_getDefaults()
-		self._active = false
+		self._used = false
 		return
 	end
 
-	self._active = true
+	self._used = true
 
 	self._alignment.offset = args.offset or Vector2.zero
 	self._alignment.anchor = args.anchor or self._alignment.anchor
@@ -30,7 +30,7 @@ end
 
 -- Returns the alignment parameters
 function Alignment:get()
-	if not self._active then
+	if not self._used then
 		return nil
 	end
 
@@ -42,7 +42,7 @@ end
 
 -- Updates the position
 function Alignment:postUpdate()
-	if self._active then
+	if self._used then
 		-- Screen size
 		local screen = Vector2(lgraphics.getDimensions())
 		local position = self.ecs.transformation:inverseTransformPoint(Vector2.multiply(screen, self._alignment.anchor) + self._alignment.offset)

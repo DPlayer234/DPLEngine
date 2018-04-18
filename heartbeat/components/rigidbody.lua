@@ -23,6 +23,14 @@ function Rigidbody:initialize()
 	self.transform:setLBody(self._body, true)
 end
 
+function Rigidbody:onEnable()
+	self:getLBody():setActive(true)
+end
+
+function Rigidbody:onDisable()
+	self:getLBody():setActive(false)
+end
+
 -- Returns the Löve physics body
 function Rigidbody:getLBody()
 	return self._body
@@ -63,16 +71,6 @@ end
 function Rigidbody:setMaterial(value)
 	if not value:typeOf("Material") then error("Can only set Materials!") end
 	self._material = value:instantiate()
-end
-
--- Gets whether the body is active and partaking in the physics simulation.
-function Rigidbody:isActive()
-	return self:getLBody():isActive()
-end
-
--- Sets whether the body is active.
-function Rigidbody:setActive(value)
-	return self:getLBody():setActive(value)
 end
 
 -- Gets the velocity

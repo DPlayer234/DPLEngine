@@ -6,10 +6,18 @@ local Component = class("Component", require "Heartbeat.ECS.Object")
 -- Creates a new component instance
 function Component:new()
 	self:Object()
+
+	self._enabled = true
 end
 
 -- Called after the entity and ECS is attached
 function Component:initialize() end
+
+-- Called when the component is either explicitly or implicitly enabled
+function Component:onEnable() end
+
+-- Called when the component is either explicitly or implicitly disabled
+function Component:onDisable() end
 
 -- Attaches an entity to the component
 function Component:attachToEntity(entity)
@@ -32,6 +40,26 @@ end
 -- Returns whether this component is attached to an Entity
 function Component:isAttachedToEntity()
 	return self.entity ~= nil
+end
+
+-- Sets whether the component is enabled
+function Component:setEnabled(value)
+	assert(type(value) == "boolean", "Enabled value must be a boolean.")
+
+	if value ~= self._enabled then
+		self._enabled = value
+
+		if value then
+			self:onEnable()
+		else
+			self:onDisable()
+		end
+	end
+end
+
+-- Gets whether the component is enabled
+function Component:isEnabled()
+	return self._enabled
 end
 
 -- Destroys the component

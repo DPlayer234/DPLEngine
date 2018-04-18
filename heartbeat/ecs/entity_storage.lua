@@ -91,19 +91,23 @@ function EntityStorage:getAllType(typeName)
 	return entities
 end
 
--- Calls the named function on every entity, if the entity has one
+-- Calls the named function on every entity that has the function and is active
 function EntityStorage:callAll(funcName, ...)
 	for i=1, #self._entities do
 		local entity = self._entities[i]
-		if entity[funcName] then entity[funcName](entity, ...) end
+		if entity[funcName] and entity:isActive() then
+			entity[funcName](entity, ...)
+		end
 	end
 end
 
--- Calls the named function on every entity
-function EntityStorage:callAllAnyways(funcName, ...)
+-- Calls the named function on every entity that has the function
+function EntityStorage:callAllAlways(funcName, ...)
 	for i=1, #self._entities do
 		local entity = self._entities[i]
-		entity[funcName](entity, ...)
+		if entity[funcName] then
+			entity[funcName](entity, ...)
+		end
 	end
 end
 
