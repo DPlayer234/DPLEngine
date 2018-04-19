@@ -2,6 +2,7 @@
 A Joint connecting two Rigidbodies
 ]]
 local physics = require "love.physics"
+local class = require "Heartbeat.class"
 local Vector2 = require "Heartbeat.Vector2"
 local Material = require "Heartbeat.Material"
 
@@ -11,9 +12,10 @@ local lJointConstructor
 
 -- Creates a new Joint, optionally with a certain body type
 function Joint:new(jointType)
+	self:Component()
+
 	assert(lJointConstructor[jointType] ~= nil, "Unknown Joint Type.")
 	self._type = jointType
-	self:Component()
 end
 
 -- Initializes the Joint

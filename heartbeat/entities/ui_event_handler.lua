@@ -2,6 +2,7 @@
 This entity handles UI events
 ]]
 local input = require "Heartbeat.input"
+local class = require "Heartbeat.class"
 local Vector2 = require "Heartbeat.Vector2"
 local EntityStorage = require "Heartbeat.ECS.EntityStorage"
 
@@ -24,23 +25,7 @@ function UiEventHandler:initialize()
 		self._entStorage:callAll("_onUp", self.ecs.transformation:inverseTransformPoint(Vector2(x, y)))
 	end)
 
-	-- Add and remove input handler appropriately
-	self._onPauseR = self.ecs.gameState.onPause:add(function()
-		input.remove(self._input)
-	end)
-
-	self._onResumeR = self.ecs.gameState.onResume:add(function()
-		input.add(self._input)
-	end)
-
-	input.add(self._input)
-end
-
-function UiEventHandler:onDestroy()
-	input.remove(self._input)
-
-	self.ecs.gameState.onPause:remove(self._onPauseR)
-	self.ecs.gameState.onResume:remove(self._onResumeR)
+	self:registerInput(self._input)
 end
 
 -- Adds a new UiEventHandler if there isn't already one

@@ -1,6 +1,8 @@
 --[[
 The base class for any component addable to entities
 ]]
+local class = require "Heartbeat.class"
+
 local Component = class("Component", require "Heartbeat.ECS.Object")
 
 -- Creates a new component instance

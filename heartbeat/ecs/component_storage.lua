@@ -1,6 +1,8 @@
 --[[
 Stores components
 ]]
+local class = require "Heartbeat.class"
+
 local ComponentStorage = class("ComponentStorage")
 
 -- Automatically extends the definitions in the table by the class's children

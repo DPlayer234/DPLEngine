@@ -7,6 +7,7 @@ Red pixels define any additional vertices.
 ]]
 local ffi = require "ffi"
 local physics = require "love.physics"
+local class = require "Heartbeat.class"
 local Vector2 = require "Heartbeat.Vector2"
 
 local Collider = require("Heartbeat.components").Collider

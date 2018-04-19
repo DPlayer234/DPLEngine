@@ -1,9 +1,10 @@
 --[[
 Render Transformation for GameStates
 ]]
-local Vector2 = require "Heartbeat.Vector2"
 local lgraphics = require "love.graphics"
 local lmath = require "love.math"
+local class = require "Heartbeat.class"
+local Vector2 = require "Heartbeat.Vector2"
 
 local Transformation = class("Transformation")
 

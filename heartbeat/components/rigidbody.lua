@@ -2,6 +2,7 @@
 A Rigidbody (Body)
 ]]
 local physics = require "love.physics"
+local class = require "Heartbeat.class"
 local Vector2 = require "Heartbeat.Vector2"
 local Material = require "Heartbeat.Material"
 
@@ -174,11 +175,9 @@ function Rigidbody:setGravityScale(value)
 end
 
 function Rigidbody:onDestroy()
-	self._body:destroy()
+	self.transform:setLBody(nil)
 
-	if not self.entity:isDestroyed() then
-		self.transform:unhookBody()
-	end
+	self._body:destroy()
 end
 
 return Rigidbody

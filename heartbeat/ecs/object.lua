@@ -1,6 +1,8 @@
 --[[
 Super class for updatable, drawable and destroyable things
 ]]
+local class = require "Heartbeat.class"
+
 local Object = class("Object")
 
 Object.priority = 0
@@ -12,6 +14,9 @@ function Object:new()
 
 	-- Marks an entity as already destroyed
 	self._destroyed = false
+
+	self._registeredInputs = {}
+	self.ecs = nil
 end
 
 --[[ Update and Draw callbacks ]]
@@ -35,9 +40,19 @@ end
 -- > function Object:onSensorStay(collision)
 -- > function Object:onSensorEnd(collision)
 
+-- Registers an input
+function Object:registerInput(input)
+	self._registeredInputs[#self._registeredInputs + 1] = input
+	self.ecs.input:add(input)
+end
+
 -- Destroys the object
 function Object:destroy()
 	self._destroy = true
+
+	for i=1, #self._registeredInputs do
+		self.ecs.input:remove(self._registeredInputs[i])
+	end
 end
 
 -- Called when the object is actually destroyed

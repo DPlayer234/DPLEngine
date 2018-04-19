@@ -23,7 +23,7 @@ local pairs, next = pairs, next
 
 local class = setmetatable({}, {
 	__call = function(self, ...)
-		return self.class(...)
+		return self.new(...)
 	end
 })
 
@@ -106,8 +106,8 @@ classMeta.__call = classMeta.new
 classMeta.__newindex = classMeta.extend
 
 -- Creates a new class.
-function class.class(name, rawbase, parent)
-	if class.isClass(rawbase) and parent == nil then
+function class.new(name, rawbase, parent)
+	if class.is(rawbase) and parent == nil then
 		parent = rawbase
 		rawbase = {}
 	end
@@ -116,7 +116,7 @@ function class.class(name, rawbase, parent)
 		parent = Default
 	elseif parent == class.null then
 		parent = nil
-	elseif not class.isClass(parent) then
+	elseif not class.is(parent) then
 		error("Cannot extend a something that is not a class!", 2)
 	end
 
@@ -187,7 +187,7 @@ function class.class(name, rawbase, parent)
 end
 
 -- Returns whether the object in question is a class
-function class.isClass(cls)
+function class.is(cls)
 	return getmetatable(cls) == classMeta
 end
 

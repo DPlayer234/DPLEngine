@@ -1,6 +1,7 @@
 --[[
 Entity Transform
 ]]
+local class = require "Heartbeat.class"
 local Vector2 = require "Heartbeat.Vector2"
 
 local Transform = class("Transform")
@@ -24,9 +25,7 @@ end
 
 -- Gets the Löve body this is hooked to
 function Transform:getLBody()
-	if self._body and not self._body:isDestroyed() then
-		return self._body
-	end
+	return self._body
 end
 
 -- Sets the Löve body this is hooked to

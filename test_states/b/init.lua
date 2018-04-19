@@ -1,7 +1,7 @@
 --[[
 Repeating test state
 ]]
-local TestState = class("TestState", heartbeat.GameState)
+local TestState = heartbeat.class("TestState", heartbeat.GameState)
 
 function TestState:initialize()
 	-- Create a game state

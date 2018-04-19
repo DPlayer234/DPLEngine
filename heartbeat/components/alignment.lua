@@ -2,16 +2,17 @@
 Aligns objects relative to the screen
 ]]
 local lgraphics = require "love.graphics"
+local class = require "Heartbeat.class"
 local Vector2 = require "Heartbeat.Vector2"
 
 local Alignment = class("Alignment", require "Heartbeat.ECS.Component")
 
 -- Creates a new aligner
 function Alignment:new()
+	self:Component()
+
 	self._used = false
 	self._alignment = self:_getDefaults()
-
-	self:Component()
 end
 
 -- Sets the alignment

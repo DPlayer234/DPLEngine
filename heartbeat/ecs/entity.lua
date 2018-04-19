@@ -1,6 +1,8 @@
 --[[
 The base class for any entity to be added to a scene
 ]]
+local class = require "Heartbeat.class"
+
 local Component = require "Heartbeat.ECS.Component"
 local ComponentStorage = require "Heartbeat.ECS.ComponentStorage"
 

@@ -1,6 +1,8 @@
 --[[
 The Entity Component System
 ]]
+local class = require "Heartbeat.class"
+
 local ECS = class("ECS")
 
 -- Load important classes
@@ -21,6 +23,7 @@ function ECS:new()
 	self.world = nil
 	self.timer = nil
 	self.transformation = nil
+	self.input = nil
 	self.gameState = nil
 end
 

@@ -3,18 +3,18 @@ Entity following the mouse
 ]]
 local currentModule = (...):gsub("%.[^%.]+$", "")
 
-local colors = require "libs.colors"
+local Color = require "Heartbeat.Color"
 local Vector2 = heartbeat.Vector2
 
 local SelectionBox = require(currentModule .. ".selection_box")
 
-local UserController = class("UserController", heartbeat.ECS.Entity)
+local UserController = heartbeat.class("UserController", heartbeat.ECS.Entity)
 
 local color = {
-	neutral = colors.new(255, 255, 255, 255),
-	lmb = colors.new(0, 255, 255, 255),
-	rmb = colors.new(255, 0, 255, 255),
-	mmb = colors.new(255, 255, 0, 255)
+	neutral = Color(1, 1, 1, 1),
+	lmb = Color(0, 1, 1, 1),
+	rmb = Color(1, 0, 1, 1),
+	mmb = Color(1, 1, 0, 1)
 }
 
 local releaseCallbacks

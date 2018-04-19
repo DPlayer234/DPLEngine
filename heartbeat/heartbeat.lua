@@ -2,6 +2,7 @@
 The engine itself
 ]]
 local ltimer = require "love.timer"
+local class = require "Heartbeat.class"
 local Timer = require "Heartbeat.Timer"
 
 -- Class for the game engine
@@ -15,6 +16,8 @@ local ES_GAME_STATE_DRAW   = "gameState:draw" --#const
 
 -- Load Libraries
 Heartbeat.input      = require "Heartbeat.input"
+Heartbeat.class      = require "Heartbeat.class"
+Heartbeat.Color      = require "Heartbeat.Color"
 Heartbeat.complex    = require "Heartbeat.complex"
 Heartbeat.EventStore = require "Heartbeat.EventStore"
 Heartbeat.Material   = require "Heartbeat.Material"
@@ -73,7 +76,7 @@ function Heartbeat:pushGameState(gameState)
 	if not gameState:typeOf("GameState") then error("Can only push objects of type 'GameState' as a game state.") end
 
 	local state = self:getActiveGameState()
-	if state then state:onPause() end
+	if state then state:_onPause() end
 
 	self._gameStates[#self._gameStates + 1] = gameState
 	if gameState.heartbeat ~= self then
@@ -81,7 +84,7 @@ function Heartbeat:pushGameState(gameState)
 		gameState:initialize()
 	end
 
-	gameState:onResume()
+	gameState:_onResume()
 
 	if self:getEngineState() == ES_GAME_STATE_UPDATE then
 		gameState:update(ltimer.getDelta())
@@ -92,7 +95,7 @@ end
 function Heartbeat:popGameState()
 	local state = self:getActiveGameState()
 	if state then
-		state:onPause()
+		state:_onPause()
 		state:destroy()
 	end
 
@@ -100,7 +103,7 @@ function Heartbeat:popGameState()
 
 	local state = self:getActiveGameState()
 	if state then
-		state:onResume()
+		state:_onResume()
 
 		if self:getEngineState() == ES_GAME_STATE_UPDATE then
 			state:update(ltimer.getDelta())

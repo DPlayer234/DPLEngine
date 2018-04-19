@@ -2,7 +2,8 @@
 Renders a shape
 ]]
 local lgraphics = require "love.graphics"
-local colors = require "libs.colors"
+local class = require "Heartbeat.class"
+local Color = require "Heartbeat.Color"
 local Vector2 = require "Heartbeat.Vector2"
 
 local ShapeRenderer = class("ShapeRenderer", require "Heartbeat.ECS.Component")
@@ -15,7 +16,7 @@ function ShapeRenderer:new(drawMode, shape, arg)
 	self:setShape(shape, arg)
 
 	self._center = Vector2.zero
-	self._color = colors.vec4(1, 1, 1, 1)
+	self._color = Color.white
 end
 
 -- Gets the draw mode

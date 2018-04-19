@@ -1,8 +1,6 @@
 -- Load general files
 require "r_redirect"
 
-class = require "heartbeat.class"
-
 function love.load()
 	-- Load libraries
 	miscMod = require "libs.misc_mod"

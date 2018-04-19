@@ -1,10 +1,12 @@
 --[[
 Physics Material to be applied to Colliders
 ]]
-local DEFAULT_FRICTION = 0.2 --#const
-local DEFAULT_BOUNCINESS = 0 --#const
+local class = require "Heartbeat.class"
 
 local Material = class("Material")
+
+local DEFAULT_FRICTION = 0.2 --#const
+local DEFAULT_BOUNCINESS = 0 --#const
 
 -- Creates a new Material
 function Material:new()

@@ -2,7 +2,8 @@
 Renders any drawable object
 ]]
 local lgraphics = require "love.graphics"
-local colors = require "libs.colors"
+local class = require "Heartbeat.class"
+local Color = require "Heartbeat.Color"
 local Vector2 = require "Heartbeat.Vector2"
 
 local DrawableRenderer = class("DrawableRenderer", require "Heartbeat.ECS.Component")
@@ -11,7 +12,7 @@ DrawableRenderer.priority = -1
 
 function DrawableRenderer:initialize()
 	self._center = Vector2.zero
-	self._color = colors.vec4(1, 1, 1, 1)
+	self._color = Color.white
 end
 
 -- Gets the used drawable

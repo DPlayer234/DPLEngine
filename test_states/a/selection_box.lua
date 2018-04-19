@@ -1,10 +1,10 @@
 --[[
 Selection Box
 ]]
-local colors = require "libs.colors"
+local Color = heartbeat.Color
 local Vector2 = heartbeat.Vector2
 
-local SelectionBox = class("SelectionBox", heartbeat.ECS.Component)
+local SelectionBox = heartbeat.class("SelectionBox", heartbeat.ECS.Component)
 
 function SelectionBox:initialize()
 	assert(self.entity:typeOf("UserController"), "SelectionBox must be attached to a UserController!")
@@ -19,7 +19,7 @@ function SelectionBox:draw()
 	love.graphics.setColor(self.entity.color)
 	love.graphics.print(("x%.0f, %.0f"):format(self.dimensions.x, self.dimensions.y), self.origin.x, self.origin.y)
 
-	love.graphics.setColor(self.entity.color * colors.vec4(1, 1, 1, 0.25))
+	love.graphics.setColor(self.entity.color * Color(1, 1, 1, 0.25))
 	love.graphics.rectangle("fill", self.origin.x, self.origin.y, self.dimensions.x, self.dimensions.y)
 end
 

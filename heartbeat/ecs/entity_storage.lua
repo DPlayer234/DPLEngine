@@ -1,6 +1,8 @@
 --[[
 Stores entities
 ]]
+local class = require "Heartbeat.class"
+
 local EntityStorage = class("EntityStorage")
 
 -- Creates a new EntityStorage

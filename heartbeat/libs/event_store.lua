@@ -16,8 +16,9 @@ If any given function yields, it is paused until the EventStore is handling even
 local assert = assert
 local remove = table.remove
 local coroutine = coroutine
+local class = require "Heartbeat.class"
 
-local EventStore = {}
+local EventStore = class("EventStore")
 
 -- Initializes a new Event Store.
 --[[
@@ -174,4 +175,4 @@ function EventStore:__tostring()
 	return ("%s: %s-%s"):format(self:type(), self.eventType, self.mode)
 end
 
-return class("EventStore", EventStore)
+return EventStore

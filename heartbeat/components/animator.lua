@@ -2,6 +2,7 @@
 Stores and updates animations
 ]]
 local lgraphics = require "love.graphics"
+local class = require "Heartbeat.class"
 local Vector2 = require "Heartbeat.Vector2"
 
 local getQuad, framesMeta
@@ -10,6 +11,8 @@ local Animator = class("Animator", require "Heartbeat.ECS.Component")
 local Animation = class("Animation")
 
 function Animator:new(texture, width, height)
+	self:Component()
+
 	assert(texture and texture:typeOf("Texture"), "Every Animator needs a texture!")
 	assert(type(width) == "number" and type(height) == "number", "You must define the size of the quads used.")
 
@@ -21,8 +24,6 @@ function Animator:new(texture, width, height)
 	}
 
 	self._animations = {}
-
-	self:Component()
 end
 
 function Animator:initialize(args)

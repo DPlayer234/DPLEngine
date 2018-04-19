@@ -3,7 +3,7 @@ Loading stuff
 ]]
 local physics  = require "love.physics"
 local lgraphics = require "love.graphics"
-
+local class = require "Heartbeat.class"
 local EventStore = require "Heartbeat.EventStore"
 
 local Initializer = class("Initializer")

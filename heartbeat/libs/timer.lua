@@ -4,8 +4,9 @@ Simple Timer Class
 local remove = table.remove
 local unpack, type = unpack, type
 local coroutine = coroutine
+local class = require "Heartbeat.class"
 
-local Timer = {}
+local Timer = class("Timer")
 
 function Timer:new(start)
 	self.time = start or 0
@@ -98,4 +99,4 @@ function Timer:__tostring()
 	return ("%s: %.3fs; %d Tasks"):format(self:type(), self.time, #self.tasks)
 end
 
-return class("Timer", Timer)
+return Timer

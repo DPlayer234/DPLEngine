@@ -2,6 +2,8 @@
 The base class for any Game State
 ]]
 local physics = require "love.physics"
+local input = require "Heartbeat.input"
+local class = require "Heartbeat.class"
 local EventStore = require "Heartbeat.EventStore"
 
 local ECS            = require "Heartbeat.ECS"
@@ -24,23 +26,30 @@ function GameState:new()
 	self.timer = Timer()
 	self.timeScale = 1
 	self.transformation = Transformation()
+	self.input = input.MergedInput()
 
 	self.ecs = ECS()
 	self.ecs.world = self.world
 	self.ecs.timer = self.timer
 	self.ecs.transformation = self.transformation
+	self.ecs.input = self.input
 	self.ecs.gameState = self
 
 	self.heartbeat = nil
-
-	self.onPause = EventStore { type = "handler" }
-	self.onResume = EventStore { type = "handler" }
-	self.onDestroy = EventStore { type = "handler" }
 end
 
 -- Initializes the game state and, f.e., sets the entities and terrain used when instantiating
 -- Called when the game state is first pushed
 function GameState:initialize() end
+
+-- Called when the game state is paused or removed
+function GameState:onPause() end
+
+-- Called when the game state is resumed or started
+function GameState:onResume() end
+
+-- Called when the game state is destroyed
+function GameState:onDestroy() end
 
 -- Updates the game state
 function GameState:update(dt)
@@ -69,6 +78,20 @@ function GameState:destroy()
 	-- Disabled because it MAY cause crashes.
 	-- It's still being garbage-collected, so it shouldn't cause any issues.
 	--self.world:destroy()
+end
+
+-- Internally called on pause
+function GameState:_onPause()
+	input.remove(self.input)
+
+	self:onPause()
+end
+
+-- Internally called on pause
+function GameState:_onResume()
+	input.add(self.input)
+
+	self:onResume()
 end
 
 -- Sets the callbacks to the world

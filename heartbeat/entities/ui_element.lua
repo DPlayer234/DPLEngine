@@ -1,6 +1,7 @@
 --[[
 Any UI Element
 ]]
+local class = require "Heartbeat.class"
 local Vector2 = require "Heartbeat.Vector2"
 
 local Alignment = require("Heartbeat.components").Alignment
