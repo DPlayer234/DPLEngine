@@ -8,16 +8,16 @@ local TYPE_NAME = "Vector4" --#const
 
 -- Define the C structs
 ffi.cdef [[
-typedef struct {
+struct Heartbeat_Vector4 {
 	double x;
 	double y;
 	double z;
 	double w;
-} Heartbeat_Vector4
+}
 ]]
 
 -- Get the type in Lua (also used for construction)
-local Vector4 = ffi.typeof("Heartbeat_Vector4")
+local Vector4 = ffi.typeof("struct Heartbeat_Vector4")
 
 -- Constants
 local const = {
@@ -65,9 +65,9 @@ local methods = {
 	getAngleTo = function(a, b)
 		return (a * b) / (a:getMagnitude() * b:getMagnitude())
 	end,
-	-- Returns the result of a point multiplication. Equal to a * b.
+	-- Returns the result of a point multiplication.
 	point = function(a, b)
-		return a * b
+		return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w
 	end,
 	-- Memberwise addition (+)
 	add = function(a, b)
@@ -120,7 +120,7 @@ local meta = {
 		elseif type(b) == "number" then
 			return Vector4(a.x * b, a.y * b, a.z * b, a.w * b)
 		end
-		return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w
+		error("Invalid operation.")
 	end,
 	-- Vector / scalar
 	__div = function(a, b)

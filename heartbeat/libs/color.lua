@@ -48,8 +48,8 @@ local methods = {
 	typeOf = function(self, name) return name == TYPE_NAME end,
 	is = function(value) return getmetatable(value) == meta end,
 	-- Other constructors
-	fromInt8 = function(r, g, b, a)
-		return Color(r, g, b, a) * 255
+	fromUInt8 = function(r, g, b, a)
+		return Color(r, g, b, a) * (1/255)
 	end,
 	fromHSV = function(h, s, v, a)
 		h = (h % 1) * 360
