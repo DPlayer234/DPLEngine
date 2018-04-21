@@ -28,6 +28,7 @@ function love.load()
 
 	-- Load and initialize the engine
 	heartbeat = require "heartbeat"
+	null = heartbeat.null
 
 	heartbeat:initialize { meter = 100 }
 

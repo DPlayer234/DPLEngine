@@ -27,7 +27,7 @@ function Entity:initialize() end
 
 -- Attaches an ECS to the entity
 function Entity:attachToECS(ecs)
-	if self:isAttachedToECS() then error("Cannot attach an Entity multiple times.") end
+	assert(not self:isAttachedToECS(), "Cannot attach an Entity multiple times.")
 
 	self.ecs = ecs
 	self.ecs._entStorage:add(self)

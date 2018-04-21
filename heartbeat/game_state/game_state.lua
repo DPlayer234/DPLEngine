@@ -20,8 +20,7 @@ GameState.Transformation = Transformation
 
 -- Creates a new GameState
 function GameState:new()
-	self.world = physics.newWorld(0, 9.85 * physics.getMeter(), true)
-	self:_setWorldCallbacks()
+	self:_setPhysicsWorld()
 
 	self.timer = Timer()
 	self.timeScale = 1
@@ -34,6 +33,8 @@ function GameState:new()
 	self.ecs.transformation = self.transformation
 	self.ecs.input = self.input
 	self.ecs.gameState = self
+
+	self._subs = {}
 
 	self.heartbeat = nil
 end
@@ -51,6 +52,36 @@ function GameState:onResume() end
 -- Called when the game state is destroyed
 function GameState:onDestroy() end
 
+-- Returns whether the game state has been pushed and initialized
+function GameState:hasHeartbeat()
+	return self.heartbeat ~= nil
+end
+
+-- Adds a sub state and initializes it
+function GameState:addSubState(gameState)
+	assert(self:hasHeartbeat(), "Can only push sub-states to states with a heartbeat.")
+	assert(gameState:typeOf("SubState"), "Can only add objects of type 'SubState' as sub-states.")
+	assert(not gameState:hasHeartbeat(), "GameStates can only be pushed once.")
+
+	self._subs[#self._subs + 1] = gameState
+
+	gameState.heartbeat = self.heartbeat
+	gameState._parent = self
+	gameState:initialize()
+
+	gameState:_onResume()
+end
+
+-- Gets a sub-state by index
+function GameState:getSubState(index)
+	return self._subs[i]
+end
+
+-- Gets the amount of sub-states added
+function GameState:getSubStateCount()
+	return #self._subs
+end
+
 -- Updates the game state
 function GameState:update(dt)
 	dt = dt * self.timeScale
@@ -58,26 +89,31 @@ function GameState:update(dt)
 
 	self.ecs:update()
 
+	for i=1, #self._subs do self._subs[i]:preUpdate(dt) end
+
 	self.world:update(dt)
 	self.timer:update(dt)
 
 	self.ecs:postUpdate()
+
+	for i=1, #self._subs do self._subs[i]:postUpdate(dt) end
 end
 
 -- Draws the game state
 function GameState:draw()
-	self.transformation:apply()
+	self.transformation:replace()
 	self.ecs:draw()
 end
 
--- Destroys the ECS and associated destroyable resources
+-- Destroys the ECS, child-states and associated destroyable resources
 function GameState:destroy()
 	self:onDestroy()
 	self.ecs:destroy()
 
-	-- Disabled because it MAY cause crashes.
-	-- It's still being garbage-collected, so it shouldn't cause any issues.
-	--self.world:destroy()
+	for i=#self._subs, 1, -1 do
+		self._subs[i]:destroy()
+		table.remove(self._subs, i)
+	end
 end
 
 -- Internally called on pause
@@ -94,8 +130,10 @@ function GameState:_onResume()
 	self:onResume()
 end
 
--- Sets the callbacks to the world
-function GameState:_setWorldCallbacks()
+-- Sets the physics world
+function GameState:_setPhysicsWorld()
+	self.world = physics.newWorld(0, 9.85 * physics.getMeter(), true)
+
 	-- All callbacks receive the two fixtures and their contact point
 	local function getCallback(sensor, collision)
 		return function(fixA, fixB, contact)

@@ -23,8 +23,8 @@ function Component:onDisable() end
 
 -- Attaches an entity to the component
 function Component:attachToEntity(entity)
-	if self:isAttachedToEntity() then error("Cannot attach a Component multiple times.") end
-	if not entity:isAttachedToECS() then error("Cannot attach Components to Entities not attached to an ECS.") end
+	assert(not self:isAttachedToEntity(), "Cannot attach a Component multiple times.")
+	assert(entity:isAttachedToECS(), "Cannot attach Components to Entities not attached to an ECS.")
 
 	self.entity = entity
 

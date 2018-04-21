@@ -59,7 +59,7 @@ function Transformation:apply()
 end
 
 -- Replaces the current screen transformation with this one
-function Transformation:apply()
+function Transformation:replace()
 	lgraphics.replaceTransform(self._transform)
 	return self
 end

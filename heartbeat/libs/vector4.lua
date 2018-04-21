@@ -13,7 +13,7 @@ struct Heartbeat_Vector4 {
 	double y;
 	double z;
 	double w;
-}
+};
 ]]
 
 -- Get the type in Lua (also used for construction)

@@ -22,6 +22,7 @@ Heartbeat.complex    = require "Heartbeat.complex"
 Heartbeat.EventStore = require "Heartbeat.EventStore"
 Heartbeat.Material   = require "Heartbeat.Material"
 Heartbeat.mathf      = require "Heartbeat.mathf"
+Heartbeat.null       = require "Heartbeat.null"
 Heartbeat.Timer      = require "Heartbeat.Timer"
 Heartbeat.Vector2    = require "Heartbeat.Vector2"
 Heartbeat.Vector3    = require "Heartbeat.Vector3"
@@ -30,6 +31,7 @@ Heartbeat.Vector4    = require "Heartbeat.Vector4"
 -- Load primary classes
 Heartbeat.ECS         = require "Heartbeat.ECS"
 Heartbeat.GameState   = require "Heartbeat.GameState"
+Heartbeat.SubState    = require "Heartbeat.SubState"
 Heartbeat.Initializer = require "Heartbeat.Initializer"
 
 -- Quick access
@@ -73,16 +75,16 @@ end
 
 -- Pushes the game state onto the stack
 function Heartbeat:pushGameState(gameState)
-	if not gameState:typeOf("GameState") then error("Can only push objects of type 'GameState' as a game state.") end
+	assert(gameState:typeOf("GameState"), "Can only push objects of type 'GameState' as a game state.")
+	assert(not gameState:hasHeartbeat(), "GameStates can only be pushed once.")
 
 	local state = self:getActiveGameState()
 	if state then state:_onPause() end
 
 	self._gameStates[#self._gameStates + 1] = gameState
-	if gameState.heartbeat ~= self then
-		gameState.heartbeat = self
-		gameState:initialize()
-	end
+
+	gameState.heartbeat = self
+	gameState:initialize()
 
 	gameState:_onResume()
 

@@ -11,7 +11,7 @@ ffi.cdef [[
 struct Heartbeat_Vector2 {
 	double x;
 	double y;
-}
+};
 ]]
 
 -- Get the type in Lua (also used for construction)
