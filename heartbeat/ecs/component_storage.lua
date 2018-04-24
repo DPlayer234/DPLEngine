@@ -88,7 +88,7 @@ end
 
 -- Gets a component of exactly the given class
 function ComponentStorage:getExact(typeName)
-	return self:_getTypeList(typeName)[1]
+	return self:_getRawTypeList(typeName)[1]
 end
 
 -- Gets all components of the given type. The order is undefined.
@@ -108,7 +108,7 @@ end
 
 -- Gets all components of exactly the given class
 function ComponentStorage:getAllExact(typeName)
-	return { unpack(self:_getTypeList(typeName)) }
+	return { unpack(self:_getRawTypeList(typeName)) }
 end
 
 -- Calls the named function on every component that has the function is enabled
@@ -221,6 +221,13 @@ function ComponentStorage:_getValueList(value)
 	end
 
 	return self:_getTypeList(typeName)
+end
+
+-- Gets the 'raw' type list. Should not have side-effects.
+function ComponentStorage:_getRawTypeList(typeName)
+	local id = rawget(self._typeIds, typeName)
+	if id then return self._components[id] end
+	return  {}
 end
 
 -- Gets the component list of the given class
