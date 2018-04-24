@@ -18,6 +18,7 @@ local getters = {
 	white = function() return Color(1, 1, 1, 1) end,
 	black = function() return Color(0, 0, 0, 1) end,
 	clear = function() return Color(0, 0, 0, 0) end,
+	random = function() return Color(love.math.random(), love.math.random(), love.math.random(), 1) end,
 	-- Quick access
 	r = function(c) return c[1] end,
 	g = function(c) return c[2] end,
@@ -49,7 +50,7 @@ local methods = {
 	is = function(value) return getmetatable(value) == meta end,
 	-- Other constructors
 	fromUInt8 = function(r, g, b, a)
-		return Color(r, g, b, a) * (1/255)
+		return Color(r, g, b, a or 255) * (1/255)
 	end,
 	fromHSV = function(h, s, v, a)
 		h = (h % 1) * 360

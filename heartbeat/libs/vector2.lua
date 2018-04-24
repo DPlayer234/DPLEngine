@@ -110,6 +110,13 @@ local methods = {
 	unpack = function(self)
 		return self.x, self.y
 	end,
+	-- Returns the largest/smallest component
+	max = function(self)
+		return math.max(self.x, self.y)
+	end,
+	min = function(self)
+		return math.min(self.x, self.y)
+	end,
 	-- Type
 	type = function() return TYPE_NAME end,
 	typeOf = function(self, name) return name == TYPE_NAME end,

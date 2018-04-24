@@ -20,9 +20,6 @@ end
 
 -- Initializes the Joint
 function Joint:initialize()
-	self._joint = physics.newBody(self.ecs.world, 0, 0, self._type)
-	self._joint:setUserData(self)
-
 	self._rigidbody = self.entity:getComponent("Rigidbody")
 	if not self._rigidbody then
 		error("Joints require the use of Rigidbodies.")
@@ -44,8 +41,8 @@ function Joint:connect(other, collideConnected)
 
 	self._collide = collideConnected and true
 
-	self:_connect(true)
-	other:_connect(false)
+	self:_create(true)
+	other:_create(false)
 end
 
 -- Returns the Löve joint
@@ -55,7 +52,7 @@ end
 
 -- Gets the type of the joint
 function Joint:getType()
-	return self:getJoint():getType()
+	return self._type
 end
 
 -- Gets the anchor point (world coordinates); this default to the entity position.
@@ -141,7 +138,7 @@ function Joint:_create(isFirst)
 		self._joint = lJointConstructor[self:getType()](self, self._other)
 		self._joint:setUserData(self)
 	else
-		self._joint = self._other:getJoint()
+		self._joint = self._other:getLJoint()
 	end
 end
 

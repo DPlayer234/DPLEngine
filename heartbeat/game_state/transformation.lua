@@ -13,6 +13,11 @@ function Transformation:new()
 	self._transform = lmath.newTransform()
 end
 
+-- Returns the Löve Transform
+function Transformation:getLTransform()
+	return self._transform
+end
+
 -- Translates the transformation
 function Transformation:translate(tl)
 	self._transform:translate(tl.x, tl.y)

@@ -51,7 +51,7 @@ function Rigidbody:applyTorque(torque)
 end
 
 -- Applies an impulse to the body
-function Rigidbody:applyImpulse(impulse)
+function Rigidbody:applyImpulse(impulse, position)
 	if position then
 		return self:getLBody():applyLinearImpulse(impulse.x, impulse.y, position:unpack())
 	end
