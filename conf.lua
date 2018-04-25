@@ -16,7 +16,7 @@ function love.conf(t)
 	_game.fullTitle = _game.subtitle and _game.title .. ": " .. _game.subtitle or _game.title
 
 	-- Main settings
-	t.version = "11.0"
+	t.version = "11.1"
 	t.accelerometerjoystick = false
 
 	t.identity = _game.identity

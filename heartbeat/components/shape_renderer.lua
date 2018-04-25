@@ -8,6 +8,7 @@ local Vector2 = require "Heartbeat.Vector2"
 
 local ShapeRenderer = class("ShapeRenderer", require "Heartbeat.ECS.Component")
 
+-- Creates a new ShapeRenderer
 function ShapeRenderer:new(drawMode, shape, arg)
 	self:Component()
 
@@ -17,6 +18,10 @@ function ShapeRenderer:new(drawMode, shape, arg)
 
 	self._center = Vector2.zero
 	self._color = Color.white
+
+	if shape == "rectangle" then
+		self:setCenter(arg * 0.5)
+	end
 end
 
 -- Gets the draw mode
@@ -79,9 +84,10 @@ function ShapeRenderer:draw()
 	local sx, sy = self.transform:getScale():unpack()
 	local cx, cy = self:getCenter():unpack()
 
-	lgraphics.translate(x - cx, y - cy)
-	lgraphics.scale(sx, sy)
+	lgraphics.translate(x, y)
 	lgraphics.rotate(self.transform:getAngle())
+	lgraphics.translate(-cx, -cy)
+	lgraphics.scale(sx, sy)
 	lgraphics.setColor(self:getColor())
 
 	if self._shape == "rectangle" then

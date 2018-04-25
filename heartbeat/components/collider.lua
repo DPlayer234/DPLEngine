@@ -64,6 +64,11 @@ function Collider:getType()
 	return self._type
 end
 
+-- Returns the rigidbody
+function Collider:getRigidbody()
+	return self._rigidbody
+end
+
 -- Returns the Löve fixture
 function Collider:getLFixture()
 	return self._fixture

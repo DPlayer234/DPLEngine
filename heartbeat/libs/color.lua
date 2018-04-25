@@ -15,9 +15,15 @@ end
 -- Getters
 local getters = {
 	-- Constants
-	white = function() return Color(1, 1, 1, 1) end,
-	black = function() return Color(0, 0, 0, 1) end,
-	clear = function() return Color(0, 0, 0, 0) end,
+	white  = function() return Color(1, 1, 1, 1) end,
+	black  = function() return Color(0, 0, 0, 1) end,
+	clear  = function() return Color(0, 0, 0, 0) end,
+	red    = function() return Color(1, 0, 0, 1) end,
+	yellow = function() return Color(1, 1, 0, 1) end,
+	green  = function() return Color(0, 1, 0, 1) end,
+	cyan   = function() return Color(0, 1, 1, 1) end,
+	blue   = function() return Color(0, 0, 1, 1) end,
+	pink   = function() return Color(1, 0, 1, 1) end,
 	random = function() return Color(love.math.random(), love.math.random(), love.math.random(), 1) end,
 	-- Quick access
 	r = function(c) return c[1] end,
@@ -49,9 +55,11 @@ local methods = {
 	typeOf = function(self, name) return name == TYPE_NAME end,
 	is = function(value) return getmetatable(value) == meta end,
 	-- Other constructors
+	-- Expects values in the range 0-255 rather than 0-1
 	fromUInt8 = function(r, g, b, a)
 		return Color(r, g, b, a or 255) * (1/255)
 	end,
+	-- Converts a color from HSV into this format
 	fromHSV = function(h, s, v, a)
 		h = (h % 1) * 360
 		local c = v * s
@@ -73,6 +81,10 @@ local methods = {
 		else
 			return Color(c, m, x, a)
 		end
+	end,
+	-- Basically generates a gray-scale color with the given brighness
+	fromBrightness = function(b, a)
+		return Color(b, b, b, a)
 	end
 }
 
@@ -122,7 +134,7 @@ meta = {
 	end,
 	-- Equality
 	__eq = function(a, b)
-		if Color.is(a) ~= Color.is(b) then return false end
+		if methods.is(a) ~= methods.is(b) then return false end
 		return a.r == b.r and a.g == b.g and a.b == b.b and a.a == b.a
 	end,
 	-- Nicer string format
