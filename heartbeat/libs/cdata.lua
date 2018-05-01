@@ -3,12 +3,22 @@ Quickly create customized C-structs
 ]]
 local ffi = require "ffi"
 
-local cstruct = {}
+local cdata = {}
+
+-- C-Types
+cdata.Int = ffi.typeof("int")
+cdata.Float = ffi.typeof("float")
+cdata.Double = ffi.typeof("double")
+
+-- C-Pointers
+cdata.IntPtr = ffi.typeof("int *")
+cdata.FloatPtr = ffi.typeof("float *")
+cdata.DoublePtr = ffi.typeof("double *")
 
 local structId = 0
 
--- New Struct
-function cstruct.newType(name, proto, op)
+-- Creates and returns a new struct type
+function cdata.newStruct(name, proto, op)
 	-- Generate the C-struct data type
 	local structName = ("struct %s_%d"):format(name, structId)
 	structId = structId + 1
@@ -63,4 +73,4 @@ function cstruct.newType(name, proto, op)
 	return ctype
 end
 
-return cstruct
+return cdata

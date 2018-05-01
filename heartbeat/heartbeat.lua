@@ -16,10 +16,12 @@ local ES_GAME_STATE_DRAW   = "gameState:draw" --#const
 
 -- Load Libraries
 Heartbeat.input      = require "Heartbeat.input"
+Heartbeat.cdata      = require "Heartbeat.cdata"
 Heartbeat.class      = require "Heartbeat.class"
 Heartbeat.Color      = require "Heartbeat.Color"
 Heartbeat.complex    = require "Heartbeat.complex"
 Heartbeat.EventStore = require "Heartbeat.EventStore"
+Heartbeat.Handler    = require "Heartbeat.Handler"
 Heartbeat.Material   = require "Heartbeat.Material"
 Heartbeat.mathf      = require "Heartbeat.mathf"
 Heartbeat.null       = require "Heartbeat.null"
