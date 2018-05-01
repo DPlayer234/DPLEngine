@@ -74,15 +74,19 @@ function TestState:initialize()
 		button:addComponent(heartbeat.components.ShapeRenderer("line", "rectangle", Vector2(100, 100))):setCenter(Vector2(50, 50))
 	end
 
-	self.timer:coTask(function(wait)
+	self.timer:startCoroutine(function(wait)
 		while true do
 			wait(1)
-			ecs:findEntityByTag("Azure").transform:flipHorizontal()
+
+			local azure = ecs:findEntityByTag("Azure")
+			if azure then
+				azure.transform:flipHorizontal()
+			end
 		end
 	end)
 
 	-- Set a function to run after 5 seconds
-	self.timer:queueTask(5, function()
+	self.timer:runAfter(5, function()
 		-- Pop the state of the stack
 		self.heartbeat:popGameState()
 

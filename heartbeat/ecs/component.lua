@@ -1,6 +1,7 @@
 --[[
 The base class for any component addable to entities
 ]]
+local assert, type = assert, type
 local class = require "Heartbeat.class"
 
 local Component = class("Component", require "Heartbeat.ECS.Object")

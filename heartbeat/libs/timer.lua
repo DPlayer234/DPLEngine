@@ -1,102 +1,81 @@
 --[[
-Simple Timer Class
+Timer class
 ]]
-local remove = table.remove
-local unpack, type = unpack, type
-local coroutine = coroutine
+local coroutine, table = coroutine, table
+local type = type
 local class = require "Heartbeat.class"
+
+local Coroutine = require "Heartbeat.Coroutine"
 
 local Timer = class("Timer")
 
-function Timer:new(start)
-	self.time = start or 0
-	self.tasks = {}
+-- Creates a new timer
+function Timer:new()
+	self._time = 0
+	self._tasks = {}
 end
 
-local coroutineWait = function(time)
+-- Gets the current run time
+function Timer:getTime()
+	return self._time
+end
+
+-- Starts a coroutine
+function Timer:startCoroutine(closure)
+	local coroutine = Coroutine(closure)
+
+	self:_addTask(coroutine, self._time)
+
+	return coroutine
+end
+
+-- Runs a closure after the given amount of time
+function Timer:runAfter(delay, closure)
+	self:_addTask(closure, self._time + delay)
+end
+
+-- Updates the timer. Should be called once a frame
+function Timer:update(dt)
+	self._time = self._time + dt
+
+	for i=#self._tasks, 1, -1 do
+		if self:_handleTask(self._tasks[i]) then
+			table.remove(self._tasks, i)
+		end
+	end
+end
+
+-- Adds a task to be executed
+function Timer:_addTask(func, time)
+	self._tasks[#self._tasks + 1] = {
+		func = func,
+		time = time
+	}
+end
+
+local wait = function(time)
 	return coroutine.yield(time)
 end
 
-local taskHandler = {
-	["single"] = function(self, task, i)
-		task.func()
-		return remove(self.tasks, i)
-	end,
-	["repeat"] = function(self, task, i)
-		task.func(-task.wait)
-		if -task.wait > task.duration then
-			return remove(self.tasks, i)
-		end
-	end,
-	["coroutine"] = function(self, task, i)
-		if coroutine.status(task.rout) == "suspended" then
-			local ok, wait = coroutine.resume(task.rout, coroutineWait)
-			if ok then
-				task.wait = type(wait) == "number" and wait or 0
-			else
-				self._errorBy = task.rout
-				error(wait)
-			end
+-- Handles a single task
+-- Returns whether to remove the task
+function Timer:_handleTask(task)
+	if task.time < self._time then
+		local delay = task.func(wait)
+
+		if type(delay) == "number" then
+			task.time = task.time + delay
+		elseif delay == nil then
+			return true
 		else
-			return remove(self.tasks, i)
+			error("Task Function returned value of '" .. type(delay) .. "'. Expected number or nil.")
 		end
 	end
-}
-
--- Updates the timer and tasks
-function Timer:update(dt)
-	self.time = self.time + dt
-
-	for i=#self.tasks, 1, -1 do
-		local task = self.tasks[i]
-
-		task.wait = task.wait - dt
-		if task.wait < 0 then
-			taskHandler[task.type](self, task, i)
-		end
-	end
-end
-
--- Queues a task to be executed after a set delay
--- func()
-function Timer:queueTask(delay, func)
-	self.tasks[#self.tasks+1] = {
-		wait = delay,
-		func = func,
-		type = "single"
-	}
-end
-
--- Executes a task after a set delay for some time every update
--- func(totalTime)
-function Timer:repeatTask(delay, duration, func)
-	self.tasks[#self.tasks+1] = {
-		wait = delay,
-		duration = duration,
-		func = func,
-		type = "repeat"
-	}
-end
-
--- Executes a task as a coroutine
--- func(wait)
-function Timer:coTask(func)
-	self.tasks[#self.tasks+1] = {
-		wait = 0,
-		func = func,
-		rout = coroutine.create(func),
-		type = "coroutine"
-	}
-end
-
--- Resets the time and clears all tasks
-function Timer:reset()
-	self.time = 0
-	self.tasks = {}
+	return false
 end
 
 function Timer:__tostring()
-	return ("%s: %.3fs; %d Tasks"):format(self:type(), self.time, #self.tasks)
+	return ("Timer: %.3fs"):format(self:getTime())
 end
 
 return Timer

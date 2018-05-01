@@ -2,6 +2,8 @@
 Colors
 ]]
 local math = math
+local setmetatable, type = setmetatable, type
+local lmath = require "love.math"
 
 local TYPE_NAME = "Color" --#getters
 
@@ -24,7 +26,7 @@ local getters = {
 	cyan   = function() return Color(0, 1, 1, 1) end,
 	blue   = function() return Color(0, 0, 1, 1) end,
 	pink   = function() return Color(1, 0, 1, 1) end,
-	random = function() return Color(love.math.random(), love.math.random(), love.math.random(), 1) end,
+	random = function() return Color(lmath.random(), lmath.random(), lmath.random(), 1) end,
 	-- Quick access
 	r = function(c) return c[1] end,
 	g = function(c) return c[2] end,

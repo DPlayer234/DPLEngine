@@ -1,6 +1,8 @@
 --[[
 The engine itself
 ]]
+local table = table
+local assert = assert
 local ltimer = require "love.timer"
 local class = require "Heartbeat.class"
 local Timer = require "Heartbeat.Timer"
@@ -20,6 +22,7 @@ Heartbeat.cdata      = require "Heartbeat.cdata"
 Heartbeat.class      = require "Heartbeat.class"
 Heartbeat.Color      = require "Heartbeat.Color"
 Heartbeat.complex    = require "Heartbeat.complex"
+Heartbeat.Coroutine  = require "Heartbeat.Coroutine"
 Heartbeat.EventStore = require "Heartbeat.EventStore"
 Heartbeat.Handler    = require "Heartbeat.Handler"
 Heartbeat.Material   = require "Heartbeat.Material"

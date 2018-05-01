@@ -2,6 +2,7 @@
 4D-Vector (using C-FFI Struct)
 ]]
 local math = math
+local type = type
 local ffi = require "ffi"
 
 local TYPE_NAME = "Vector4" --#const
@@ -9,10 +10,7 @@ local TYPE_NAME = "Vector4" --#const
 -- Define the C structs
 ffi.cdef [[
 struct Heartbeat_Vector4 {
-	double x;
-	double y;
-	double z;
-	double w;
+	double x, y, z, w;
 };
 ]]
 

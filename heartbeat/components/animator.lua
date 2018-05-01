@@ -1,6 +1,8 @@
 --[[
 Stores and updates animations
 ]]
+local math = math
+local assert, type, rawget, setmetatable = assert, type, rawget, setmetatable
 local lgraphics = require "love.graphics"
 local class = require "Heartbeat.class"
 local Vector2 = require "Heartbeat.Vector2"

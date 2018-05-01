@@ -1,6 +1,7 @@
 --[[
 Renders a shape
 ]]
+local assert = assert
 local lgraphics = require "love.graphics"
 local class = require "Heartbeat.class"
 local Color = require "Heartbeat.Color"

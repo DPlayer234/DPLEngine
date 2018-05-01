@@ -1,6 +1,8 @@
 --[[
 The base class for any Game State
 ]]
+local table = table
+local assert = assert
 local physics = require "love.physics"
 local input = require "Heartbeat.input"
 local class = require "Heartbeat.class"

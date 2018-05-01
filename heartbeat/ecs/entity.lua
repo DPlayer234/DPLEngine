@@ -1,6 +1,7 @@
 --[[
 The base class for any entity to be added to a scene
 ]]
+local assert, type = assert, type
 local class = require "Heartbeat.class"
 
 local Component = require "Heartbeat.ECS.Component"

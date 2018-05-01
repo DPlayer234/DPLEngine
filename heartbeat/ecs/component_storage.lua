@@ -1,6 +1,8 @@
 --[[
 Stores components
 ]]
+local table = table
+local setmetatable, rawset, rawget, pairs, ipairs = setmetatable, rawset, rawget, pairs, ipairs
 local class = require "Heartbeat.class"
 
 local ComponentStorage = class("ComponentStorage")

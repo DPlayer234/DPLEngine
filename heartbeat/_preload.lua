@@ -22,6 +22,7 @@ local hooks = {
 	["Heartbeat.class"]                    = ".libs.class",
 	["Heartbeat.Color"]                    = ".libs.Color",
 	["Heartbeat.complex"]                  = ".libs.complex",
+	["Heartbeat.Coroutine"]                = ".libs.coroutine",
 	["Heartbeat.EventStore"]               = ".libs.event_store",
 	["Heartbeat.Handler"]                  = ".libs.handler",
 	["Heartbeat.Material"]                 = ".libs.material",

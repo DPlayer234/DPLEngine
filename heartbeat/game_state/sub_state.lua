@@ -1,6 +1,7 @@
 --[[
 The class for any sub state
 ]]
+local table = table
 local class = require "Heartbeat.class"
 
 local SubState = class("SubState", require "Heartbeat.GameState")
