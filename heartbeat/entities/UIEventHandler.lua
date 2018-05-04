@@ -6,10 +6,10 @@ local class = require "Heartbeat.class"
 local Vector2 = require "Heartbeat.Vector2"
 local EntityStorage = require "Heartbeat.ECS.EntityStorage"
 
-local UiEventHandler = class("UiEventHandler", require "Heartbeat.ECS.Entity")
+local UIEventHandler = class("UIEventHandler", require "Heartbeat.ECS.Entity")
 
--- Initializes a new UiEventHandler
-function UiEventHandler:initialize()
+-- Initializes a new UIEventHandler
+function UIEventHandler:initialize()
 	self._entStorage = EntityStorage()
 
 	self._input = input.MouseInput({})
@@ -28,22 +28,22 @@ function UiEventHandler:initialize()
 	self:registerInput(self._input)
 end
 
--- Adds a new UiEventHandler if there isn't already one
+-- Adds a new UIEventHandler if there isn't already one
 -- Returns the existing or new handler
 -- This a class, not an instance method!
-function UiEventHandler.create(element)
-	assert(element:typeOf("UiElement"), "Can only add UiElements to the UiEventHandler.")
+function UIEventHandler.create(element)
+	assert(element:typeOf("UIElement"), "Can only add UIElements to the UIEventHandler.")
 
-	local handler = element.ecs:findEntityByType("UiEventHandler") or element.ecs:addEntity(UiEventHandler())
+	local handler = element.ecs:findEntityByType("UIEventHandler") or element.ecs:addEntity(UIEventHandler())
 	handler:_addElement(element)
 end
 
 -- Adds a ui element
-function UiEventHandler:_addElement(element)
+function UIEventHandler:_addElement(element)
 	self._entStorage:add(element)
 	element.handler = self
 
 	return element
 end
 
-return UiEventHandler
+return UIEventHandler

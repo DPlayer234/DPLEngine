@@ -16,23 +16,6 @@ local ES_TIMER_UPDATE      = "timer:update" --#const
 local ES_GAME_STATE_UPDATE = "gameState:update" --#const
 local ES_GAME_STATE_DRAW   = "gameState:draw" --#const
 
--- Load Libraries
-Heartbeat.input      = require "Heartbeat.input"
-Heartbeat.cdata      = require "Heartbeat.cdata"
-Heartbeat.class      = require "Heartbeat.class"
-Heartbeat.Color      = require "Heartbeat.Color"
-Heartbeat.complex    = require "Heartbeat.complex"
-Heartbeat.Coroutine  = require "Heartbeat.Coroutine"
-Heartbeat.EventStore = require "Heartbeat.EventStore"
-Heartbeat.Handler    = require "Heartbeat.Handler"
-Heartbeat.Material   = require "Heartbeat.Material"
-Heartbeat.mathf      = require "Heartbeat.mathf"
-Heartbeat.null       = require "Heartbeat.null"
-Heartbeat.Timer      = require "Heartbeat.Timer"
-Heartbeat.Vector2    = require "Heartbeat.Vector2"
-Heartbeat.Vector3    = require "Heartbeat.Vector3"
-Heartbeat.Vector4    = require "Heartbeat.Vector4"
-
 -- Load primary classes
 Heartbeat.ECS         = require "Heartbeat.ECS"
 Heartbeat.GameState   = require "Heartbeat.GameState"
@@ -43,12 +26,31 @@ Heartbeat.Initializer = require "Heartbeat.Initializer"
 Heartbeat.entities   = require "Heartbeat.entities"
 Heartbeat.components = require "Heartbeat.components"
 
+-- Load Libraries
+Heartbeat.input        = require "Heartbeat.input"
+Heartbeat.Vector2      = require "Heartbeat.Vector2"
+Heartbeat.Vector3      = require "Heartbeat.Vector3"
+Heartbeat.Vector4      = require "Heartbeat.Vector4"
+Heartbeat.cdata        = require "Heartbeat.cdata"
+Heartbeat.class        = require "Heartbeat.class"
+Heartbeat.Color        = require "Heartbeat.Color"
+Heartbeat.complex      = require "Heartbeat.complex"
+Heartbeat.Coroutine    = require "Heartbeat.Coroutine"
+Heartbeat.EventStore   = require "Heartbeat.EventStore"
+Heartbeat.Handler      = require "Heartbeat.Handler"
+Heartbeat.Material     = require "Heartbeat.Material"
+Heartbeat.mathf        = require "Heartbeat.mathf"
+Heartbeat.null         = require "Heartbeat.null"
+Heartbeat.RequireTable = require "Heartbeat.RequireTable"
+Heartbeat.Timer        = require "Heartbeat.Timer"
+
 -- Instantiates a new engine state
 function Heartbeat:new()
 	self._gameStates = {}
+	self._engineState = ES_IDLE
+
 	self.timer = Timer()
 	self.usesInput = false
-	self._engineState = ES_IDLE
 
 	self.initializer = Heartbeat.Initializer(self)
 end

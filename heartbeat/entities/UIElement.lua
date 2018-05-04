@@ -5,12 +5,12 @@ local class = require "Heartbeat.class"
 local Vector2 = require "Heartbeat.Vector2"
 
 local Alignment = require("Heartbeat.components").Alignment
-local UiEventHandler = require("Heartbeat.entities").UiEventHandler
+local UIEventHandler = require("Heartbeat.entities").UIEventHandler
 
-local UiElement = class("UiElement", require "Heartbeat.ECS.Entity")
+local UIElement = class("UIElement", require "Heartbeat.ECS.Entity")
 
--- Creates a new UiElement
-function UiElement:new()
+-- Creates a new UIElement
+function UIElement:new()
 	self:Entity()
 
 	self.handler = nil
@@ -18,8 +18,8 @@ function UiElement:new()
 end
 
 -- Initializes a new element
-function UiElement:initialize()
-	UiEventHandler.create(self)
+function UIElement:initialize()
+	UIEventHandler.create(self)
 
 	self._wasPressed = false
 	self._alignment = self:addComponent(Alignment())
@@ -30,64 +30,64 @@ function UiElement:initialize()
 	self._offset = Vector2.zero
 end
 
--- Destroys the UiElement
-function UiElement:destroy()
+-- Destroys the UIElement
+function UIElement:destroy()
 	self.handler._entStorage:queueClear()
 	self.Entity.destroy(self)
 end
 
 -- Gets the dimensions
-function UiElement:getDimensions()
+function UIElement:getDimensions()
 	return self._dimensions:copy()
 end
 
 -- Sets the dimensions
-function UiElement:setDimensions(value)
+function UIElement:setDimensions(value)
 	self._dimensions = value:copy()
 	self:_updateAlignment()
 end
 
 -- Gets the screen anchor
-function UiElement:getScreenAnchor()
+function UIElement:getScreenAnchor()
 	return self._screenAnchor:copy()
 end
 
 -- Sets the screen anchor
-function UiElement:setScreenAnchor(value)
+function UIElement:setScreenAnchor(value)
 	self._screenAnchor = value:copy()
 	self:_updateAlignment()
 end
 
 -- Gets the local anchor
-function UiElement:getLocalAnchor()
+function UIElement:getLocalAnchor()
 	return self._localAnchor:copy()
 end
 
 -- Sets the local anchor
-function UiElement:setLocalAnchor(value)
+function UIElement:setLocalAnchor(value)
 	self._localAnchor = value:copy()
 	self:_updateAlignment()
 end
 
 -- Gets the absolute offset
-function UiElement:getOffset()
+function UIElement:getOffset()
 	return self._offset:copy()
 end
 
 -- Sets the absolute offset
-function UiElement:setOffset(value)
+function UIElement:setOffset(value)
 	self._offset = value:copy()
 	self:_updateAlignment()
 end
 
 -- Called when the mouse is pressed down it
-function UiElement:onDown() end
+function UIElement:onDown() end
 
 -- Called when the mouse was pressed down on it and is now released, still on it
-function UiElement:onUp() end
+function UIElement:onUp() end
 
 -- Updates the alignment
-function UiElement:_updateAlignment()
+function UIElement:_updateAlignment()
 	return self._alignment:set {
 		anchor = self._screenAnchor,
 		offset = Vector2.multiply(self._dimensions, (self._localAnchor - Vector2(0.5, 0.5))) + self._offset
@@ -95,7 +95,7 @@ function UiElement:_updateAlignment()
 end
 
 -- Called when the mouse button is pressed
-function UiElement:_onDown(pos)
+function UIElement:_onDown(pos)
 	if self:_intersect(pos) then
 		self:onDown()
 
@@ -106,14 +106,14 @@ function UiElement:_onDown(pos)
 end
 
 -- Called when the mouse button is released
-function UiElement:_onUp(pos)
+function UIElement:_onUp(pos)
 	if self._wasPressed and self:_intersect(pos) then
 		self:onUp()
 	end
 end
 
 -- Returns whether the point intersects the bounding box
-function UiElement:_intersect(point)
+function UIElement:_intersect(point)
 	local pos = self.transform:getPosition()
 	local scale = self.transform:getScale()
 
@@ -124,4 +124,4 @@ function UiElement:_intersect(point)
 		point.y < pos.y + self._dimensions.y * scale.y * 0.5
 end
 
-return UiElement
+return UIElement

@@ -5,7 +5,7 @@ local math = math
 local setmetatable, type = setmetatable, type
 local lmath = require "love.math"
 
-local TYPE_NAME = "Color" --#getters
+local TYPE_NAME = "Color" --#const
 
 local meta
 
