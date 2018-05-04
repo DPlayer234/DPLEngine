@@ -52,6 +52,7 @@ function TestState:initialize()
 
 		rigidbody:setGravityScale(0)
 		rigidbody:setMass(1, 1)
+		rigidbody:setBullet(true)
 
 		entity.transform:setPosition(Vector2(800, 400))
 	end
@@ -74,9 +75,9 @@ function TestState:initialize()
 		button:addComponent(heartbeat.components.ShapeRenderer("line", "rectangle", Vector2(100, 100))):setCenter(Vector2(50, 50))
 	end
 
-	self.timer:startCoroutine(function(wait)
+	self.timer:startCoroutine(function(self)
 		while true do
-			wait(1)
+			self:yield(1)
 
 			local azure = ecs:findEntityByTag("Azure")
 			if azure then

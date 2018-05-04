@@ -53,15 +53,11 @@ function Timer:_addTask(func, time)
 	}
 end
 
-local wait = function(time)
-	return coroutine.yield(time)
-end
-
 -- Handles a single task
 -- Returns whether to remove the task
 function Timer:_handleTask(task)
 	if task.time < self._time then
-		local delay = task.func(wait)
+		local delay = task.func()
 
 		if type(delay) == "number" then
 			task.time = task.time + delay
