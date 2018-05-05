@@ -3,7 +3,7 @@ Entity following the mouse
 ]]
 local currentModule = (...):gsub("%.[^%.]+$", "")
 
-local Color = require "Heartbeat.Color"
+local Color = heartbeat.Color
 local Vector2 = heartbeat.Vector2
 
 local SelectionBox = require(currentModule .. ".selection_box")

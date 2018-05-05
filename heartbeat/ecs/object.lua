@@ -1,7 +1,7 @@
 --[[
 Super class for updatable, drawable and destroyable things
 ]]
-local class = require "Heartbeat.class"
+local class = require "Heartbeat::class"
 
 local Object = class("Object")
 

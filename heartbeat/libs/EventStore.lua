@@ -16,7 +16,7 @@ If any given function yields, it is paused until the EventStore is handling even
 local assert = assert
 local remove = table.remove
 local coroutine = coroutine
-local class = require "Heartbeat.class"
+local class = require "Heartbeat::class"
 
 local EventStore = class("EventStore")
 

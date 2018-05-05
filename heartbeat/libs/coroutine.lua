@@ -3,7 +3,7 @@ Easy to use coroutines
 ]]
 local coroutine = coroutine
 local assert = assert
-local class = require "Heartbeat.class"
+local class = require "Heartbeat::class"
 
 local Coroutine = class("Coroutine")
 

@@ -2,9 +2,9 @@
 The class for any sub state
 ]]
 local table = table
-local class = require "Heartbeat.class"
+local class = require "Heartbeat::class"
 
-local SubState = class("SubState", require "Heartbeat.GameState")
+local SubState = class("SubState", require "Heartbeat::GameState")
 
 -- Creates a new SubState
 function SubState:new()

@@ -2,7 +2,7 @@
 This is similar to a handler-type EventStore but faster
 ]]
 local table = table
-local class = require "Heartbeat.class"
+local class = require "Heartbeat::class"
 
 local Handler = class("Handler")
 

@@ -4,7 +4,7 @@ Maybe.
 ]]
 local currentModule = (...):gsub("%.init$", "")
 local love, math, table, ipairs, pairs = love, math, table, ipairs, pairs
-local class = require "Heartbeat.class"
+local class = require "Heartbeat::class"
 
 local input2 = {}
 

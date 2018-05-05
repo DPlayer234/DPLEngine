@@ -2,11 +2,11 @@
 A Rigidbody (Body)
 ]]
 local physics = require "love.physics"
-local class = require "Heartbeat.class"
-local Vector2 = require "Heartbeat.Vector2"
-local Material = require "Heartbeat.Material"
+local class = require "Heartbeat::class"
+local Vector2 = require "Heartbeat::Vector2"
+local Material = require "Heartbeat::Material"
 
-local Rigidbody = class("Rigidbody", require "Heartbeat.ECS.Component")
+local Rigidbody = class("Rigidbody", require "Heartbeat::ECS::Component")
 
 -- Creates a new Rigidbody, optionally with a certain body type
 function Rigidbody:new(bodyType)

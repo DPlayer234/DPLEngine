@@ -3,10 +3,10 @@ A Collider for rigidbodies (Fixture)
 ]]
 local ffi = require "ffi"
 local physics = require "love.physics"
-local class = require "Heartbeat.class"
-local Vector2 = require "Heartbeat.Vector2"
+local class = require "Heartbeat::class"
+local Vector2 = require "Heartbeat::Vector2"
 
-local Collider = class("Collider", require "Heartbeat.ECS.Component")
+local Collider = class("Collider", require "Heartbeat::ECS::Component")
 
 -- Creates a new Collider
 --[[

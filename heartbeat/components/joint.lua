@@ -3,11 +3,11 @@ A Joint connecting two Rigidbodies
 ]]
 local assert = assert
 local physics = require "love.physics"
-local class = require "Heartbeat.class"
-local Vector2 = require "Heartbeat.Vector2"
-local Material = require "Heartbeat.Material"
+local class = require "Heartbeat::class"
+local Vector2 = require "Heartbeat::Vector2"
+local Material = require "Heartbeat::Material"
 
-local Joint = class("Joint", require "Heartbeat.ECS.Component")
+local Joint = class("Joint", require "Heartbeat::ECS::Component")
 
 local lJointConstructor
 

@@ -1,8 +1,8 @@
 --[[
 Entity Transform
 ]]
-local class = require "Heartbeat.class"
-local Vector2 = require "Heartbeat.Vector2"
+local class = require "Heartbeat::class"
+local Vector2 = require "Heartbeat::Vector2"
 
 local Transform = class("Transform")
 

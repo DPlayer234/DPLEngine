@@ -4,8 +4,8 @@ The engine itself
 local table = table
 local assert = assert
 local ltimer = require "love.timer"
-local class = require "Heartbeat.class"
-local Timer = require "Heartbeat.Timer"
+local class = require "Heartbeat::class"
+local Timer = require "Heartbeat::Timer"
 
 -- Class for the game engine
 local Heartbeat = class("Heartbeat")
@@ -17,32 +17,32 @@ local ES_GAME_STATE_UPDATE = "gameState:update" --#const
 local ES_GAME_STATE_DRAW   = "gameState:draw" --#const
 
 -- Load primary classes
-Heartbeat.ECS         = require "Heartbeat.ECS"
-Heartbeat.GameState   = require "Heartbeat.GameState"
-Heartbeat.SubState    = require "Heartbeat.SubState"
-Heartbeat.Initializer = require "Heartbeat.Initializer"
+Heartbeat.ECS         = require "Heartbeat::ECS"
+Heartbeat.GameState   = require "Heartbeat::GameState"
+Heartbeat.SubState    = require "Heartbeat::SubState"
+Heartbeat.Initializer = require "Heartbeat::Initializer"
 
 -- Quick access
-Heartbeat.entities   = require "Heartbeat.entities"
-Heartbeat.components = require "Heartbeat.components"
+Heartbeat.entities   = require "Heartbeat::entities"
+Heartbeat.components = require "Heartbeat::components"
 
 -- Load Libraries
-Heartbeat.input        = require "Heartbeat.input"
-Heartbeat.Vector2      = require "Heartbeat.Vector2"
-Heartbeat.Vector3      = require "Heartbeat.Vector3"
-Heartbeat.Vector4      = require "Heartbeat.Vector4"
-Heartbeat.cdata        = require "Heartbeat.cdata"
-Heartbeat.class        = require "Heartbeat.class"
-Heartbeat.Color        = require "Heartbeat.Color"
-Heartbeat.complex      = require "Heartbeat.complex"
-Heartbeat.Coroutine    = require "Heartbeat.Coroutine"
-Heartbeat.EventStore   = require "Heartbeat.EventStore"
-Heartbeat.Handler      = require "Heartbeat.Handler"
-Heartbeat.Material     = require "Heartbeat.Material"
-Heartbeat.mathf        = require "Heartbeat.mathf"
-Heartbeat.null         = require "Heartbeat.null"
-Heartbeat.RequireTable = require "Heartbeat.RequireTable"
-Heartbeat.Timer        = require "Heartbeat.Timer"
+Heartbeat.input        = require "Heartbeat::input"
+Heartbeat.Vector2      = require "Heartbeat::Vector2"
+Heartbeat.Vector3      = require "Heartbeat::Vector3"
+Heartbeat.Vector4      = require "Heartbeat::Vector4"
+Heartbeat.cdata        = require "Heartbeat::cdata"
+Heartbeat.class        = require "Heartbeat::class"
+Heartbeat.Color        = require "Heartbeat::Color"
+Heartbeat.complex      = require "Heartbeat::complex"
+Heartbeat.Coroutine    = require "Heartbeat::Coroutine"
+Heartbeat.EventStore   = require "Heartbeat::EventStore"
+Heartbeat.Handler      = require "Heartbeat::Handler"
+Heartbeat.Material     = require "Heartbeat::Material"
+Heartbeat.mathf        = require "Heartbeat::mathf"
+Heartbeat.null         = require "Heartbeat::null"
+Heartbeat.RequireTable = require "Heartbeat::RequireTable"
+Heartbeat.Timer        = require "Heartbeat::Timer"
 
 -- Instantiates a new engine state
 function Heartbeat:new()

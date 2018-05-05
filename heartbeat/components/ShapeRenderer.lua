@@ -3,11 +3,11 @@ Renders a shape
 ]]
 local assert = assert
 local lgraphics = require "love.graphics"
-local class = require "Heartbeat.class"
-local Color = require "Heartbeat.Color"
-local Vector2 = require "Heartbeat.Vector2"
+local class = require "Heartbeat::class"
+local Color = require "Heartbeat::Color"
+local Vector2 = require "Heartbeat::Vector2"
 
-local ShapeRenderer = class("ShapeRenderer", require "Heartbeat.ECS.Component")
+local ShapeRenderer = class("ShapeRenderer", require "Heartbeat::ECS::Component")
 
 -- Creates a new ShapeRenderer
 function ShapeRenderer:new(drawMode, shape, arg)

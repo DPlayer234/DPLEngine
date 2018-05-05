@@ -3,9 +3,9 @@ Timer class
 ]]
 local coroutine, table = coroutine, table
 local type = type
-local class = require "Heartbeat.class"
+local class = require "Heartbeat::class"
 
-local Coroutine = require "Heartbeat.Coroutine"
+local Coroutine = require "Heartbeat::Coroutine"
 
 local Timer = class("Timer")
 

@@ -2,11 +2,11 @@
 Renders any drawable object
 ]]
 local lgraphics = require "love.graphics"
-local class = require "Heartbeat.class"
-local Color = require "Heartbeat.Color"
-local Vector2 = require "Heartbeat.Vector2"
+local class = require "Heartbeat::class"
+local Color = require "Heartbeat::Color"
+local Vector2 = require "Heartbeat::Vector2"
 
-local DrawableRenderer = class("DrawableRenderer", require "Heartbeat.ECS.Component")
+local DrawableRenderer = class("DrawableRenderer", require "Heartbeat::ECS::Component")
 
 DrawableRenderer.priority = -1
 

@@ -1,7 +1,7 @@
 --[[
 Physics Material to be applied to Colliders
 ]]
-local class = require "Heartbeat.class"
+local class = require "Heartbeat::class"
 
 local Material = class("Material")
 

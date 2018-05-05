@@ -1,9 +1,9 @@
 --[[
 Renders and updates an animation
 ]]
-local class = require "Heartbeat.class"
+local class = require "Heartbeat::class"
 
-local DrawableRenderer = require("Heartbeat.components").DrawableRenderer
+local DrawableRenderer = require("Heartbeat::components").DrawableRenderer
 local AnimationRenderer = class("AnimationRenderer", DrawableRenderer)
 
 function AnimationRenderer:getAnimator()

@@ -26,13 +26,15 @@ function love.load()
 		love.window.setIcon(love.image.newImageData("assets/textures/icon.png"))
 	end
 
+	heartbeat, null = false, false
+
+	require "dev"
+
 	-- Load and initialize the engine
 	heartbeat = require "heartbeat"
 	null = heartbeat.null
 
 	heartbeat:initialize { meter = 100 }
-
-	require "dev"
 
 	heartbeat:pushGameState(require "test_states.b" ())
 end

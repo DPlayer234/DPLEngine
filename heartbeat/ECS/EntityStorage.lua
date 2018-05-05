@@ -2,7 +2,7 @@
 Stores entities
 ]]
 local table = table
-local class = require "Heartbeat.class"
+local class = require "Heartbeat::class"
 
 local EntityStorage = class("EntityStorage")
 

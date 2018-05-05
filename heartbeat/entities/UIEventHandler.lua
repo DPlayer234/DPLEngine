@@ -1,12 +1,12 @@
 --[[
 This entity handles UI events
 ]]
-local input = require "Heartbeat.input"
-local class = require "Heartbeat.class"
-local Vector2 = require "Heartbeat.Vector2"
-local EntityStorage = require "Heartbeat.ECS.EntityStorage"
+local input = require "Heartbeat::input"
+local class = require "Heartbeat::class"
+local Vector2 = require "Heartbeat::Vector2"
+local EntityStorage = require "Heartbeat::ECS::EntityStorage"
 
-local UIEventHandler = class("UIEventHandler", require "Heartbeat.ECS.Entity")
+local UIEventHandler = class("UIEventHandler", require "Heartbeat::ECS::Entity")
 
 -- Initializes a new UIEventHandler
 function UIEventHandler:initialize()

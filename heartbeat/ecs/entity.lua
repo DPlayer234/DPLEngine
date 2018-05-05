@@ -2,15 +2,15 @@
 The base class for any entity to be added to a scene
 ]]
 local assert, type = assert, type
-local class = require "Heartbeat.class"
+local class = require "Heartbeat::class"
 
-local Component = require "Heartbeat.ECS.Component"
-local ComponentStorage = require "Heartbeat.ECS.ComponentStorage"
+local Component = require "Heartbeat::ECS::Component"
+local ComponentStorage = require "Heartbeat::ECS::ComponentStorage"
 
-local Transform = require "Heartbeat.ECS.Transform"
+local Transform = require "Heartbeat::ECS::Transform"
 
 -- Class
-local Entity = class("Entity", require "Heartbeat.ECS.Object")
+local Entity = class("Entity", require "Heartbeat::ECS::Object")
 
 -- Initializes a new Entity
 function Entity:new()

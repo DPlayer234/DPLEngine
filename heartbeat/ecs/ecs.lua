@@ -1,17 +1,17 @@
 --[[
 The Entity Component System
 ]]
-local class = require "Heartbeat.class"
+local class = require "Heartbeat::class"
 
 local ECS = class("ECS")
 
 -- Load important classes
-ECS.Object           = require "Heartbeat.ECS.Object"
-ECS.Entity           = require "Heartbeat.ECS.Entity"
-ECS.Component        = require "Heartbeat.ECS.Component"
-ECS.EntityStorage    = require "Heartbeat.ECS.EntityStorage"
-ECS.ComponentStorage = require "Heartbeat.ECS.ComponentStorage"
-ECS.Transform        = require "Heartbeat.ECS.Transform"
+ECS.Object           = require "Heartbeat::ECS::Object"
+ECS.Entity           = require "Heartbeat::ECS::Entity"
+ECS.Component        = require "Heartbeat::ECS::Component"
+ECS.EntityStorage    = require "Heartbeat::ECS::EntityStorage"
+ECS.ComponentStorage = require "Heartbeat::ECS::ComponentStorage"
+ECS.Transform        = require "Heartbeat::ECS::Transform"
 
 -- Initializes a new Entity Component System
 function ECS:new()

@@ -4,15 +4,15 @@ The base class for any Game State
 local table = table
 local assert = assert
 local physics = require "love.physics"
-local input = require "Heartbeat.input"
-local class = require "Heartbeat.class"
-local EventStore = require "Heartbeat.EventStore"
+local input = require "Heartbeat::input"
+local class = require "Heartbeat::class"
+local EventStore = require "Heartbeat::EventStore"
 
-local ECS            = require "Heartbeat.ECS"
-local Transformation = require "Heartbeat.GameState.Transformation"
-local Collision      = require "Heartbeat.GameState.Collision"
+local ECS            = require "Heartbeat::ECS"
+local Transformation = require "Heartbeat::GameState::Transformation"
+local Collision      = require "Heartbeat::GameState::Collision"
 
-local Timer = require "Heartbeat.Timer"
+local Timer = require "Heartbeat::Timer"
 
 -- The class
 local GameState = class("GameState")

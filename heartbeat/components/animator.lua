@@ -4,12 +4,12 @@ Stores and updates animations
 local math = math
 local assert, type, rawget, setmetatable = assert, type, rawget, setmetatable
 local lgraphics = require "love.graphics"
-local class = require "Heartbeat.class"
-local Vector2 = require "Heartbeat.Vector2"
+local class = require "Heartbeat::class"
+local Vector2 = require "Heartbeat::Vector2"
 
 local getQuad, framesMeta
 
-local Animator = class("Animator", require "Heartbeat.ECS.Component")
+local Animator = class("Animator", require "Heartbeat::ECS::Component")
 local Animation = class("Animation")
 
 function Animator:new(texture, width, height)

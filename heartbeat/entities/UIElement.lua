@@ -1,13 +1,13 @@
 --[[
 Any UI Element
 ]]
-local class = require "Heartbeat.class"
-local Vector2 = require "Heartbeat.Vector2"
+local class = require "Heartbeat::class"
+local Vector2 = require "Heartbeat::Vector2"
 
-local Alignment = require("Heartbeat.components").Alignment
-local UIEventHandler = require("Heartbeat.entities").UIEventHandler
+local Alignment = require("Heartbeat::components").Alignment
+local UIEventHandler = require("Heartbeat::entities").UIEventHandler
 
-local UIElement = class("UIElement", require "Heartbeat.ECS.Entity")
+local UIElement = class("UIElement", require "Heartbeat::ECS::Entity")
 
 -- Creates a new UIElement
 function UIElement:new()

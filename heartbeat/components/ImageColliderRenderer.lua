@@ -2,12 +2,12 @@
 This is a component that basically generates a new ShapeRenderer from and ImageCollider
 ]]
 local lmath = love.math
-local class = require "Heartbeat.class"
-local Color = require "Heartbeat.Color"
-local Vector2 = require "Heartbeat.Vector2"
+local class = require "Heartbeat::class"
+local Color = require "Heartbeat::Color"
+local Vector2 = require "Heartbeat::Vector2"
 
-local ShapeRenderer = require("Heartbeat.components").ShapeRenderer
-local ImageColliderRenderer = class("ImageColliderRenderer", require "Heartbeat.ECS.Component")
+local ShapeRenderer = require("Heartbeat::components").ShapeRenderer
+local ImageColliderRenderer = class("ImageColliderRenderer", require "Heartbeat::ECS::Component")
 
 -- Creates a new ImageColliderRenderer from an ImageCollider
 function ImageColliderRenderer:new(drawMode, imageCollider)
