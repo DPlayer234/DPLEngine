@@ -1,13 +1,36 @@
 --[[
 Repeating test state
 ]]
+local Vector2 = heartbeat.Vector2
+
+local TestSub = heartbeat.class("TestSub", heartbeat.SubState)
+
+function TestSub:initialize()
+	local ecs = self.ecs
+
+	do
+		local button = ecs:addEntity(heartbeat.entities.Button())
+
+		local x = 0
+
+		button.onClick:add(function()
+			x = x + 1
+			print(">> Clicked " .. tostring(x) .. " times!")
+		end)
+
+		button:setScreenAnchor(Vector2(0.5, 0.5))
+		button:setLocalAnchor(Vector2(0.5, 0.5))
+		button:setDimensions(Vector2(100, 100))
+		button:setOffset(Vector2(200, 0))
+
+		button:addComponent(heartbeat.components.ShapeRenderer("line", "rectangle", Vector2(100, 100))):setCenter(Vector2(50, 50))
+	end
+end
+
 local TestState = heartbeat.class("TestState", heartbeat.GameState)
 
 function TestState:initialize()
-	-- Create a game state
 	local ecs = self.ecs
-
-	local Vector2 = heartbeat.Vector2
 
 	do
 		local entity = ecs:addEntity(heartbeat.ECS.Entity())
@@ -57,23 +80,7 @@ function TestState:initialize()
 		entity.transform:setPosition(Vector2(800, 400))
 	end
 
-	do
-		local button = ecs:addEntity(heartbeat.entities.Button())
-
-		local x = 0
-
-		button.onClick:add(function()
-			x = x + 1
-			print(">> Clicked " .. tostring(x) .. " times!")
-		end)
-
-		button:setScreenAnchor(Vector2(0.5, 0.5))
-		button:setLocalAnchor(Vector2(0.5, 0.5))
-		button:setDimensions(Vector2(100, 100))
-		button:setOffset(Vector2(200, 0))
-
-		button:addComponent(heartbeat.components.ShapeRenderer("line", "rectangle", Vector2(100, 100))):setCenter(Vector2(50, 50))
-	end
+	self:addSubState(TestSub())
 
 	self.timer:startCoroutine(function(self)
 		while true do
