@@ -63,7 +63,7 @@ local methods = {
 	end,
 	-- Returns a new vector, which is the original vector rotated by rad radians around origin or (0, 0)
 	rotate = function(self, rad, origin)
-		if origin == nil then origin = Vector2.zero end
+		if not origin then origin = Vector2.zero end
 		self = self - origin
 
 		local sin = math.sin(rad)

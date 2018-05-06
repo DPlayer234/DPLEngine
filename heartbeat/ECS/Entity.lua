@@ -119,7 +119,7 @@ end
 -- Debug-Friendly debug message
 function Entity:__tostring()
 	local tag = next(self._tags)
-	if tag == nil then
+	if not tag then
 		return self:type()
 	end
 	return ("%s (%s)"):format(self:type(), tag)
@@ -127,7 +127,7 @@ end
 
 -- Calls the named function for all of its components and itself
 function Entity:_callEvent(funcName, ...)
-	if self[funcName] then self[funcName](self, ...) end
+	if self[funcName] ~= nil then self[funcName](self, ...) end
 	return self._compStorage:callAll(funcName, ...)
 end
 

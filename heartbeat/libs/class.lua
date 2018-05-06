@@ -1,25 +1,13 @@
 --[[
-Copyright (c) 2017-2018 Darius "DPlay" K.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
-documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
-rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit
-persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the
-Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+The class implementation used by Heartbeat.
 ]]
--- See class.txt for the license text (again) and a short documentation.
-
 local type, tostring = type, tostring
 local setmetatable, getmetatable = setmetatable, getmetatable
-local rawget, rawset = rawget, rawset
+local rawget, rawset, rawequal = rawget, rawset, rawequal
 local pairs, next = pairs, next
+
+-- This value can be replaced with another constant if need be
+local null = require "Heartbeat::null"
 
 local class = setmetatable({}, {
 	__call = function(self, ...)
@@ -29,8 +17,6 @@ local class = setmetatable({}, {
 
 local weakTable = { __mode = "kv" }
 local defaultFalse = { __index = function() return false end }
-
-class.null = setmetatable({}, { __tostring = function() return "const: class.null" end })
 
 -- Class System Main
 -- For creation of new classes and the Default class.
@@ -107,14 +93,14 @@ classMeta.__newindex = classMeta.extend
 
 -- Creates a new class.
 function class.new(name, rawbase, parent)
-	if class.is(rawbase) and parent == nil then
+	if (class.is(rawbase) or rawequal(rawbase, null)) and parent == nil then
 		parent = rawbase
 		rawbase = {}
 	end
 
-	if parent == nil then
+	if rawequal(parent, nil) then
 		parent = Default
-	elseif parent == class.null then
+	elseif rawequal(parent, null) then
 		parent = nil
 	elseif not class.is(parent) then
 		error("Cannot extend a something that is not a class!", 2)
@@ -142,12 +128,7 @@ function class.new(name, rawbase, parent)
 	-- Copying new base fields
 	for k,v in pairs(rawbase) do
 		override[k] = true
-
-		if v == class.null then
-			base[k] = nil
-		else
-			base[k] = v
-		end
+		base[k] = v
 	end
 
 	base[name] = base

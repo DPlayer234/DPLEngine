@@ -40,7 +40,8 @@ complex catanh(complex);
 local Complex = ffi.typeof("complex")
 
 -- Wrap all methods
-local complex = {
+local complex
+complex = {
 	real  = function(z) return C.creal(z) end,
 	imag  = function(z) return C.cimag(z) end,
 	abs   = function(z) return C.cabs(z) end,
@@ -66,10 +67,41 @@ local complex = {
 	phaseAngle = function(z) return C.carg(z) end,
 	conjugate = function(z) return C.conj(z) end,
 	projection = function(z) return C.cproj(z) end,
-	abssqr = function(z) return z.real ^ 2 + z.imag ^ 2 end,
+	abssqr = function(z)
+		if complex.is(z) then
+			return z.real ^ 2 + z.imag ^ 2
+		else
+			return z * z
+		end
+	end,
+	-- Check whether the value is a complex number
 	is = function(value) return ffi.istype(Complex, value) end,
-	to = function(a, b) return Complex(a, b) end,
-	i = Complex(0, 1)
+
+	-- Convert the given value (real and imaginary, the latter optional) into a complex
+	-- number. Returns nil if this fails.
+	tocomplex = function(a, b)
+		if b == nil then
+			if complex.is(a) then
+				return a
+			end
+
+			a = tonumber(a)
+			if a == nil then return end
+			return Complex(a, 0)
+		end
+
+		a = tonumber(a)
+		b = tonumber(b)
+		if a == nil or b == nil then return end
+		return Complex(a, b)
+	end,
+
+	-- Some constants
+	i = Complex(0, 1),
+	infinity = Complex(1/0, 1/0),
+	positiveInfinity = Complex(1/0, 1/0),
+	negativeInfinity = Complex(-1/0, -1/0),
+	NaN = Complex(0/0, 0/0),
 }
 
 -- Indexer

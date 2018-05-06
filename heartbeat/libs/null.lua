@@ -1,5 +1,8 @@
 --[[
 'null', aka explicit nil
+It behaves a little bit different than nil:
+It is considered truthy and, unlike nil, it does not return true when compared against FFI null-pointers.
+It should also not be explicitly compared against (e.g. myvar == null).
 ]]
 local rawequal = rawequal
 

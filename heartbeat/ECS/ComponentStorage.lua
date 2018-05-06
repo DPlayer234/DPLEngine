@@ -117,7 +117,7 @@ end
 function ComponentStorage:callAll(funcName, ...)
 	for i=1, #self._components do
 		local list = self._components[i]
-		if self._classes[list.name].BASE[funcName] then
+		if self._classes[list.name].BASE[funcName] ~= nil then
 			for j=1, #list do
 				local component = list[j]
 				if component:isEnabled() and component.entity:isActive() then
@@ -132,7 +132,7 @@ end
 function ComponentStorage:callAllAlways(funcName, ...)
 	for i=1, #self._components do
 		local list = self._components[i]
-		if self._classes[list.name].BASE[funcName] then
+		if self._classes[list.name].BASE[funcName] ~= nil then
 			for j=1, #list do
 				local component = list[j]
 				component[funcName](component, ...)

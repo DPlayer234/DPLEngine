@@ -98,7 +98,7 @@ end
 function EntityStorage:callAll(funcName, ...)
 	for i=1, #self._entities do
 		local entity = self._entities[i]
-		if entity[funcName] and entity:isActive() then
+		if entity[funcName] ~= nil and entity:isActive() then
 			entity[funcName](entity, ...)
 		end
 	end
@@ -108,7 +108,7 @@ end
 function EntityStorage:callAllAlways(funcName, ...)
 	for i=1, #self._entities do
 		local entity = self._entities[i]
-		if entity[funcName] then
+		if entity[funcName] ~= nil then
 			entity[funcName](entity, ...)
 		end
 	end

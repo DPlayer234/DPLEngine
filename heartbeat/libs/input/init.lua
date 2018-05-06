@@ -5,6 +5,7 @@ Maybe.
 local currentModule = (...):gsub("%.init$", "")
 local love, math, table, ipairs, pairs = love, math, table, ipairs, pairs
 local class = require "Heartbeat::class"
+local null = require "Heartbeat::null"
 
 local input2 = {}
 
@@ -441,10 +442,10 @@ do
 		self:MergedInput(self.buttons, self.axes)
 	end
 
-	GamepadInput.add        = class.null
-	GamepadInput.remove     = class.null
-	GamepadInput.clear      = class.null
-	GamepadInput.getHandler = class.null
+	GamepadInput.add        = null
+	GamepadInput.remove     = null
+	GamepadInput.clear      = null
+	GamepadInput.getHandler = null
 
 	function GamepadInput:bindButton(button, id)
 		self.buttons:bindButton(button, id)
