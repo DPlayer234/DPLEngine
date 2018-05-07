@@ -4,7 +4,7 @@ Loading stuff
 local physics  = require "love.physics"
 local lgraphics = require "love.graphics"
 local class = require "Heartbeat::class"
-local EventStore = require "Heartbeat::EventStore"
+local Handler = require "Heartbeat::Handler"
 
 local Initializer = class("Initializer")
 
@@ -41,14 +41,12 @@ end
 function Initializer:setCallbacks()
 	--[[love.quit:add(function()
 		for i=1, self.engine:getGameStateCount() do
-			local state = self.engine:getActiveGameState()
 			self.engine:popGameState()
-			state:destroy()
 		end
 	end)]]
 end
 
--- Wraps all callbacks into an EventStore for easier modification
+-- Wraps all callbacks into a Handler for easier modification
 function Initializer:wrapCallbacks()
 	for _, callback in ipairs {
 		"keypressed",
@@ -75,7 +73,7 @@ function Initializer:wrapCallbacks()
 		"quit"
 	} do
 		local love_callback = love[callback]
-		love[callback] = EventStore { type = "handler" }
+		love[callback] = Handler()
 		if love_callback then
 			love[callback]:add(love_callback)
 		end

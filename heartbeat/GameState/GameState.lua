@@ -6,7 +6,6 @@ local assert = assert
 local physics = require "love.physics"
 local input = require "Heartbeat::input"
 local class = require "Heartbeat::class"
-local EventStore = require "Heartbeat::EventStore"
 
 local ECS            = require "Heartbeat::ECS"
 local Transformation = require "Heartbeat::GameState::Transformation"

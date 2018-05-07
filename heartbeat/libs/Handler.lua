@@ -1,5 +1,7 @@
 --[[
-This is similar to a handler-type EventStore but faster
+This is similar to an EventStore, however was optimized to have functions added once
+and to run them in a group. Handlers can be copied and support + and - operators in
+the way that C# delegates support them. This creates a new copied instance as well.
 ]]
 local table = table
 local class = require "Heartbeat::class"
@@ -28,30 +30,25 @@ function Handler:has(func)
 end
 
 -- Adds a function if it not contained already.
--- Returns the original handler.
 function Handler:add(func)
 	if not self:has(func) then
 		self._list[#self._list + 1] = func
 	end
-	return self
 end
 
 -- Removes a function if it is contained.
--- Returns the original handler.
 function Handler:remove(func)
 	local index = self:getIndex(func)
 	if index ~= nil then
 		table.remove(self._list, index)
 	end
-	return self
 end
 
--- Calls all handler functions and returns the handler.
+-- Calls all handler functions.
 function Handler:handle(...)
 	for i=1, #self._list do
 		self._list[i](...)
 	end
-	return self
 end
 
 -- Creates an identical copy of this handler
