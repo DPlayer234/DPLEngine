@@ -27,6 +27,7 @@ Heartbeat.entities   = require "Heartbeat::entities"
 Heartbeat.components = require "Heartbeat::components"
 
 -- Load Libraries
+Heartbeat.BehaviorTree = require "Heartbeat::BehaviorTree"
 Heartbeat.input        = require "Heartbeat::input"
 Heartbeat.Vector2      = require "Heartbeat::Vector2"
 Heartbeat.Vector3      = require "Heartbeat::Vector3"

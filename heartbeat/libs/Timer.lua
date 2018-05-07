@@ -1,7 +1,7 @@
 --[[
 Timer class
 ]]
-local coroutine, table = coroutine, table
+local coroutine, table, math = coroutine, table, math
 local type = type
 local class = require "Heartbeat::class"
 
@@ -60,7 +60,7 @@ function Timer:_handleTask(task)
 		local delay = task.func()
 
 		if type(delay) == "number" then
-			task.time = task.time + delay
+			task.time = math.max(self._time, task.time + delay)
 		elseif delay == nil then
 			return true
 		else
