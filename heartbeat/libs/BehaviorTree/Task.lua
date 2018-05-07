@@ -4,6 +4,7 @@ It cannot have any children.
 ]]
 local class = require "Heartbeat::class"
 local Coroutine = require "Heartbeat::Coroutine"
+local Node = require "Heartbeat::BehaviorTree::Node"
 
 local Task = class("Task", Node)
 
