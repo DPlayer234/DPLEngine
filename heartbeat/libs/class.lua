@@ -7,6 +7,7 @@ local rawget, rawset, rawequal = rawget, rawset, rawequal
 local pairs, next = pairs, next
 
 -- This value can be replaced with another constant if need be
+-- false may work as well.
 local null = require "Heartbeat::null"
 
 local class = setmetatable({}, {
@@ -19,77 +20,115 @@ local weakTable = { __mode = "kv" }
 local defaultFalse = { __index = function() return false end }
 
 -- Class System Main
--- For creation of new classes and the Default class.
-local noNew, noNewFields, metaNew, classMeta, reservedClassFields, Default
+-- For creation of classes
 
-function noNew(self)
-	error("Cannot instantiate object of type "..self.CLASS.NAME..": It has no 'new' field.", 3)
+local function noNew(self)
+	error("Cannot instantiate object of type " .. self.CLASS.NAME .. ": It has no 'new' field.", 3)
 end
 
-function noNewFields()
-	error("Cannot directly add new fields to class bases.", 2)
+-- Instantiates a new instance of the given class.
+-- Identical to cls(...)
+function class.instantiate(cls, ...)
+	local obj = setmetatable({}, cls.BASE)
+	return cls.NEW(obj, ...) or obj
 end
 
-function metaNew(base, self, ...)
-	if base.new == nil then error("Cannot call '"..base.CLASS.NAME.."': The super-class has no such method.", 2) end
-	return base.new(self, ...)
-end
-
-reservedClassFields = {
-	CLASS = true,
-	__index = true
+-- These fields cannot be set
+local reservedClassFields = {
+	CLASS = true
 }
 
-classMeta = {
-	__index = function(self, k)
-		local v = rawget(classMeta, k)
-		if v ~= nil then
-			return v
+-- These functions are called on the class upon extension
+local extendByField = {
+	-- Add a constructor
+	new = function(cls, new)
+		rawset(cls, "NEW", new == nil and (cls.PARENT and cls.PARENT.NEW or noNew) or new)
+	end,
+	-- Add a custom indexer
+	__index = function(cls, indexer)
+		if indexer == nil then
+			-- Reset the value
+			cls.OVERRIDE.__index = false
+			rawset(cls.BASE, "__index", cls.BASE)
+		elseif type(indexer) == "function" then
+			-- Add a new function indexer
+			rawset(cls.BASE, "__index", function(self, k)
+				local v = cls.BASE[k]
+				if v == nil then
+					return indexer(self, k)
+				end
+				return v
+			end)
 		else
-			return rawget(self.BASE, k)
-		end
-	end,
-	__tostring = function(self)
-		if self.PARENT == nil then
-			return "class "..tostring(self.NAME)
-		end
-		return "class "..tostring(self.NAME).." : "..tostring(self.PARENT.NAME)
-	end,
-	new = function(self, ...)
-		local obj = setmetatable({}, self.BASE)
-		self.NEW(obj, ...)
-		return obj
-	end,
-	extend = function(self, k, v)
-		self:extendExact(k, v)
-		self.OVERRIDE[k] = true
-
-		for _, cls in pairs(self.CHILDREN) do
-			cls:extendByParent(k, v, self)
-		end
-	end,
-	extendByParent = function(self, k, v, parent)
-		if not self.OVERRIDE[k] then
-			self:extendExact(k, v)
-
-			for _, cls in pairs(self.CHILDREN) do
-				cls:extendByParent(k, v, parent)
-			end
-		end
-	end,
-	extendExact = function(self, k, v)
-		if reservedClassFields[k] then
-			error("Field '"..tostring(k).."' is reserved in classes.", 3)
-		else
-			if k == "new" then
-				rawset(self, "NEW", v == nil and (self.PARENT and self.PARENT.NEW or noNew) or v)
-			end
-			rawset(self.BASE, k, v)
+			-- Set the indexer directly...?
+			rawset(cls.BASE, "__index", indexer)
 		end
 	end
 }
-classMeta.__call = classMeta.new
-classMeta.__newindex = classMeta.extend
+
+-- Extend a class by a method or value.
+-- Identical to cls[k] = v
+function class.extend(cls, k, v)
+	cls.OVERRIDE[k] = true
+	class._extendExact(cls, k, v)
+
+	for _, cls in pairs(cls.CHILDREN) do
+		class._extendByParent(cls, k, v, cls)
+	end
+end
+
+-- Internally used to extend classes.
+function class._extendByParent(cls, k, v, parent)
+	if not cls.OVERRIDE[k] then
+		class._extendExact(cls, k, v)
+
+		for _, cls in pairs(cls.CHILDREN) do
+			class._extendByParent(cls, k, v, parent)
+		end
+	end
+end
+
+-- Internally used to extend classes.
+function class._extendExact(cls, k, v)
+	if reservedClassFields[k] then
+		error("Field '" .. tostring(k) .. "' is reserved in classes.", 3)
+	else
+		rawset(cls.BASE, k, v)
+
+		if extendByField[k] then
+			return extendByField[k](cls, v)
+		end
+	end
+end
+
+-- This is the metatable for classes.
+local classMeta = {
+	__index = function(self, k)
+		return rawget(self.BASE, k)
+	end,
+	__tostring = function(self)
+		if self.PARENT == nil then
+			return "class " .. tostring(self.NAME)
+		end
+		return "class " .. tostring(self.NAME) .. " : " .. tostring(self.PARENT.NAME)
+	end,
+	__call = class.instantiate,
+	__newindex = class.extend
+}
+
+-- This is the metatable for class bases.
+local baseMeta = {
+	__newindex = function()
+		error("Should not directly add new fields to class bases. Use rawset if this is intentional.", 2)
+	end,
+	__call = function(base, self, ...)
+		if base.new == nil then error("Cannot call '" .. base.CLASS.NAME .. "': The super-class has no such method.", 2) end
+		return base.new(self, ...)
+	end,
+	__tostring = function(base)
+		return "base of " .. tostring(base.CLASS)
+	end
+}
 
 -- Creates a new class.
 function class.new(name, rawbase, parent)
@@ -99,7 +138,7 @@ function class.new(name, rawbase, parent)
 	end
 
 	if rawequal(parent, nil) then
-		parent = Default
+		parent = class.Default
 	elseif rawequal(parent, null) then
 		parent = nil
 	elseif not class.is(parent) then
@@ -107,9 +146,10 @@ function class.new(name, rawbase, parent)
 	end
 
 	if type(name) ~= "string" then error("Class name has to be of type string!", 2) end
-	if rawbase == nil then rawbase = {} end
 
 	local base = {}
+	base.__index = base
+
 	local override = {}
 
 	local typeOf = setmetatable({ [name] = true }, defaultFalse)
@@ -123,24 +163,14 @@ function class.new(name, rawbase, parent)
 		for k,v in pairs(parent.TYPEOF) do
 			typeOf[k] = v
 		end
+
+		base.__index = parent.OVERRIDE.__index and parent.BASE.__index or base
 	end
 
-	-- Copying new base fields
-	for k,v in pairs(rawbase) do
-		override[k] = true
-		base[k] = v
-	end
-
+	-- Copy itself
 	base[name] = base
 
-	-- Metatable
-	local bmeta = {
-		__newindex = noNewFields,
-		__call = metaNew
-	}
-
-	base.__index = base
-	setmetatable(base, bmeta)
+	setmetatable(base, baseMeta)
 
 	-- Creating the class
 	local cls = setmetatable({
@@ -164,6 +194,13 @@ function class.new(name, rawbase, parent)
 		parent:__inherited(cls)
 	end
 
+	-- Add new fields
+	if rawbase then
+		for k,v in pairs(rawbase) do
+			cls[k] = v
+		end
+	end
+
 	return cls
 end
 
@@ -172,31 +209,35 @@ function class.is(cls)
 	return getmetatable(cls) == classMeta
 end
 
--- Default class. Everything inherits from this.
-Default = class("Default", {
-	type = function(self)
-		return self.CLASS.NAME
-	end,
-	typeOf = function(self, comp)
-		return self.CLASS.TYPEOF[comp]
-	end,
-	instantiate = function(self)
-		local obj = {}
-		for k,v in pairs(self) do
-			obj[k] = v
-		end
-		return setmetatable(obj, getmetatable(self))
-	end,
-	__call = function(self, arg)
-		for k,v in pairs(arg) do
-			self[k] = v
-		end
-		return self
-	end,
-	__tostring = function(self)
-		return self:type()
+-- Define the default class. Everything inherits from this.
+local Default = class("Default")
+
+function Default:type()
+	return self.CLASS.NAME
+end
+
+function Default:typeOf(comp)
+	return self.CLASS.TYPEOF[comp]
+end
+
+function Default:instantiate()
+	local obj = {}
+	for k,v in pairs(self) do
+		obj[k] = v
 	end
-})
+	return setmetatable(obj, getmetatable(self))
+end
+
+function Default:__call(arg)
+	for k,v in pairs(arg) do
+		self[k] = v
+	end
+	return self
+end
+
+function Default:__tostring()
+	return self:type()
+end
 
 class.Default = Default
 
