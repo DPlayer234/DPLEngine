@@ -56,7 +56,7 @@ end
 -- Lets the coroutine yield (To be called inside the coroutine)
 function Coroutine:yield(...)
 	assert(self:isActive(), "The coroutine is not active.")
-	return coroutine.yield(...)
+	return returnFrom2nd(coroutine.yield(...))
 end
 
 -- Returns the current coroutine status

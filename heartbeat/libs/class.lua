@@ -126,7 +126,7 @@ local baseMeta = {
 		return base.new(self, ...)
 	end,
 	__tostring = function(base)
-		return "base of " .. tostring(base.CLASS)
+		return ("base of class %s"):format(base.CLASS.NAME)
 	end
 }
 
@@ -186,18 +186,19 @@ function class.new(name, rawbase, parent)
 	rawset(cls, "CLASS", cls)
 	rawset(base, "CLASS", cls)
 
-	if parent and parent.CHILDREN then
-		parent.CHILDREN[#parent.CHILDREN+1] = cls
-	end
-
-	if parent and parent.__inherited then
-		parent:__inherited(cls)
-	end
-
 	-- Add new fields
 	if rawbase then
 		for k,v in pairs(rawbase) do
 			cls[k] = v
+		end
+	end
+
+	-- Parenting
+	if parent then
+		parent.CHILDREN[#parent.CHILDREN+1] = cls
+
+		if parent.__inherited then
+			parent:__inherited(cls)
 		end
 	end
 

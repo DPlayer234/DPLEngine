@@ -37,7 +37,7 @@ function RequireTable:__index(element)
 end
 
 function RequireTable:__tostring()
-	return ("%s: %s"):format(self:type(), self._root)
+	return ("%s: %q"):format(self:type(), self._root)
 end
 
 -- Internally loads and stores the data

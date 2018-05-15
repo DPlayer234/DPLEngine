@@ -44,6 +44,7 @@ Heartbeat.mathf        = require "Heartbeat::mathf"
 Heartbeat.null         = require "Heartbeat::null"
 Heartbeat.RequireTable = require "Heartbeat::RequireTable"
 Heartbeat.Timer        = require "Heartbeat::Timer"
+Heartbeat.Try          = require "Heartbeat::Try"
 
 -- Instantiates a new engine state
 function Heartbeat:new()

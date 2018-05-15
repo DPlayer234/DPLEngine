@@ -40,6 +40,7 @@ local hooks = {
 	["Heartbeat::null"]                      = "libs.null",
 	["Heartbeat::RequireTable"]              = "libs.RequireTable",
 	["Heartbeat::Timer"]                     = "libs.Timer",
+	["Heartbeat::Try"]                       = "libs.Try",
 	["Heartbeat::Initializer"]               = "Initializer",
 	["Heartbeat::components"]                = "components",
 	["Heartbeat::entities"]                  = "entities",
