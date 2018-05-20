@@ -2,6 +2,7 @@
 This is a runnable task node.
 It cannot have any children.
 ]]
+local assert = assert
 local class = require "Heartbeat::class"
 local Coroutine = require "Heartbeat::Coroutine"
 local Node = require "Heartbeat::BehaviorTree::Node"
@@ -13,8 +14,8 @@ local Task = class("Task", Node)
 -- and return 'true' if it did exit successfully. It may also yield to delay execution.
 -- Also see Coroutines.
 function Task:new(closure)
-	self:Node()
 	self._coroutine = Coroutine(closure)
+	self:Node()
 end
 
 function Task:reset()

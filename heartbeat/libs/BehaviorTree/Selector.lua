@@ -9,8 +9,6 @@ local Selector = class("Selector", Node)
 
 function Selector:new()
 	self:Node()
-
-	self._index = 1
 end
 
 function Selector:reset()

@@ -9,8 +9,6 @@ local Sequence = class("Sequence", Node)
 
 function Sequence:new()
 	self:Node()
-
-	self._index = 1
 end
 
 function Sequence:reset()

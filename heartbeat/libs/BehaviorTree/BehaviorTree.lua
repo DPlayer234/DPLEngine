@@ -1,6 +1,8 @@
 --[[
 This is a BehaviorTree.
-It really doesn't do a lot, you may as well just use the nodes directly.
+You create it by supplying a predefined data structure representing the nodes.
+If you want to do this manually, use the node classes directly and use the root node
+instead of the BehaviorTree.
 ]]
 local class = require "Heartbeat::class"
 
@@ -12,20 +14,14 @@ BehaviorTree.Selector = require "Heartbeat::BehaviorTree::Selector"
 BehaviorTree.Sequence = require "Heartbeat::BehaviorTree::Sequence"
 BehaviorTree.Parallel = require "Heartbeat::BehaviorTree::Parallel"
 
--- Creates a new, empty BehaviorTree
-function BehaviorTree:new()
-	self._root = nil
+-- Creates a new BehaviorTree based on the given data structure
+function BehaviorTree:new(data)
+	self._root = BehaviorTree.Node.createFromData(data)
 end
 
 -- Gets the root node
 function BehaviorTree:getRoot()
 	return self._root
-end
-
--- Sets the root node. It is attached as a child to a dummy node.
-function BehaviorTree:setRoot(node)
-	BehaviorTree.Node():addNode(node)
-	self._root = node
 end
 
 -- Continues the execution

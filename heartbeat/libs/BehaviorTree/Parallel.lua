@@ -2,15 +2,16 @@
 Parallel runs all its children every continue until all of them are finished.
 Its result is the 'and' of all its children's results.
 ]]
+local assert, type = assert, type
 local class = require "Heartbeat::class"
 local Node = require "Heartbeat::BehaviorTree::Node"
 
 local Parallel = class("Parallel", Node)
 
-function Parallel:new(closure)
-	self:Node()
-
+function Parallel:new()
 	self._finChildren = {}
+
+	self:Node()
 end
 
 function Parallel:reset()
@@ -30,6 +31,7 @@ end
 function Parallel:continue(...)
 	self:resetFinish()
 	self._result = true
+	self._finished = true
 
 	for i=1, self:getChildCount() do
 		local child = self:getChild(i)

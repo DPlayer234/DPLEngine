@@ -1,7 +1,7 @@
 --[[
 This is any node element in the BehaviorTree.
 ]]
-local assert = assert
+local assert, type = assert, type
 local class = require "Heartbeat::class"
 
 local Node = class("Node")
@@ -75,5 +75,42 @@ end
 
 -- Override this to add behaviour (allows for custom node types)
 function Node:continue(...) end
+
+-- Additional constructor called when a node is created from data (for custom node types)
+function Node:newData(data) end
+
+local nodeTypes = {}
+
+-- Creates an entirely new node from data
+function Node.createFromData(data)
+	assert(type(data) == "table", "Node data has to be a table.")
+	assert(type(data.type) == "string", "'type' has to be a string.")
+	local nodeType = nodeTypes[data.type]
+	if nodeType == nil then error("No known node type '" .. data.type .. "'.") end
+
+	local node = nodeType(data.param)
+	node:newData(data)
+
+	if data.children == nil then
+		-- No children
+	elseif type(data.children) == "table" then
+		-- Add children
+		for i=1, #data.children do
+			node:addChild(Node.createFromData(data.children[i]))
+		end
+	else
+		-- Something went terribly wrong, didn't it?
+		error("'children' has to be a list of node data.")
+	end
+
+	return node
+end
+
+-- Called when the a custom type is inherited. Used to allow loading data.
+function Node:__inherited(cls)
+	assert(nodeTypes[cls.NAME] == nil, "Multiple node types with the same name are not allowed.")
+
+	nodeTypes[cls.NAME] = cls
+end
 
 return Node
