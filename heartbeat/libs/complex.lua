@@ -99,7 +99,6 @@ complex = {
 	-- Some constants
 	i = Complex(0, 1),
 	infinity = Complex(1/0, 1/0),
-	positiveInfinity = Complex(1/0, 1/0),
 	negativeInfinity = Complex(-1/0, -1/0),
 	NaN = Complex(0/0, 0/0),
 }

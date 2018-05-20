@@ -2,7 +2,7 @@
 A Joint connecting two Rigidbodies
 ]]
 local assert = assert
-local physics = require "love.physics"
+local lphysics = require "love.physics"
 local class = require "Heartbeat::class"
 local Vector2 = require "Heartbeat::Vector2"
 local Material = require "Heartbeat::Material"
@@ -149,7 +149,7 @@ lJointConstructor = {
 		local x1, y1 = j1:getAnchor():unpack()
 		local x2, y2 = j2:getAnchor():unpack()
 
-		return physics.newDistanceJoint(
+		return lphysics.newDistanceJoint(
 			j1._rigidbody:getLBody(),
 			j2._rigidbody:getLBody(),
 			x1, y1, x2, y2,
@@ -159,7 +159,7 @@ lJointConstructor = {
 	Friction = function(j1, j2)
 		local x1, y1 = j1:getAnchor():unpack()
 
-		return physics.newFrictionJoint(
+		return lphysics.newFrictionJoint(
 			j1._rigidbody:getLBody(),
 			j2._rigidbody:getLBody(),
 			x1, y1,
@@ -170,7 +170,7 @@ lJointConstructor = {
 		local correction = j1:getCorrectionFactor() or j2:getCorrectionFactor()
 		assert(correction, "The correction factor for the Motor Joint was never set.")
 
-		return physics.newMotorJoint(
+		return lphysics.newMotorJoint(
 			j1._rigidbody:getLBody(),
 			j2._rigidbody:getLBody(),
 			correction,
@@ -183,7 +183,7 @@ lJointConstructor = {
 		local axis = j1:getAxis() or j2:getAxis()
 		assert(axis, "The axis vector for the Prismatic Joint was never set.")
 
-		return physics.newPrismaticJoint(
+		return lphysics.newPrismaticJoint(
 			j1._rigidbody:getLBody(),
 			j2._rigidbody:getLBody(),
 			x1, y1,
@@ -202,7 +202,7 @@ lJointConstructor = {
 		local ratio = j1:getRatio() or j2:getRatio()
 		assert(axis, "The ratio for the Pulley Joint was never set.")
 
-		return physics.newDistanceJoint(
+		return lphysics.newDistanceJoint(
 			j1._rigidbody:getLBody(),
 			j2._rigidbody:getLBody(),
 			g1.x, g1.y, g2.x, g2.y,
@@ -214,7 +214,7 @@ lJointConstructor = {
 	Revolute = function(j1, j2)
 		local x1, y1 = j1:getAnchor():unpack()
 
-		return physics.newRevoluteJoint(
+		return lphysics.newRevoluteJoint(
 			j1._rigidbody:getLBody(),
 			j2._rigidbody:getLBody(),
 			x1, y1,
@@ -228,7 +228,7 @@ lJointConstructor = {
 		local maxLenght = j1:getMaximumLenght() or j2:getMaximumLenght()
 		assert(maxLenght, "The maximum lenght for the Rope Joint was not set.")
 
-		return physics.newRopeJoint(
+		return lphysics.newRopeJoint(
 			j1._rigidbody:getLBody(),
 			j2._rigidbody:getLBody(),
 			x1, y1, x2, y2,
@@ -239,7 +239,7 @@ lJointConstructor = {
 	Weld = function(j1, j2)
 		local x1, y1 = j1:getAnchor():unpack()
 
-		return physics.newWeldJoint(
+		return lphysics.newWeldJoint(
 			j1._rigidbody:getLBody(),
 			j2._rigidbody:getLBody(),
 			x1, y1,
@@ -252,7 +252,7 @@ lJointConstructor = {
 		local axis = j1:getAxis() or j2:getAxis()
 		assert(axis, "The axis vector for the Wheel Joint was never set.")
 
-		return physics.newWheelJoint(
+		return lphysics.newWheelJoint(
 			j1._rigidbody:getLBody(),
 			j2._rigidbody:getLBody(),
 			x1, y1,

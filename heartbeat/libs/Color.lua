@@ -38,11 +38,11 @@ local getters = {
 local methods = {
 	-- Copy the current color
 	copy = function(self)
-		return Color(self.r, self.g, self.b, self.a)
+		return Color(self[1], self[2], self[3], self[4])
 	end,
 	-- Get the squared brightness of the color
 	getBrightnessSqr = function(self)
-		return self.r * self.r + self.g * self.g + self.b * self.b
+		return (self.r * self.r + self.g * self.g + self.b * self.b) * self.a
 	end,
 	-- Get the brightness of the color
 	getBrightness = function(self)
@@ -50,7 +50,7 @@ local methods = {
 	end,
 	-- Returns all components in order
 	unpack = function(self)
-		return self.r, self.g, self.b, self.a
+		return self[1], self[2], self[3], self[4]
 	end,
 	-- Type
 	type = function() return TYPE_NAME end,

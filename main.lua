@@ -30,6 +30,8 @@ function love.load()
 
 	require "dev"
 
+	package.path = ""
+
 	-- Load and initialize the engine
 	heartbeat = require "heartbeat"
 	null = heartbeat.null

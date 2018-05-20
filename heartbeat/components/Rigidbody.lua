@@ -1,8 +1,9 @@
 --[[
 A Rigidbody (Body)
 ]]
-local physics = require "love.physics"
+local lphysics = require "love.physics"
 local class = require "Heartbeat::class"
+local mathf = require "Heartbeat::mathf"
 local Vector2 = require "Heartbeat::Vector2"
 local Material = require "Heartbeat::Material"
 
@@ -16,7 +17,7 @@ end
 
 -- Initializes the Rigidbody
 function Rigidbody:initialize()
-	self._body = physics.newBody(self.ecs.world, 0, 0, self._type)
+	self._body = lphysics.newBody(self.ecs.world, 0, 0, self._type)
 	self._body:setUserData(self)
 
 	self._material = Material()
@@ -24,15 +25,7 @@ function Rigidbody:initialize()
 	self.transform:setLBody(self._body, true)
 end
 
-function Rigidbody:onEnable()
-	self:getLBody():setActive(true)
-end
-
-function Rigidbody:onDisable()
-	self:getLBody():setActive(false)
-end
-
--- Returns the Löve physics body
+-- Returns the Löve lphysics body
 function Rigidbody:getLBody()
 	return self._body
 end
@@ -174,10 +167,34 @@ function Rigidbody:setGravityScale(value)
 	return self:getLBody():setGravityScale(value)
 end
 
+-- Returns the closest distance between two rigidbodies
+-- If you have only one collider each, it is faster to call Collider:getDistance(other)
+function Rigidbody:getDistance(other)
+	local selfFixtures = self:getLBody():getFixtures()
+	local otherFixtures = other:getLBody():getFixtures()
+
+	local distance = mathf.infinity
+	for s=1, #selfFixtures do
+		for o=1, #otherFixtures do
+			distance = mathf.min(distance, lphysics.getDistance(selfFixtures[s], otherFixtures[o]))
+		end
+	end
+
+	return distance
+end
+
 function Rigidbody:onDestroy()
 	self.transform:setLBody(nil)
 
 	self._body:destroy()
+end
+
+function Rigidbody:onEnable()
+	self:getLBody():setActive(true)
+end
+
+function Rigidbody:onDisable()
+	self:getLBody():setActive(false)
 end
 
 return Rigidbody

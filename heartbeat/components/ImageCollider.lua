@@ -6,7 +6,7 @@ A green pixel defines the first vertex of the shape.
 Red pixels define any additional vertices.
 ]]
 local ffi = require "ffi"
-local physics = require "love.physics"
+local lphysics = require "love.physics"
 local class = require "Heartbeat::class"
 local Vector2 = require "Heartbeat::Vector2"
 
@@ -172,7 +172,7 @@ function ImageCollider:_createShape()
 		pointTable[i * 2] = point.y
 	end
 
-	self._shape = physics.newChainShape(self._loop, pointTable)
+	self._shape = lphysics.newChainShape(self._loop, pointTable)
 end
 
 -- Gets the index for the _solid array

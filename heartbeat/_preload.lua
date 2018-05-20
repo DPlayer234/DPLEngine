@@ -17,6 +17,10 @@ local hooks = {
 	["Heartbeat::GameState::Collision"]      = "GameState.Collision",
 	["Heartbeat::SubState"]                  = "GameState.SubState",
 	["Heartbeat::GameState::Transformation"] = "GameState.Transformation",
+	["Heartbeat::lovef"]                     = "lovef",
+	["Heartbeat::lovef::graphics"]           = "lovef.graphics",
+	["Heartbeat::lovef::physics"]            = "lovef.physics",
+	["Heartbeat::libs"]                      = "libs",
 	["Heartbeat::BehaviorTree"]              = "libs.BehaviorTree",
 	["Heartbeat::BehaviorTree::Node"]        = "libs.BehaviorTree.Node",
 	["Heartbeat::BehaviorTree::Task"]        = "libs.BehaviorTree.Task",
@@ -29,7 +33,6 @@ local hooks = {
 	["Heartbeat::Vector3"]                   = "libs.vectors.Vector3",
 	["Heartbeat::Vector4"]                   = "libs.vectors.Vector4",
 	["Heartbeat::cdata"]                     = "libs.cdata",
-	["Heartbeat::class"]                     = "libs.class",
 	["Heartbeat::Color"]                     = "libs.Color",
 	["Heartbeat::complex"]                   = "libs.Complex",
 	["Heartbeat::Coroutine"]                 = "libs.Coroutine",
@@ -41,10 +44,11 @@ local hooks = {
 	["Heartbeat::RequireTable"]              = "libs.RequireTable",
 	["Heartbeat::Timer"]                     = "libs.Timer",
 	["Heartbeat::Try"]                       = "libs.Try",
-	["Heartbeat::Initializer"]               = "Initializer",
 	["Heartbeat::components"]                = "components",
 	["Heartbeat::entities"]                  = "entities",
-	["Heartbeat::Heartbeat"]                 = "Heartbeat"
+	["Heartbeat::class"]                     = "class",
+	["Heartbeat::Heartbeat"]                 = "Heartbeat",
+	["Heartbeat::Initializer"]               = "Initializer",
 }
 
 -- Hooking into package.preload

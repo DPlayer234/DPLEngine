@@ -27,7 +27,6 @@ local mathf = {
 
 	-- Some constants
 	infinity = 1/0,
-	positiveInfinity = 1/0,
 	negativeInfinity = -1/0,
 	NaN = 0/0,
 

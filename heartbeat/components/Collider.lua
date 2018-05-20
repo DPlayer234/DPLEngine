@@ -2,7 +2,7 @@
 A Collider for rigidbodies (Fixture)
 ]]
 local ffi = require "ffi"
-local physics = require "love.physics"
+local lphysics = require "love.physics"
 local class = require "Heartbeat::class"
 local Vector2 = require "Heartbeat::Vector2"
 
@@ -23,26 +23,26 @@ function Collider:new(shapeType, a, b, c, d)
 
 	if shapeType == "Rectangle" then
 		if Vector2.is(b) then
-			self:_init(physics.newRectangleShape(a.x, a.y, b.x, b.y, c), d)
+			self:_init(lphysics.newRectangleShape(a.x, a.y, b.x, b.y, c), d)
 		else
-			self:_init(physics.newRectangleShape(a.x, a.y), b)
+			self:_init(lphysics.newRectangleShape(a.x, a.y), b)
 		end
 	elseif shapeType == "Circle" then
 		if Vector2.is(a) then
-			self:_init(physics.newCircleShape(a.x, a.y, b), c)
+			self:_init(lphysics.newCircleShape(a.x, a.y, b), c)
 		else
-			self:_init(physics.newCircleShape(a), b)
+			self:_init(lphysics.newCircleShape(a), b)
 		end
 	elseif shapeType == "Polygon" then
 		if Vector2.is(a[1]) then
 			a = self:_vectorToNumberList(a)
 		end
-		self:_init(physics.newPolygonShape(a), b)
+		self:_init(lphysics.newPolygonShape(a), b)
 	elseif shapeType == "Chain" then
 		if Vector2.is(b[1]) then
 			b = self:_vectorToNumberList(b)
 		end
-		self:_init(physics.newChainShape(a, b), c)
+		self:_init(lphysics.newChainShape(a, b), c)
 	else
 		self:_init(a, b)
 	end
@@ -53,7 +53,7 @@ end
 function Collider:initialize()
 	self._rigidbody = assert(self.entity:getComponent("Rigidbody"), "Colliders require a Rigidbody.")
 
-	self._fixture = physics.newFixture(self._rigidbody:getLBody(), self._shape, self._density or 1)
+	self._fixture = lphysics.newFixture(self._rigidbody:getLBody(), self._shape, self._density or 1)
 	self._fixture:setUserData(self)
 
 	self:setMaterial(self._rigidbody:getMaterial())
@@ -123,6 +123,11 @@ function Collider:_vectorToNumberList(vpoints)
 		points[i * 2] = vpoints[i].y
 	end
 	return points
+end
+
+-- Returns the closest distance between two colliders
+function Collider:getDistance(other)
+	return lphysics.getDistance(self:getLFixture(), other:getLFixture())
 end
 
 return Collider

@@ -3,7 +3,7 @@ The base class for any Game State
 ]]
 local table = table
 local assert = assert
-local physics = require "love.physics"
+local lphysics = require "love.physics"
 local input = require "Heartbeat::input"
 local class = require "Heartbeat::class"
 
@@ -152,7 +152,7 @@ end
 
 -- Sets the physics world
 function GameState:_setPhysicsWorld()
-	self.world = physics.newWorld(0, 9.85 * physics.getMeter(), true)
+	self.world = lphysics.newWorld(0, 9.85 * lphysics.getMeter(), true)
 
 	-- All callbacks receive the two fixtures and their contact point
 	local function getCallback(sensor, collision)
