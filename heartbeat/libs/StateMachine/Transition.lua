@@ -19,10 +19,6 @@ end
 function Transition:attachFromState(fromState)
 	assert(self._from == nil, "Cannot attach a Transition to multiple states.")
 	self._from = fromState
-
-	if fromState:getMachine() then
-		self:_checkToState()
-	end
 end
 
 -- Gets the state being transitioned from.
@@ -32,6 +28,7 @@ end
 
 -- Gets the state being transitioned to.
 function Transition:getToState()
+	self:_checkToState()
 	return self._to
 end
 
@@ -51,11 +48,9 @@ end
 
 -- Checks the to-state and makes sure the reference is known.
 function Transition:_checkToState()
-	if self._toName ~= nil then
+	if self._to == nil and self._toName ~= nil then
 		self._to = self._from:getMachine():getState(self._toName)
-		self._toName = nil
-	elseif self._to == nil then
-		error("Unknown State to transition to.")
+		if self._to ~= nil then self._toName = nil end
 	end
 end
 

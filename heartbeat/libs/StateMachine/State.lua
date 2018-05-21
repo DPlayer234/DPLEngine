@@ -18,10 +18,11 @@ end
 -- Attached the StateMachine. This does not need to be called explicitly.
 function State:attachMachine(machine)
 	self._machine = machine
+end
 
-	for i=1, #self._transitions do
-		self._transitions[i]:_checkToState()
-	end
+-- Returns the state's machine
+function State:getMachine()
+	return self._machine
 end
 
 -- Returns the state name. State names may not be duplicated within a StateMachine.
@@ -61,7 +62,7 @@ end
 -- Adds a transition from this state.
 function State:addTransition(transition)
 	self._transitions[#self._transitions + 1] = transition
-	transition:attackFromState(self)
+	transition:attachFromState(self)
 	return self
 end
 

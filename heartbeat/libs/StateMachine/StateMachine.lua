@@ -52,28 +52,39 @@ end
 
 -- Updates the state machine.
 function StateMachine:update(...)
-	if self:getNextState() then
-		self:_doTransition()
-	end
+	self:_checkTransition()
+	self:_doTransition()
 
 	if self:getActiveState() == nil then return end
 
 	self:getActiveState():update(...)
 
-	local transition = self:getActiveState():checkTransition()
-	if transition then
-		self:setNextState(transition)
+	self:_checkTransition()
+	self:_doTransition()
+end
+
+-- Internal. Perform a transition, call the callbacks and make sure it happens correctly.
+function StateMachine:_doTransition()
+	if self:getNextState() then
+		if self._state then
+			self._state:exit()
+		end
+
+		self._state = self._nextState
+		self._nextState = nil
+
+		self._state:enter()
 	end
 end
 
--- Internal. Calls the transition callbacks and makes sure it happens correctly.
-function StateMachine:_doTransition()
-	self._state:exit()
+-- Checks for any valid transition and calls setNextState if there is one.
+function StateMachine:_checkTransition()
+	if self:getActiveState() == nil then return end
 
-	self._state = self._nextState
-	self._nextState = nil
-
-	self._state:enter()
+	local transition = self:getActiveState():checkTransition()
+	if transition then
+		self:setNextState(transition:getToState())
+	end
 end
 
 return StateMachine
