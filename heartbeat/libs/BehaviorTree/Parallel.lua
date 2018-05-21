@@ -23,9 +23,9 @@ function Parallel:reset()
 end
 
 function Parallel:addNode(node)
-	self.Node.addNode(node)
-
 	self._finChildren[#self._finChildren + 1] = false
+
+	return self.Node.addNode(self, node)
 end
 
 function Parallel:continue(...)

@@ -4,6 +4,7 @@ Loads all libs and returns them
 return {
 	BehaviorTree = require "Heartbeat::BehaviorTree",
 	input        = require "Heartbeat::input",
+	StateMachine = require "Heartbeat::StateMachine",
 	Vector2      = require "Heartbeat::Vector2",
 	Vector3      = require "Heartbeat::Vector3",
 	Vector4      = require "Heartbeat::Vector4",
