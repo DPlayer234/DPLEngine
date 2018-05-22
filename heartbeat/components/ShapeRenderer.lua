@@ -10,8 +10,8 @@ local Vector2 = require "Heartbeat::Vector2"
 local ShapeRenderer = class("ShapeRenderer", require "Heartbeat::ECS::Component")
 
 -- Creates a new ShapeRenderer
-function ShapeRenderer:new(drawMode, shape, arg)
-	self:Component()
+function ShapeRenderer:new(entity, drawMode, shape, arg)
+	self:Component(entity)
 
 	self:setDrawMode(drawMode)
 

@@ -8,8 +8,8 @@ local Vector2 = require "Heartbeat::Vector2"
 local Alignment = class("Alignment", require "Heartbeat::ECS::Component")
 
 -- Creates a new aligner
-function Alignment:new()
-	self:Component()
+function Alignment:new(entity)
+	self:Component(entity)
 
 	self._used = false
 	self._alignment = self:_getDefaults()

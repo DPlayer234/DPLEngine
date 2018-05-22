@@ -9,7 +9,9 @@ local EntityStorage = require "Heartbeat::ECS::EntityStorage"
 local UIEventHandler = class("UIEventHandler", require "Heartbeat::ECS::Entity")
 
 -- Initializes a new UIEventHandler
-function UIEventHandler:initialize()
+function UIEventHandler:new(ecs)
+	self:Entity(ecs)
+
 	self._entStorage = EntityStorage()
 
 	self._input = input.MouseInput({})
@@ -34,7 +36,7 @@ end
 function UIEventHandler.create(element)
 	assert(element:typeOf("UIElement"), "Can only add UIElements to the UIEventHandler.")
 
-	local handler = element.ecs:findEntityByType("UIEventHandler") or element.ecs:addEntity(UIEventHandler())
+	local handler = element.ecs:findEntityByType("UIEventHandler") or UIEventHandler(element.ecs)
 	handler:_addElement(element)
 end
 

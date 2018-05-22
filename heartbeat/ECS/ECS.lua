@@ -27,12 +27,6 @@ function ECS:new()
 	self.gameState = nil
 end
 
--- Adds an entity to the system and returns it
-function ECS:addEntity(entity)
-	entity:attachToECS(self)
-	return entity
-end
-
 -- Finds a single entity with a given tag
 function ECS:findEntityByTag(tag)
 	return self._entStorage:getWithTag(tag)

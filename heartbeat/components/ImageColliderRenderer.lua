@@ -10,9 +10,9 @@ local ShapeRenderer = require("Heartbeat::components").ShapeRenderer
 local ImageColliderRenderer = class("ImageColliderRenderer", require "Heartbeat::ECS::Component")
 
 -- Creates a new ImageColliderRenderer from an ImageCollider
-function ImageColliderRenderer:new(drawMode, imageCollider)
+function ImageColliderRenderer:new(entity, drawMode, imageCollider)
 	assert(imageCollider:typeOf("ImageCollider"), "ImageColliderRenderers require a ImageCollider passed to the constructor.")
-	self:Component()
+	self:Component(entity)
 
 	self._imageCollider = imageCollider
 
@@ -23,21 +23,14 @@ function ImageColliderRenderer:new(drawMode, imageCollider)
 	self._color = Color.white
 
 	self._renderers = {}
-end
 
--- Initializes the ImageColliderRenderer and adds all ShapeRenderers
-function ImageColliderRenderer:initialize()
-	-- Seperate the polygon into triangles
+	-- Seperate the polygon into triangles and add ShapeRenderers
 	local triangles = lmath.triangulate(self._polygon)
 	for i=1, #triangles do
-		self._renderers[#self._renderers + 1] = ShapeRenderer(self._drawMode, "polygon", triangles[i])
-	end
-
-	-- Add all ShapeRenderers
-	for i=1, #self._renderers do
-		local renderer = self.entity:addComponent(self._renderers[i])
+		local renderer = ShapeRenderer(entity, self._drawMode, "polygon", triangles[i])
 		renderer:setCenter(self._center)
 		renderer:setColor(self._color)
+		self._renderers[#self._renderers + 1] = renderer
 	end
 end
 

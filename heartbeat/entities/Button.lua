@@ -8,8 +8,8 @@ local Handler = require "Heartbeat::Handler"
 local Button = class("Button", require("Heartbeat::entities").UIElement)
 
 -- Creates a new button
-function Button:new()
-	self:UIElement()
+function Button:new(ecs)
+	self:UIElement(ecs)
 	self.onClick = Handler()
 end
 

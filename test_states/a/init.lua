@@ -10,10 +10,10 @@ local GameState = heartbeat.GameState
 local TestState = class("TestState", GameState)
 
 -- Initializes a new test state
-function TestState:initialize(gameStateClass)
-	self.stateClass = gameStateClass or GameState
+function TestState:new()
+	self:GameState()
 
-	self.user = self.ecs:addEntity(UserController())
+	self.user = UserController(self.ecs)
 end
 
 return TestState
