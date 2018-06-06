@@ -140,12 +140,16 @@ end
 function GameState:_onPause()
 	input.remove(self.input)
 
+	for i=1, #self._subs do self._subs[i]:_onPause() end
+
 	self:onPause()
 end
 
 -- Internally called on pause
 function GameState:_onResume()
 	input.add(self.input)
+
+	for i=1, #self._subs do self._subs[i]:_onResume() end
 
 	self:onResume()
 end
