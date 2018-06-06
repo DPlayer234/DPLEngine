@@ -28,7 +28,7 @@ function Animator:new(texture, width, height)
 	self._animations = {}
 end
 
-function Animator:initialize(args)
+function Animator:initialize()
 	self._animation = nil
 	self:setTime(0)
 end

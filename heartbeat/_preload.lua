@@ -50,7 +50,7 @@ local hooks = {
 	["Heartbeat::components"]                = "components",
 	["Heartbeat::entities"]                  = "entities",
 	["Heartbeat::class"]                     = "class",
-	["Heartbeat::Heartbeat"]                 = "Heartbeat",
+	["Heartbeat::heartbeat"]                 = "Heartbeat",
 	["Heartbeat::Initializer"]               = "Initializer",
 }
 
