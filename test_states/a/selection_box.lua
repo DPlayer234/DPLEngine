@@ -6,10 +6,8 @@ local Vector2 = heartbeat.Vector2
 
 local SelectionBox = heartbeat.class("SelectionBox", heartbeat.ECS.Component)
 
-function SelectionBox:new(entity)
-	assert(entity:typeOf("UserController"), "SelectionBox must be attached to a UserController!")
-	self:Component(entity)
-
+function SelectionBox:initialize()
+	assert(self.entity:typeOf("UserController"), "SelectionBox must be attached to a UserController!")
 	self.origin = self.transform:getPosition()
 end
 

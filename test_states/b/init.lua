@@ -5,13 +5,11 @@ local Vector2 = heartbeat.Vector2
 
 local TestSub = heartbeat.class("TestSub", heartbeat.SubState)
 
-function TestSub:new(mainState)
-	self:SubState(mainState)
-
+function TestSub:initialize()
 	local ecs = self.ecs
 
 	do
-		local button = heartbeat.entities.Button(ecs)
+		local button = ecs:addEntity(heartbeat.entities.Button())
 
 		local x = 0
 
@@ -25,31 +23,29 @@ function TestSub:new(mainState)
 		button:setDimensions(Vector2(100, 100))
 		button:setOffset(Vector2(200, 0))
 
-		heartbeat.components.ShapeRenderer(button, "line", "rectangle", Vector2(100, 100)):setCenter(Vector2(50, 50))
+		button:addComponent(heartbeat.components.ShapeRenderer("line", "rectangle", Vector2(100, 100))):setCenter(Vector2(50, 50))
 	end
 end
 
 local TestState = heartbeat.class("TestState", heartbeat.GameState)
 
-function TestState:new()
-	self:GameState()
-
+function TestState:initialize()
 	local ecs = self.ecs
 
 	do
-		local entity = heartbeat.ECS.Entity(ecs)
+		local entity = ecs:addEntity(heartbeat.ECS.Entity())
 
-		local rigidbody = heartbeat.components.Rigidbody(entity)
+		local rigidbody = entity:addComponent(heartbeat.components.Rigidbody())
 		rigidbody:setMaterial(heartbeat.Material() { friction = 0, bounciness = 2 })
 
-		heartbeat.components.Collider(entity, "Rectangle", Vector2.zero, Vector2(100, 100), 0)
-		heartbeat.components.Collider(entity, "Circle", Vector2(70, 70), 50)
+		entity:addComponent(heartbeat.components.Collider("Rectangle", Vector2.zero, Vector2(100, 100), 0))
+		entity:addComponent(heartbeat.components.Collider("Circle", Vector2(70, 70), 50))
 
-		local animator = heartbeat.components.Animator(entity, love.graphics.newImage("assets/textures/azure.png"), 15, 19)
+		local animator = entity:addComponent(heartbeat.components.Animator(love.graphics.newImage("assets/textures/azure.png"), 15, 19))
 		animator:newAnimation("idle"):setRate(12):addFrames(4, 0,0, 1,0):setLoop(true)
 		animator:setAnimation("idle")
 
-		local renderer = heartbeat.components.AnimationRenderer(entity)
+		local renderer = entity:addComponent(heartbeat.components.AnimationRenderer())
 		renderer:setAnimator(animator)
 		renderer:setCenter(Vector2(7.5, 9.5))
 
@@ -60,22 +56,22 @@ function TestState:new()
 	end
 
 	do
-		local entity = heartbeat.ECS.Entity(ecs)
-		local rigidbody = heartbeat.components.Rigidbody(entity, "static")
+		local entity = ecs:addEntity(heartbeat.ECS.Entity())
+		local rigidbody = entity:addComponent(heartbeat.components.Rigidbody("static"))
 
-		heartbeat.components.Collider(entity, "Chain", false, {
+		entity:addComponent(heartbeat.components.Collider("Chain", false, {
 			Vector2(0, 500),
 			Vector2(400, 600),
 			Vector2(600, 550),
 			Vector2(900, 800)
-		})
+		}))
 	end
 
 	do
-		local entity = heartbeat.ECS.Entity(ecs)
+		local entity = ecs:addEntity(heartbeat.ECS.Entity())
 
-		local rigidbody = heartbeat.components.Rigidbody(entity, "dynamic")
-		heartbeat.components.ImageCollider(entity, love.image.newImageData("assets/textures/test_collider.png"), nil, Vector2(12, 12))
+		local rigidbody = entity:addComponent(heartbeat.components.Rigidbody("dynamic"))
+		entity:addComponent(heartbeat.components.ImageCollider(love.image.newImageData("assets/textures/test_collider.png"), nil, Vector2(12, 12)))
 
 		rigidbody:setGravityScale(0)
 		rigidbody:setMass(1, 1)
@@ -84,7 +80,7 @@ function TestState:new()
 		entity.transform:setPosition(Vector2(800, 400))
 	end
 
-	TestSub(self)
+	self:addSubState(TestSub())
 
 	self.timer:startCoroutine(function(self)
 		while true do
@@ -100,10 +96,10 @@ function TestState:new()
 	-- Set a function to run after 5 seconds
 	self.timer:runAfter(5, function()
 		-- Pop the state of the stack
-		self:destroy()
+		self.heartbeat:popGameState()
 
 		-- Set a new identical state
-		TestState()
+		self.heartbeat:pushGameState(TestState())
 	end)
 end
 

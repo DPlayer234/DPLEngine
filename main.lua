@@ -38,7 +38,7 @@ function love.load()
 
 	heartbeat:initialize { meter = 100 }
 
-	require "test_states.b" ()
+	heartbeat:pushGameState(require "test_states.b" ())
 end
 
 function love.update(dt)

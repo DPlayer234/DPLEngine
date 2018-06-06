@@ -20,12 +20,7 @@ GameState.Collision = Collision
 GameState.Transformation = Transformation
 
 -- Creates a new GameState
-function GameState:new(...)
-	if self.heartbeat == nil then
-		GameState.heartbeat = require "Heartbeat::heartbeat"
-	end
-	self.heartbeat = self.heartbeat
-
+function GameState:new()
 	self:_setPhysicsWorld()
 
 	self.timer = Timer()
@@ -43,8 +38,12 @@ function GameState:new(...)
 
 	self._subs = {}
 
-	self:_init(...)
+	self.heartbeat = nil
 end
+
+-- Initializes the game state and, f.e., sets the entities and terrain used when instantiating
+-- Called when the game state is first pushed
+function GameState:initialize() end
 
 -- Called when the game state is paused or removed
 function GameState:onPause() end
@@ -54,6 +53,27 @@ function GameState:onResume() end
 
 -- Called when the game state is destroyed
 function GameState:onDestroy() end
+
+-- Returns whether the game state has been pushed and initialized
+function GameState:hasHeartbeat()
+	return self.heartbeat ~= nil
+end
+
+-- Adds a sub state and initializes it
+function GameState:addSubState(subState)
+	assert(self:hasHeartbeat(), "Can only push sub-states to states with a heartbeat.")
+	assert(subState:typeOf("SubState"), "Can only add objects of type 'SubState' as sub-states.")
+	assert(not subState:hasHeartbeat(), "GameStates can only be pushed once.")
+
+	self._subs[#self._subs + 1] = subState
+
+	subState.heartbeat = self.heartbeat
+	subState._parent = self
+	subState:_onAdd()
+	subState:initialize()
+
+	subState:_onResume()
+end
 
 -- Gets a sub-state by index
 function GameState:getSubState(index)
@@ -108,16 +128,17 @@ end
 
 -- Destroys the ECS, child-states and associated destroyable resources
 function GameState:destroy()
-	self.heartbeat:_popGameState(self)
+	self:onDestroy()
+	self.ecs:destroy()
 
-	self:_destroy()
+	for i=#self._subs, 1, -1 do
+		self._subs[i]:destroy()
+	end
 end
 
 -- Internally called on pause
 function GameState:_onPause()
 	input.remove(self.input)
-
-	for i=1, #self._subs do self._subs[i]:_onPause() end
 
 	self:onPause()
 end
@@ -125,8 +146,6 @@ end
 -- Internally called on pause
 function GameState:_onResume()
 	input.add(self.input)
-
-	for i=1, #self._subs do self._subs[i]:_onResume() end
 
 	self:onResume()
 end
@@ -159,29 +178,6 @@ function GameState:_setPhysicsWorld()
 		getCallback("onSensorEnd",   "onCollisionEnd"), -- End
 		getCallback("onSensorStay",  "onCollisionStay") -- PreSolve
 	)
-end
-
--- Adds a sub state and initializes it
-function GameState:_addSubState(subState)
-	self._subs[#self._subs + 1] = subState
-
-	subState:_onAdd()
-	subState:_onResume()
-end
-
--- Internal destruction
-function GameState:_destroy()
-	self:onDestroy()
-	self.ecs:destroy()
-
-	for i=#self._subs, 1, -1 do
-		self._subs[i]:destroy()
-	end
-end
-
--- Initializes the GameState
-function GameState:_init()
-	self.heartbeat:_pushGameState(self)
 end
 
 return GameState

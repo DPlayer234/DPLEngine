@@ -10,10 +10,14 @@ local Material = require "Heartbeat::Material"
 local Rigidbody = class("Rigidbody", require "Heartbeat::ECS::Component")
 
 -- Creates a new Rigidbody, optionally with a certain body type
-function Rigidbody:new(entity, bodyType)
-	self:Component(entity)
+function Rigidbody:new(bodyType)
+	self._type = bodyType or "dynamic"
+	self:Component()
+end
 
-	self._body = lphysics.newBody(self.ecs.world, 0, 0, bodyType or "dynamic")
+-- Initializes the Rigidbody
+function Rigidbody:initialize()
+	self._body = lphysics.newBody(self.ecs.world, 0, 0, self._type)
 	self._body:setUserData(self)
 
 	self._material = Material()

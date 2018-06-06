@@ -7,18 +7,43 @@ local class = require "Heartbeat::class"
 local Component = class("Component", require "Heartbeat::ECS::Object")
 
 -- Creates a new component instance
-function Component:new(entity)
+function Component:new()
 	self:Object()
-	self:_attachToEntity(entity)
 
 	self._enabled = true
 end
+
+-- Called after the entity and ECS is attached
+function Component:initialize() end
 
 -- Called when the component is either explicitly or implicitly enabled
 function Component:onEnable() end
 
 -- Called when the component is either explicitly or implicitly disabled
 function Component:onDisable() end
+
+-- Attaches an entity to the component
+function Component:attachToEntity(entity)
+	assert(not self:isAttachedToEntity(), "Cannot attach a Component multiple times.")
+	assert(entity:isAttachedToECS(), "Cannot attach Components to Entities not attached to an ECS.")
+
+	self.entity = entity
+
+	self.ecs = self.entity.ecs
+	self.transform = self.entity.transform
+
+	self.entity._compStorage:add(self)
+	if self:isUpdatable() then
+		self.ecs._compStorage:add(self)
+	end
+
+	self:initialize()
+end
+
+-- Returns whether this component is attached to an Entity
+function Component:isAttachedToEntity()
+	return self.entity ~= nil
+end
 
 -- Sets whether the component is enabled
 function Component:setEnabled(value)
@@ -58,21 +83,6 @@ end
 -- Debug-Friendly debug message
 function Component:__tostring()
 	return ("%s: %s"):format(self:type(), self.entity)
-end
-
--- Attaches the component to an entity
-function Component:_attachToEntity(entity)
-	assert(entity:typeOf("Entity"), "Cannot attach a Component to non-entities.")
-
-	self.entity = entity
-
-	self.ecs = self.entity.ecs
-	self.transform = self.entity.transform
-
-	self.entity._compStorage:add(self)
-	if self:isUpdatable() then
-		self.ecs._compStorage:add(self)
-	end
 end
 
 return Component

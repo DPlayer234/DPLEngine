@@ -10,9 +10,10 @@ local SubState = class("SubState", require "Heartbeat::GameState")
 SubState.TYPEOF.GameState = false
 
 -- Creates a new SubState
-function SubState:new(mainState)
-	assert(mainState:typeOf("GameState"), "SubStates need to be added to a GameState.")
-	self:GameState(mainState)
+function SubState:new()
+	self:GameState()
+
+	self._parent = nil
 end
 
 -- Gets the parent state.
@@ -54,7 +55,7 @@ function SubState:destroy()
 		end
 	end
 
-	self:_destroy()
+	self.GameState.destroy(self)
 end
 
 -- Called when added to a parent state
@@ -69,12 +70,6 @@ end
 -- This does nothing here
 function SubState:_setPhysicsWorld()
 	self.world = nil
-end
-
--- Initializes the SubState
-function SubState:_init(mainState)
-	self._parent = mainState
-	mainState:_addSubState(self)
 end
 
 return SubState

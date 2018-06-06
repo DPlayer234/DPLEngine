@@ -6,4 +6,4 @@ local currentModule = (...):gsub("%.init$", "")
 -- Hooking require
 require(currentModule .. "._preload")
 
-return require "Heartbeat::heartbeat"
+return require "Heartbeat::Heartbeat"

@@ -19,9 +19,7 @@ local color = {
 
 local releaseCallbacks
 
-function UserController:new(ecs)
-	self:Entity(ecs)
-
+function UserController:initialize()
 	self.down = {}
 	self.held = {}
 
@@ -37,7 +35,7 @@ function UserController:update()
 		self.held[i] = love.mouse.isDown(i)
 
 		if self.down[i] then
-			self.selection[i] = SelectionBox(self)
+			self.selection[i] = self:addComponent(SelectionBox())
 			self.selection[i].callback = releaseCallbacks[i]
 		elseif self.selection[i] and not self.held[i] then
 			self.selection[i]:destroy()
@@ -65,21 +63,21 @@ end
 
 releaseCallbacks = {
 	[1] = function(box)
-		local e = heartbeat.ECS.Entity(box.ecs)
+		local e = box.ecs:addEntity(heartbeat.ECS.Entity())
 
 		e:tagAs("Box")
-		heartbeat.components.Rigidbody(e, "dynamic")
-		heartbeat.components.Collider(e, "Rectangle", box.dimensions)
+		e:addComponent(heartbeat.components.Rigidbody("dynamic"))
+		e:addComponent(heartbeat.components.Collider("Rectangle", box.dimensions))
 		e.transform:setPosition(box.topLeft + box.dimensions * 0.5)
 
-		heartbeat.components.ShapeRenderer(e, "fill", "polygon", { -box.dimensions.x * 0.5, -box.dimensions.y * 0.5, box.dimensions.x * 0.5, -box.dimensions.y * 0.5, box.dimensions.x * 0.5, box.dimensions.y * 0.5 })
+		e:addComponent(heartbeat.components.ShapeRenderer("fill", "polygon", { -box.dimensions.x * 0.5, -box.dimensions.y * 0.5, box.dimensions.x * 0.5, -box.dimensions.y * 0.5, box.dimensions.x * 0.5, box.dimensions.y * 0.5 }))
 	end,
 	[2] = function(box)
-		local e = heartbeat.ECS.Entity(box.ecs)
+		local e = box.ecs:addEntity(heartbeat.ECS.Entity())
 
 		e:tagAs("Box")
-		heartbeat.components.Rigidbody(e, "static")
-		heartbeat.components.Collider(e, "Rectangle", box.dimensions)
+		e:addComponent(heartbeat.components.Rigidbody("static"))
+		e:addComponent(heartbeat.components.Collider("Rectangle", box.dimensions))
 		e.transform:setPosition(box.topLeft + box.dimensions * 0.5)
 	end
 }

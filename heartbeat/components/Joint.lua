@@ -12,12 +12,15 @@ local Joint = class("Joint", require "Heartbeat::ECS::Component")
 local lJointConstructor
 
 -- Creates a new Joint, optionally with a certain body type
-function Joint:new(entity, jointType)
-	self:Component(entity)
+function Joint:new(jointType)
+	self:Component()
 
 	assert(lJointConstructor[jointType] ~= nil, "Unknown Joint Type.")
 	self._type = jointType
+end
 
+-- Initializes the Joint
+function Joint:initialize()
 	self._rigidbody = self.entity:getComponent("Rigidbody")
 	if not self._rigidbody then
 		error("Joints require the use of Rigidbodies.")

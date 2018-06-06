@@ -40,8 +40,8 @@ end
 -- Sets the default callbacks
 function Initializer:setCallbacks()
 	--[[love.quit:add(function()
-		for #self.engine:getGameStateCount(), 1, -1 do
-			self.engine:getGameState(i):destroy()
+		for i=1, self.engine:getGameStateCount() do
+			self.engine:popGameState()
 		end
 	end)]]
 end

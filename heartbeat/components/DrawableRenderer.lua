@@ -10,9 +10,7 @@ local DrawableRenderer = class("DrawableRenderer", require "Heartbeat::ECS::Comp
 
 DrawableRenderer.priority = -1
 
-function DrawableRenderer:new(entity)
-	self:Component(entity)
-
+function DrawableRenderer:initialize()
 	self._center = Vector2.zero
 	self._color = Color.white
 end

@@ -10,16 +10,16 @@ local Collider = class("Collider", require "Heartbeat::ECS::Component")
 
 -- Creates a new Collider
 --[[
-> Collider(entity, "Rectangle", dimensions, [density])
-> Collider(entity, "Rectangle", position, dimensions, [angle, density])
-> Collider(entity, "Circle", radius, [density])
-> Collider(entity, "Circle", position, radius, [density])
-> Collider(entity, "Polygon", vertices, [density])
-> Collider(entity, "Chain", loop, points, [density])
-> Collider(entity, <any>, shape, [density])
+> Collider("Rectangle", dimensions, [density])
+> Collider("Rectangle", position, dimensions, [angle, density])
+> Collider("Circle", radius, [density])
+> Collider("Circle", position, radius, [density])
+> Collider("Polygon", vertices, [density])
+> Collider("Chain", loop, points, [density])
+> Collider(<any>, shape, [density])
 ]]
-function Collider:new(entity, shapeType, a, b, c, d)
-	self:Component(entity)
+function Collider:new(shapeType, a, b, c, d)
+	self:Component()
 
 	if shapeType == "Rectangle" then
 		if Vector2.is(b) then
@@ -48,7 +48,9 @@ function Collider:new(entity, shapeType, a, b, c, d)
 	end
 
 	self._type = shapeType
-	
+end
+
+function Collider:initialize()
 	self._rigidbody = assert(self.entity:getComponent("Rigidbody"), "Colliders require a Rigidbody.")
 
 	self._fixture = lphysics.newFixture(self._rigidbody:getLBody(), self._shape, self._density or 1)

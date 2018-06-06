@@ -19,7 +19,7 @@ local DETECTION_THRESHOLD = 0.4 --#const
 -- Creates a new collider
 -- > ImageCollider(imageData, [offset, scale, density])
 -- 'offset' and 'scale' are Vector2s and default to half the image dimensions and (1, 1).
-function ImageCollider:new(entity, imageData, offset, scale, density)
+function ImageCollider:new(imageData, offset, scale, density)
 	self._data = imageData
 	self._offset = offset or Vector2(imageData:getDimensions()) * 0.5
 	self._scale = scale or Vector2.one
@@ -31,7 +31,7 @@ function ImageCollider:new(entity, imageData, offset, scale, density)
 
 	self._vertexCount = #self._vertices
 	self._edgeCount = self._vertexCount - (self._loop and 0 or 1)
-	self:Collider(entity, "Image", self._shape, density)
+	self:Collider("Image", self._shape, density)
 
 	self:_clearData()
 end

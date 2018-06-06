@@ -10,21 +10,24 @@ local UIEventHandler = require("Heartbeat::entities").UIEventHandler
 local UIElement = class("UIElement", require "Heartbeat::ECS::Entity")
 
 -- Creates a new UIElement
-function UIElement:new(ecs)
-	self:Entity(ecs)
+function UIElement:new()
+	self:Entity()
 
 	self.handler = nil
 	self:tagAs("UI")
+end
+
+-- Initializes a new element
+function UIElement:initialize()
+	UIEventHandler.create(self)
 
 	self._wasPressed = false
-	self._alignment = Alignment(self)
+	self._alignment = self:addComponent(Alignment())
 
 	self._dimensions = Vector2(160, 60)
 	self._screenAnchor = Vector2(0.5, 0.5)
 	self._localAnchor = Vector2(0.5, 0.5)
 	self._offset = Vector2.zero
-
-	UIEventHandler.create(self)
 end
 
 -- Destroys the UIElement

@@ -72,6 +72,46 @@ function Heartbeat:getGameStateCount()
 	return #self._gameStates
 end
 
+-- Pushes the game state onto the stack
+function Heartbeat:pushGameState(gameState)
+	assert(gameState:typeOf("GameState"), "Can only push objects of type 'GameState' as a game state.")
+	assert(not gameState:hasHeartbeat(), "GameStates can only be pushed once.")
+
+	local state = self:getActiveGameState()
+	if state then state:_onPause() end
+
+	self._gameStates[#self._gameStates + 1] = gameState
+
+	gameState.heartbeat = self
+	gameState:initialize()
+
+	gameState:_onResume()
+
+	if self:getEngineState() == ES_GAME_STATE_UPDATE then
+		gameState:update(ltimer.getDelta())
+	end
+end
+
+-- Pops the current game state of the stack
+function Heartbeat:popGameState()
+	local state = self:getActiveGameState()
+	if state then
+		state:_onPause()
+		state:destroy()
+	end
+
+	table.remove(self._gameStates, #self._gameStates)
+
+	local state = self:getActiveGameState()
+	if state then
+		state:_onResume()
+
+		if self:getEngineState() == ES_GAME_STATE_UPDATE then
+			state:update(ltimer.getDelta())
+		end
+	end
+end
+
 -- Gets the current update state of the engine
 function Heartbeat:getEngineState()
 	return self._engineState
@@ -108,48 +148,6 @@ end
 -- ToString, including the amount of stored game-states
 function Heartbeat:__tostring()
 	return ("Heartbeat: %d GSs"):format(self:getGameStateCount())
-end
-
--- Pushes the game state onto the stack
-function Heartbeat:_pushGameState(gameState)
-	local state = self:getActiveGameState()
-	if state then state:_onPause() end
-
-	self._gameStates[#self._gameStates + 1] = gameState
-
-	gameState:_onResume()
-
-	if self:getEngineState() == ES_GAME_STATE_UPDATE then
-		gameState:update(ltimer.getDelta())
-	end
-end
-
--- Pops the current game state of the stack
-function Heartbeat:_popGameState(gameState)
-	local state = self:getActiveGameState()
-
-	if state == gameState then
-		state:_onPause()
-
-		table.remove(self._gameStates, #self._gameStates)
-
-		local state = self:getActiveGameState()
-		if state then
-			state:_onResume()
-
-			if self:getEngineState() == ES_GAME_STATE_UPDATE then
-				state:update(ltimer.getDelta())
-			end
-		end
-	else
-		for i=1, #self._gameStates do
-			if self._gameStates[i] == gameState then
-				table.remove(self._gameStates, i)
-				return
-			end
-		end
-		error("Attempted to destroy an unused GameState...?")
-	end
 end
 
 return Heartbeat()

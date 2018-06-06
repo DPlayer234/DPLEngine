@@ -12,8 +12,8 @@ local getQuad, framesMeta
 local Animator = class("Animator", require "Heartbeat::ECS::Component")
 local Animation = class("Animation")
 
-function Animator:new(entity, texture, width, height)
-	self:Component(entity)
+function Animator:new(texture, width, height)
+	self:Component()
 
 	assert(texture and texture:typeOf("Texture"), "Every Animator needs a texture!")
 	assert(type(width) == "number" and type(height) == "number", "You must define the size of the quads used.")
@@ -26,7 +26,9 @@ function Animator:new(entity, texture, width, height)
 	}
 
 	self._animations = {}
+end
 
+function Animator:initialize(args)
 	self._animation = nil
 	self:setTime(0)
 end

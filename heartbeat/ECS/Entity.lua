@@ -13,7 +13,7 @@ local Transform = require "Heartbeat::ECS::Transform"
 local Entity = class("Entity", require "Heartbeat::ECS::Object")
 
 -- Initializes a new Entity
-function Entity:new(ecs)
+function Entity:new()
 	self:Object()
 
 	self.transform = Transform()
@@ -21,8 +21,30 @@ function Entity:new(ecs)
 	self._active = true
 	self._compStorage = ComponentStorage(false)
 	self._tags = {}
+end
 
-	self:_attachToECS(ecs)
+-- Called after the ECS is attached
+function Entity:initialize() end
+
+-- Attaches an ECS to the entity
+function Entity:attachToECS(ecs)
+	assert(not self:isAttachedToECS(), "Cannot attach an Entity multiple times.")
+
+	self.ecs = ecs
+	self.ecs._entStorage:add(self)
+
+	self:initialize()
+end
+
+-- Returns whether this entity is attached to an ECS
+function Entity:isAttachedToECS()
+	return self.ecs ~= nil
+end
+
+-- Adds a component to the entity
+function Entity:addComponent(component)
+	component:attachToEntity(self)
+	return component
 end
 
 -- Gets an attached component of the given type
@@ -107,14 +129,6 @@ end
 function Entity:_callEvent(funcName, ...)
 	if self[funcName] ~= nil then self[funcName](self, ...) end
 	return self._compStorage:callAll(funcName, ...)
-end
-
--- Attaches the entity to an ECS
-function Entity:_attachToECS(ecs)
-	assert(ecs:typeOf("ECS"), "Cannot attach an Entity non-ECSs.")
-
-	self.ecs = ecs
-	self.ecs._entStorage:add(self)
 end
 
 return Entity
