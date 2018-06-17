@@ -27,38 +27,26 @@ local mathf = {
 
 	-- Some constants
 	infinity = 1/0,
-	negativeInfinity = -1/0,
 	NaN = 0/0,
 
 	e = math.exp(1),
 	pi = math.pi
 }
 
-local floor = math.floor
-
 -- Rounding functions
 function mathf.round(n)
-	return floor(n + 0.5)
+	return n + 0.5 - (n + 0.5) % 1
 end
 
 -- Round with a multiplier
 function mathf.round2(n, f)
-	return floor(n * f + 0.5) / f
+	n = n + 0.5 / f
+	return n - n % (1 / f)
 end
 
 -- Returns true if the value is either positive or negative infinity
 function mathf.isInfinity(value)
-	return mathf.isPositiveInfinity(value) or mathf.isNegativeInfinity(value)
-end
-
--- Returns true if the value is positive infinity
-function mathf.isPositiveInfinity(value)
-	return value == mathf.positiveInfinity
-end
-
--- Returns true if the value is negative infinity
-function mathf.isNegativeInfinity(value)
-	return value == mathf.positiveInfinity
+	return value == mathf.infinity or value == -mathf.infinity
 end
 
 -- Returns true if the value is NaN
