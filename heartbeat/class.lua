@@ -26,10 +26,14 @@ local function noNew(self)
 	error("Cannot instantiate object of type " .. self.CLASS.NAME .. ": It has no 'new' field.", 3)
 end
 
+local function noPrecon()
+	return {}
+end
+
 -- Instantiates a new instance of the given class.
 -- Identical to cls(...)
 function class.instantiate(cls, ...)
-	local obj = setmetatable({}, cls.BASE)
+	local obj = setmetatable(cls.PRECON(), cls.BASE)
 	return cls.NEW(obj, ...) or obj
 end
 
@@ -43,6 +47,10 @@ local extendByField = {
 	-- Add a constructor
 	new = function(cls, new)
 		rawset(cls, "NEW", new == nil and (cls.PARENT and cls.PARENT.NEW or noNew) or new)
+	end,
+	-- Add the preconstruction function
+	precon = function(cls, precon)
+		rawset(cls, "PRECON", precon == nil and (cls.PARENT and cls.PARENT.PRECON or noPrecon) or precon)
 	end,
 	-- Add a custom indexer
 	__index = function(cls, indexer)
@@ -132,9 +140,8 @@ local baseMeta = {
 
 -- Creates a new class.
 function class.new(name, rawbase, parent)
-	if (class.is(rawbase) or rawequal(rawbase, null)) and parent == nil then
-		parent = rawbase
-		rawbase = {}
+	if (class.is(rawbase) or rawequal(rawbase, null)) then
+		rawbase, parent = parent, rawbase
 	end
 
 	if rawequal(parent, nil) then
@@ -175,7 +182,8 @@ function class.new(name, rawbase, parent)
 	-- Creating the class
 	local cls = setmetatable({
 		BASE = base,
-		NEW = base.new or parent and parent.NEW or noNew,
+		NEW = base.new or noNew,
+		PRECON = base.precon or noPrecon,
 		NAME = name,
 		CHILDREN = setmetatable({}, weakTable),
 		PARENT = parent,
