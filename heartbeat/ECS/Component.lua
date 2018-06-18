@@ -82,7 +82,7 @@ end
 
 -- Debug-Friendly debug message
 function Component:__tostring()
-	return ("%s: %s"):format(self:type(), self.entity)
+	return ("%s (%s)"):format(self.Default.__tostring(self), self.entity)
 end
 
 return Component

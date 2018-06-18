@@ -120,9 +120,9 @@ end
 function Entity:__tostring()
 	local tag = next(self._tags)
 	if not tag then
-		return self:type()
+		return ("%s: %p"):format(self:type(), self)
 	end
-	return ("%s (%s)"):format(self:type(), tag)
+	return ("%s (%s): %p"):format(self:type(), tag, self)
 end
 
 -- Calls the named function for all of its components and itself

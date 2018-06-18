@@ -237,7 +237,7 @@ function Default:__call(arg)
 end
 
 function Default:__tostring()
-	return self:type()
+	return ("%s: %p"):format(self:type(), self)
 end
 
 class.Default = Default
