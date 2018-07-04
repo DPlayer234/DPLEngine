@@ -1,7 +1,7 @@
 --[[
 Loading stuff
 ]]
-local lphysics  = require "love.physics"
+local physics  = require "Heartbeat::lovef::physics"
 local lgraphics = require "love.graphics"
 local class = require "Heartbeat::class"
 local Handler = require "Heartbeat::Handler"
@@ -16,7 +16,7 @@ end
 function Initializer:initialize(args)
 	args = args or {}
 
-	lphysics.setMeter(args.meter or 30)
+	physics.setMeter(args.meter or 30)
 	lgraphics.setDefaultFilter(args.textureFilter or "nearest")
 
 	if args.inputHandler ~= false then
@@ -24,6 +24,10 @@ function Initializer:initialize(args)
 	end
 
 	self:wrapCallbacks()
+
+	if args.physicCategories then
+		self:addPhysicsCategories(args.physicCategories)
+	end
 end
 
 -- Sets up the input system
@@ -78,6 +82,11 @@ function Initializer:wrapCallbacks()
 			love[callback]:add(love_callback)
 		end
 	end
+end
+
+-- Adds the physic categories
+function Initializer:addPhysicsCategories(categoryData)
+	physics.addPhysicCategories(categoryData)
 end
 
 return Initializer

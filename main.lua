@@ -36,7 +36,13 @@ function love.load()
 	heartbeat = require "heartbeat"
 	null = heartbeat.null
 
-	heartbeat:initialize { meter = 100 }
+	heartbeat:initialize {
+		meter = 100,
+		physicCategories = {
+			azure = { lineShape = false },
+			lineShape = {}
+		}
+	}
 
 	heartbeat:pushGameState(require "test_states.b" ())
 end
