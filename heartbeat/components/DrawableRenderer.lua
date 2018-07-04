@@ -2,18 +2,11 @@
 Renders any drawable object
 ]]
 local class = require "Heartbeat::class"
-local graphicsf = require "Heartbeat::lovef::graphics"
+local graphics = require "Heartbeat::lovef::graphics"
 local Color = require "Heartbeat::Color"
 local Vector2 = require "Heartbeat::Vector2"
 
-local DrawableRenderer = class("DrawableRenderer", require "Heartbeat::ECS::Component")
-
-DrawableRenderer.priority = -1
-
-function DrawableRenderer:initialize()
-	self._center = Vector2.zero
-	self._color = Color.white
-end
+local DrawableRenderer = class("DrawableRenderer", require("Heartbeat::components").Renderer)
 
 -- Gets the used drawable
 function DrawableRenderer:getDrawable()
@@ -35,39 +28,15 @@ function DrawableRenderer:setQuad(value)
 	self._quad = value
 end
 
--- Gets the center
-function DrawableRenderer:getCenter()
-	return self._center:copy()
-end
-
--- Sets the center/rotation point of the Drawable
-function DrawableRenderer:setCenter(value)
-	self._center = value:copy()
-end
-
--- Gets the color used for drawing
-function DrawableRenderer:getColor()
-	return self._color
-end
-
--- Sets the color used for drawing
-function DrawableRenderer:setColor(value)
-	self._color = value
-end
-
 function DrawableRenderer:draw()
 	if self:getDrawable() == nil then return end
 
-	local x,  y  = self.transform:getPosition():unpack()
-	local sx, sy = self.transform:getScale():unpack()
-	local cx, cy = self:getCenter():unpack()
-
-	graphicsf.setColor(self:getColor())
+	graphics.setColor(self:getColor())
 
 	if self:getQuad() then
-		graphicsf.drawTransform(self:getDrawable(), self:getQuad(), self.transform, self:getCenter())
+		graphics.drawTransform(self:getDrawable(), self:getQuad(), self.transform, self:getCenter())
 	else
-		graphicsf.drawTransform(self:getDrawable(), self.transform, self:getCenter())
+		graphics.drawTransform(self:getDrawable(), self.transform, self:getCenter())
 	end
 end
 

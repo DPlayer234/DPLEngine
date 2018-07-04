@@ -27,6 +27,16 @@ function RequireTable:new(root)
 	end
 end
 
+-- Loads the content of a loaded element into a specified table.
+-- This crashes if the loaded element is not a table itself.
+function RequireTable:loadInto(table, element)
+	for key, value in pairs(self[element]) do
+		table[key] = value
+	end
+
+	return table
+end
+
 -- The main function making this work
 function RequireTable:__index(element)
 	if self._loaded[element] ~= nil then

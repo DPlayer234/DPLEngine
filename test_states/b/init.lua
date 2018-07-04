@@ -3,9 +3,9 @@ Repeating test state
 ]]
 local Vector2 = heartbeat.Vector2
 
---heartbeat.lovef.physics.addCategory("azure")
---heartbeat.lovef.physics.addCategory("lineShape")
---heartbeat.lovef.physics.setCollisionMasks("azure", { lineShape = false })
+heartbeat.lovef.physics.addCategory("azure")
+heartbeat.lovef.physics.addCategory("lineShape")
+heartbeat.lovef.physics.setCollisionMasks("azure", { lineShape = false })
 
 local TestSub = heartbeat.class("TestSub", heartbeat.SubState)
 
@@ -72,6 +72,8 @@ function TestState:initialize()
 			Vector2(600, 550),
 			Vector2(900, 800)
 		}))
+
+		entity:addComponent(heartbeat.components.TextRenderer(nil, "Test Text", 100, "center"))
 	end
 
 	do

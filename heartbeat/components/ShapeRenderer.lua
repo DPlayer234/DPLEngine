@@ -3,22 +3,20 @@ Renders a shape
 ]]
 local assert = assert
 local lgraphics = require "love.graphics"
+local graphics = require "Heartbeat::lovef::graphics"
 local class = require "Heartbeat::class"
 local Color = require "Heartbeat::Color"
 local Vector2 = require "Heartbeat::Vector2"
 
-local ShapeRenderer = class("ShapeRenderer", require "Heartbeat::ECS::Component")
+local ShapeRenderer = class("ShapeRenderer", require("Heartbeat::components").Renderer)
 
 -- Creates a new ShapeRenderer
 function ShapeRenderer:new(drawMode, shape, arg)
-	self:Component()
+	self:Renderer()
 
 	self:setDrawMode(drawMode)
 
 	self:setShape(shape, arg)
-
-	self._center = Vector2.zero
-	self._color = Color.white
 
 	if shape == "rectangle" then
 		self:setCenter(arg * 0.5)
@@ -58,38 +56,11 @@ function ShapeRenderer:setShape(shape, arg)
 	self._shape = shape
 end
 
--- Gets the center
-function ShapeRenderer:getCenter()
-	return self._center:copy()
-end
-
--- Sets the center/rotation point of the Drawable
-function ShapeRenderer:setCenter(value)
-	self._center = value:copy()
-end
-
--- Gets the color used for drawing
-function ShapeRenderer:getColor()
-	return self._color
-end
-
--- Sets the color used for drawing
-function ShapeRenderer:setColor(value)
-	self._color = value
-end
-
 function ShapeRenderer:draw()
-	lgraphics.push()
+	graphics.push()
 
-	local x,  y  = self.transform:getPosition():unpack()
-	local sx, sy = self.transform:getScale():unpack()
-	local cx, cy = self:getCenter():unpack()
-
-	lgraphics.translate(x, y)
-	lgraphics.rotate(self.transform:getAngle())
-	lgraphics.translate(-cx, -cy)
-	lgraphics.scale(sx, sy)
-	lgraphics.setColor(self:getColor())
+	graphics.useTransform(self.transform, self:getCenter())
+	graphics.setColor(self:getColor())
 
 	if self._shape == "rectangle" then
 		lgraphics.rectangle(self._drawMode, 0, 0, self._arg:unpack())
@@ -101,7 +72,7 @@ function ShapeRenderer:draw()
 		lgraphics.polygon(self._drawMode, self._arg)
 	end
 
-	lgraphics.pop()
+	graphics.pop()
 end
 
 return ShapeRenderer

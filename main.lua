@@ -38,10 +38,10 @@ function love.load()
 
 	heartbeat:initialize {
 		meter = 100,
-		physicCategories = {
+		--[[physicCategories = {
 			azure = { lineShape = false },
 			lineShape = {}
-		}
+		}]]
 	}
 
 	heartbeat:pushGameState(require "test_states.b" ())

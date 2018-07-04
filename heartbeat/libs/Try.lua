@@ -25,7 +25,7 @@ function Try:catch(expattern, closure)
 	return self
 end
 
--- Finally is called regardless of the cirumstances after the main block.
+-- Finally is called regardless of the circumstances after the main block.
 function Try:finally(closure)
 	closure()
 	return self

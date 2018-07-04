@@ -1,8 +1,9 @@
 --[[
 Loading stuff
 ]]
-local physics  = require "Heartbeat::lovef::physics"
+local lphysics  = require "love.physics"
 local lgraphics = require "love.graphics"
+local physics  = require "Heartbeat::lovef::physics"
 local class = require "Heartbeat::class"
 local Handler = require "Heartbeat::Handler"
 
@@ -16,7 +17,7 @@ end
 function Initializer:initialize(args)
 	args = args or {}
 
-	physics.setMeter(args.meter or 30)
+	lphysics.setMeter(args.meter or 30)
 	lgraphics.setDefaultFilter(args.textureFilter or "nearest")
 
 	if args.inputHandler ~= false then
